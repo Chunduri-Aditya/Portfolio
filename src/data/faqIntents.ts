@@ -1,5 +1,12 @@
 import React from "react";
 
+// Helper to get correct public asset path (handles base path for GitHub Pages)
+const getPublicPath = (path: string): string => {
+  const base = import.meta.env.BASE_URL;
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${base}${cleanPath}`;
+};
+
 export interface FAQLink {
   label: string;
   href: string;
@@ -30,11 +37,11 @@ export const faqIntents: FAQIntent[] = [
       "who is aditya",
       "tell me about aditya",
     ],
-    answer: "I'm Aditya Chunduri, a Systems Engineer building trustworthy AI infrastructure. M.S. Applied Data Science, USC (Dec 2025). I focus on evaluation systems, RAG architectures, and reproducible pipelines. I turn high-entropy problems into repeatable results.",
+    answer: "I'm Aditya Chunduri, a graduate student pursuing an M.S. in Applied Data Science at USC (graduating Dec 2025). Through coursework and personal projects, I'm building skills in evaluation systems, RAG architectures, and reproducible pipelines. I'm passionate about turning complex problems into reliable, well-tested solutions.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
-      { label: "Download Resume", href: "/Docs/Aditya_Ch_Resume.pdf" },
+      { label: "Download Resume", href: getPublicPath("Docs/Aditya_Ch_Resume.pdf") },
     ],
     tags: ["about", "who", "introduction", "background", "person", "aditya", "you"],
   },
@@ -126,8 +133,8 @@ export const faqIntents: FAQIntent[] = [
     ],
     answer: "I published research on Wind Power Analysis using Digital Twins & ML in IJRASET Vol 11. The work combines KNN and TCN within a Digital Twin architecture on Azure to improve wind grid forecasting with long-range time dependencies.",
     links: [
-      { label: "Read Paper", href: "/Docs/Publication_Paper_Wind.pdf" },
-      { label: "View Certificate", href: "/Docs/IJRASET_Certificate_Wind.pdf" },
+      { label: "Read Paper", href: getPublicPath("Docs/Publication_Paper_Wind.pdf") },
+      { label: "View Certificate", href: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf") },
       { label: "Research Section", href: "#research", sectionId: "research" },
     ],
     tags: ["research", "paper", "publication", "wind", "digital twin", "tcn", "knn", "azure"],
@@ -164,7 +171,7 @@ export const faqIntents: FAQIntent[] = [
       "social links",
       "where are you",
     ],
-    answer: "You can reach me at chunduri@usc.edu. I'm based in Los Angeles, CA. Find me on LinkedIn and GitHub. Open to discussing systems engineering, AI infrastructure, and collaborative opportunities.",
+    answer: "You can reach me at chunduri@usc.edu. I'm a graduate student based in Los Angeles, CA. Find me on LinkedIn and GitHub. Open to discussing projects, learning opportunities, internships, and collaborative work in AI systems and data science.",
     links: [
       { label: "Email", href: "mailto:chunduri@usc.edu" },
       { label: "GitHub", href: "https://github.com/Chunduri-Aditya" },
@@ -185,7 +192,7 @@ export const faqIntents: FAQIntent[] = [
     ],
     answer: "You can download my resume as a PDF. It includes my M.S. in Applied Data Science from USC, technical skills, system-level projects, research experience, and publications.",
     links: [
-      { label: "Download Resume", href: "/Docs/Aditya_Ch_Resume.pdf" },
+      { label: "Download Resume", href: getPublicPath("Docs/Aditya_Ch_Resume.pdf") },
     ],
     tags: ["resume", "cv", "pdf", "download", "experience"],
   },

@@ -38,6 +38,17 @@ import {
 import FaqBot from "./FaqBot";
 
 /** -----------------------------
+ * Helper Functions
+ * ----------------------------- */
+// Get the correct path for public assets (handles base path for GitHub Pages)
+const getPublicPath = (path: string): string => {
+  const base = import.meta.env.BASE_URL;
+  // Remove leading slash from path if base already has trailing slash
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${base}${cleanPath}`;
+};
+
+/** -----------------------------
  * Type Definitions
  * ----------------------------- */
 type Mode = "signal" | "story";
@@ -890,8 +901,8 @@ const RESEARCH = {
     { label: "Cloud", value: "Azure", accent: "blue" as const },
     { label: "Focus", value: "Forecasting", accent: "green" as const },
   ],
-  paperHref: "/Docs/Publication_Paper_Wind.pdf",
-  certHref: "/Docs/IJRASET_Certificate_Wind.pdf",
+  paperHref: getPublicPath("Docs/Publication_Paper_Wind.pdf"),
+  certHref: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf"),
 };
 
 /** -----------------------------
@@ -934,11 +945,11 @@ const Portfolio = () => {
 
   const hero = useMemo(() => {
     const headline = isStory ? "I turn noise into signal." : "Curiosity is noisy. I build the signal.";
-    const subhead = "Systems Engineer | AI Infrastructure | M.S. Applied Data Science, USC (Dec 2025)";
+    const subhead = "Graduate Student | M.S. Applied Data Science, USC (Dec 2025) | Aspiring AI Systems Engineer";
     const intro =
       isStory
-        ? "My brain runs high bandwidth: lots of signals, lots of connections, lots of 'what if'. I don’t fight that. I channel it into structure—tests, logs, and pipelines—so the output stays calm, clear, and trustworthy."
-        : "I build verifiable systems: instrumentation, testable assumptions, and repeatable pipelines that turn messy inputs into reliable outputs.";
+        ? "I'm a graduate student building systems that matter. Through coursework and personal projects, I'm learning to turn complex problems into reliable solutions—with tests, logs, and clear architecture."
+        : "Graduate student focused on building verifiable systems through coursework and projects. Learning to apply instrumentation, testable assumptions, and reproducible pipelines to turn messy inputs into reliable outputs.";
     const chips = isStory
       ? [
           { icon: <Sparkles size={14} />, text: "Curiosity with guardrails" },
@@ -1139,7 +1150,7 @@ const Portfolio = () => {
                 How I Think
               </button>
               <a
-                href="/Docs/Aditya_Ch_Resume.pdf"
+                href={getPublicPath("Docs/Aditya_Ch_Resume.pdf")}
                 target="_blank"
                 rel="noreferrer"
                 className="px-6 py-3 bg-slate-900/40 hover:bg-slate-800 text-slate-200 font-medium rounded-lg transition-all border border-slate-800 flex items-center gap-2"
@@ -1451,7 +1462,7 @@ const Portfolio = () => {
               <p className="text-xs text-slate-500 mb-4">Resume PDF + GitHub + short project demos.</p>
               <div className="grid gap-2">
                 <a
-                  href="/Docs/Aditya_Ch_Resume.pdf"
+                  href={getPublicPath("Docs/Aditya_Ch_Resume.pdf")}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded text-sm font-medium transition-colors"
