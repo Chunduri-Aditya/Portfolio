@@ -8,7 +8,7 @@ import react from '@vitejs/plugin-react'
 const REPO_NAME = 'Portfolio' // Change this to your actual repository name
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? `/${REPO_NAME}/` : '/',
+  base: `/${REPO_NAME}/`, // Always use base path for GitHub Pages
   plugins: [react()],
   test: {
     globals: true,
