@@ -945,7 +945,7 @@ const Portfolio = () => {
 
   const hero = useMemo(() => {
     const headline = isStory ? "I turn noise into signal." : "Curiosity is noisy. I build the signal.";
-    const subhead = "Graduate Student | M.S. Applied Data Science, USC (Dec 2025) | Aspiring AI Systems Engineer";
+    const subhead = "Graduate Student | M.S. Applied Data Science, USC (Dec 2025) | AI & Software Engineer | ML • Systems • Data";
     const intro =
       isStory
         ? "I'm a graduate student building systems that matter. Through coursework and personal projects, I'm learning to turn complex problems into reliable solutions—with tests, logs, and clear architecture."
