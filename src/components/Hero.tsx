@@ -4,14 +4,15 @@ import {
   Terminal,
   FileText,
   ScrollText,
-  Sparkles,
   ShieldCheck,
   Rocket,
   Boxes,
   Brain,
   Gauge,
-  Database,
+  Target,
   Wrench,
+  Radar,
+  ListChecks,
 } from "lucide-react";
 
 type Mode = "signal" | "story";
@@ -42,26 +43,26 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
   const hero = useMemo(() => {
     const headline = isStory
       ? "I turn noise into signal."
-      : "Curiosity is noisy. I build the signal.";
+      : "Agents are shipping. I build the evals that catch what breaks.";
     const subhead =
-      "Graduate Student | M.S. Applied Data Science, USC (Dec 2025) | AI & Software Engineer | ML \u00b7 Systems \u00b7 Data";
+      "M.S. Applied Data Science, USC (Dec 2025) \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing";
     const intro = isStory
-      ? "I'm a graduate student building systems that matter. Through coursework and personal projects, I'm learning to turn complex problems into reliable solutions\u2014with tests, logs, and clear architecture."
-      : "Graduate student focused on building verifiable systems through coursework and projects. Learning to apply instrumentation, testable assumptions, and reproducible pipelines to turn messy inputs into reliable outputs.";
+      ? "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment\u2014reproducible, logged, standard-aligned. Current obsession: Agent Shield, an 8-module attack framework stress-testing 8 frontier models on the Inspect AI harness."
+      : "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield \u2014 8 adversarial modules (prompt injection, MCP tool poisoning, RAG memory attacks, behavioral drift) across 8 frontier models, with unified ASR + utility-under-attack metrics on Inspect AI. arXiv preprint in progress.";
     const chips = isStory
       ? [
-          { icon: <Sparkles size={14} />, text: "Curiosity with guardrails" },
-          { icon: <ShieldCheck size={14} />, text: "Truth > vibes" },
-          { icon: <Rocket size={14} />, text: "Fast iteration, tight loops" },
-          { icon: <Boxes size={14} />, text: "Systems over scripts" },
+          { icon: <ShieldCheck size={14} />, text: "Evals over vibes" },
+          { icon: <Radar size={14} />, text: "Adversarial thinking" },
+          { icon: <Rocket size={14} />, text: "Reproducible by default" },
+          { icon: <Boxes size={14} />, text: "Systems > scripts" },
           { icon: <Brain size={14} />, text: "Attention trained daily" },
         ]
       : [
-          { icon: <ShieldCheck size={14} />, text: "Reproducible pipelines" },
-          { icon: <Gauge size={14} />, text: "Eval-driven development" },
-          { icon: <Database size={14} />, text: "RAG + memory" },
-          { icon: <Wrench size={14} />, text: "Product-minded engineering" },
-          { icon: <Brain size={14} />, text: "Calm under pressure" },
+          { icon: <ShieldCheck size={14} />, text: "Inspect AI harness" },
+          { icon: <Target size={14} />, text: "ASR + utility-under-attack" },
+          { icon: <Gauge size={14} />, text: "Judge-model versioning" },
+          { icon: <ListChecks size={14} />, text: "CI-ready eval logs" },
+          { icon: <Wrench size={14} />, text: "Reproducible pipelines" },
         ];
     return { headline, subhead, intro, chips };
   }, [isStory]);
@@ -103,7 +104,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
           </span>
-          System Status: ONLINE // Dec 2025
+          System Status: ONLINE // Agent Shield Sprint Active
         </motion.div>
 
         {/* Headline — staggered word animation */}
@@ -200,17 +201,35 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <ScrollText size={18} />
             How I Think
           </motion.button>
-          <motion.a
-            href={getPublicPath("Docs/Aditya_Ch_Resume.pdf")}
-            target="_blank"
-            rel="noreferrer"
-            className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2"
+          {/* Dual resume picker: one tile with ML + LLM tracks */}
+          <motion.div
+            className="inline-flex glass rounded-xl overflow-hidden"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
-            <FileText size={18} />
-            Resume
-          </motion.a>
+            <div className="flex items-center gap-2 px-4 py-3.5 text-slate-200 font-medium">
+              <FileText size={18} />
+              Resume
+            </div>
+            <a
+              href={getPublicPath("Docs/Aditya_Ch_Resume_ML.pdf")}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3.5 py-3.5 border-l border-slate-800/60 text-xs font-mono text-cyan-300 hover:bg-cyan-500/10 hover:text-cyan-200 transition-colors flex items-center"
+              aria-label="Download ML-focused resume"
+            >
+              ML
+            </a>
+            <a
+              href={getPublicPath("Docs/Aditya_Ch_Resume_LLM.pdf")}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3.5 py-3.5 border-l border-slate-800/60 text-xs font-mono text-purple-300 hover:bg-purple-500/10 hover:text-purple-200 transition-colors flex items-center"
+              aria-label="Download LLM-focused resume"
+            >
+              LLM
+            </a>
+          </motion.div>
         </motion.div>
       </div>
     </section>

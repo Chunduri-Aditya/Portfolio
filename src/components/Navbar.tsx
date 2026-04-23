@@ -25,6 +25,7 @@ interface NavbarProps {
 const navLinks = [
   { id: "thinking", label: "Thinking" },
   { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
   { id: "research", label: "Research" },
   { id: "skills", label: "Skills" },
 ];

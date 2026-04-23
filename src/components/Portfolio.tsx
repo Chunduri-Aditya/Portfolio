@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Hero from "./Hero";
 import ThinkingSection from "./ThinkingSection";
 import ProjectsSection from "./ProjectsSection";
+import ExperienceSection from "./ExperienceSection";
 import ResearchSection from "./ResearchSection";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
@@ -94,6 +95,21 @@ const Portfolio: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <ProjectsSection mode={mode} />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Section divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent" />
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`experience-${mode}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ExperienceSection mode={mode} />
               </motion.div>
             </AnimatePresence>
 

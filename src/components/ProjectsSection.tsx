@@ -7,10 +7,8 @@ import {
   Sparkles,
   Lock,
   Eye,
-  Gauge,
-  Activity,
-  Timer,
-  Database,
+  ShieldCheck,
+  Music,
 } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import ProjectCard from "./ProjectCard";
@@ -21,270 +19,128 @@ type Mode = "signal" | "story";
 
 const PROJECTS: Project[] = [
   {
-    id: "akashic-tree-web",
-    title: "AkashicTree Web Platform",
-    subtitle: "Automated GenAI Media Pipeline",
-    icon: <Sparkles className="w-6 h-6 text-purple-400" />,
-    tags: ["Flask", "LangChain", "Stable Diffusion", "Coqui TTS", "MoviePy", "ChromaDB"],
+    id: "agent-shield",
+    title: "Agent Shield",
+    subtitle: "LLM Agent Security Evaluation Framework",
+    icon: <ShieldCheck className="w-6 h-6 text-rose-400" />,
+    tags: [
+      "Inspect AI",
+      "AgentDojo",
+      "Adversarial Eval",
+      "Prompt Injection",
+      "MCP Security",
+      "Red Teaming",
+      "Python",
+    ],
     oneLiner:
-      "An end-to-end content pipeline that turns a brief into scripts, visuals, voice, and assembled video\u2014with quality gates and traceable stages.",
+      "An 8-module adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool poisoning, RAG memory attacks, and behavioral drift\u2014built on UK AISI\u2019s Inspect AI harness.",
     story:
-      "Marketing needs speed *and* brand safety. I built a pipeline that generates scripts, images, voiceovers, and final videos, then blocks output when brand constraints fail. It ships fast, but it doesn\u2019t ship lies.",
+      "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one metric schema, eight adversarial modules\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
     evidence: [
-      "Script generation with brand constraints + validation",
-      "Image generation via Stable Diffusion",
-      "Voice synthesis with Coqui TTS",
-      "Video assembly with MoviePy",
-      "Quality gates that stop bad generations early",
-      "Batch generation + repeatable runs (configs/logs)",
-    ],
-    architecture: {
-      overview: "Brief \u2192 Script Gen \u2192 Brand Check \u2192 Image Gen \u2192 Voice Gen \u2192 Assembly \u2192 Quality Gate \u2192 Video",
-      diagram: `
-+-----------+   +-----------+   +-----------+   +-----------+
-|  Brief    |-->|  Script   |-->|   Brand   |-->|   Image   |
-|           |   |   Gen     |   |   Check   |   |   Gen     |
-+-----------+   +-----------+   +-----------+   +-----------+
-                                                             |
-                                                             v
-+-----------+   +-----------+   +-----------+   +-----------+
-|   Video   |<--|  Quality  |<--| Assembly  |<--|  Voice    |
-|  Output   |   |   Gate    |   | (MoviePy) |   |   Gen     |
-+-----------+   +-----------+   +-----------+   +-----------+`,
-      tradeoffs: [
-        "Speed vs correctness (quality gates add time, prevent damage)",
-        "Local-first control vs cloud scale (biased toward control + privacy)",
-        "Batch throughput vs live UX (supports both paths)",
-      ],
-    },
-    decisions: [
-      { title: "Quality gates", why: "It\u2019s cheaper to block bad output than to clean it later." },
-      { title: "Modular stages", why: "Swap/upgrade any stage without rewiring the whole system." },
-      { title: "Traceable runs", why: "Generative systems need receipts (logs/configs/artifacts)." },
-    ],
-    links: {
-      github: "https://github.com/Chunduri-Aditya/Automated-GenAI-Media-Pipeline-Akashic-Tree",
-      live: "#",
-      demo: "#",
-    },
-    metrics: [
-      { label: "Output", value: "Video assets" },
-      { label: "Design", value: "Quality-gated" },
-    ],
-  },
-  {
-    id: "ai-health-journal",
-    title: "The External Memory",
-    subtitle: "AI Health Journal (Local-First)",
-    icon: <Lock className="w-6 h-6 text-emerald-400" />,
-    tags: ["RAG", "LangChain", "Whisper", "Local-First", "Privacy", "Flask"],
-    oneLiner:
-      "A journaling assistant that grounds responses in your own history using retrieval\u2014built to be calm, private, and verifiable.",
-    story:
-      "I wanted reflection without exporting my private thoughts into someone else\u2019s dataset. So I built a journal that remembers selectively: it retrieves relevant moments and responds with context\u2014not vibes.",
-    evidence: [
-      "Voice input (Whisper) \u2192 structured notes",
-      "Vector retrieval grounding (history-backed answers)",
-      "Multi-model support (Ollama) with safer \u201cquality mode\u201d",
-      "Local-first defaults for privacy",
-    ],
-    architecture: {
-      overview: "Voice/Text \u2192 Normalize \u2192 Embed \u2192 Retrieve \u2192 Compose Prompt \u2192 Generate \u2192 Verify",
-      diagram: `
-+---------+   +-----------+   +---------+   +-----------+   +-----------+
-|  Voice  |-->| Whisper   |-->|  Text   |-->|  Embed    |-->|  Vector   |
-+---------+   +-----------+   +---------+   +-----------+   |  Store    |
-                                                             +-----+-----+
-                                                                   |
-                                                                   v
-                                                           +---------------+
-                                                           |   Retrieve    |
-                                                           +-------+-------+
-                                                                   |
-                                                                   v
-                                                           +---------------+
-                                                           |  Compose +    |
-                                                           |  Grounded LLM |
-                                                           +-------+-------+
-                                                                   |
-                                                                   v
-                                                           +---------------+
-                                                           | Verify/Revise |
-                                                           +---------------+`,
-      tradeoffs: [
-        "Privacy vs convenience (local-first default, optional cloud later)",
-        "Recall vs relevance (tight retrieval + prompt framing)",
-        "Speed vs groundedness (verification is slower, safer)",
-      ],
-    },
-    decisions: [
-      { title: "Retrieval grounding", why: "Memory should be targeted, not noisy." },
-      { title: "Local-first baseline", why: "Sensitive inputs deserve default privacy." },
-      { title: "Verification stage", why: "The best hallucination is the one you never ship." },
-    ],
-    links: {
-      github: "https://github.com/Chunduri-Aditya/ai-health-journal",
-      live: "#",
-      demo: "#",
-    },
-    metrics: [
-      { label: "Privacy", value: "Default-safe" },
-      { label: "Grounding", value: "History-backed" },
-    ],
-  },
-  {
-    id: "model-behavior-lab",
-    title: "The Truth-Seeking Engine",
-    subtitle: "Model Behavior Lab",
-    icon: <Eye className="w-6 h-6 text-cyan-400" />,
-    tags: ["Python", "Evals", "JSONL", "Viz", "OSS LLMs", "Ollama"],
-    oneLiner:
-      "A reproducible evaluation harness for LLM behavior\u2014turning \u201cfeels off\u201d into scored, comparable runs.",
-    story:
-      "I got tired of debating model quality with adjectives. So I built an interrogation room: versioned tests, consistent scoring, artifacts you can diff. It makes failure modes visible.",
-    evidence: [
-      "JSONL test suites \u2192 consistent runs",
-      "Failure-mode taxonomy: hallucination / refusal / tone drift",
-      "Artifacts: reports + breakdowns + diffs",
-      "A/B comparisons across models",
-    ],
-    architecture: {
-      overview: "Tests (JSONL) \u2192 Runner \u2192 Scorers \u2192 Artifacts \u2192 Compare runs",
-      diagram: `
-+------------------+     +------------------+     +------------------+
-|   tests/*.jsonl  | --> |   eval_runner     | --> |   raw outputs    |
-+------------------+     +------------------+     +------------------+
-                                   |                      |
-                                   v                      v
-                            +--------------+       +--------------+
-                            |   scorers    |       |  reporters   |
-                            +--------------+       +--------------+
-                                   |                      |
-                                   v                      v
-                            +------------------------------------+
-                            |  results/ (tables, charts, diffs)  |
-                            +------------------------------------+`,
-      tradeoffs: [
-        "Strict scoring vs flexibility (kept configurable)",
-        "Fast iteration vs deep evaluation (quick + full modes)",
-        "Heuristics vs judge-model scoring (designed for both)",
-      ],
-    },
-    decisions: [
-      { title: "JSON-driven tests", why: "Evaluation should be reviewable like code." },
-      { title: "Artifacts-first", why: "Charts and diffs change minds faster than paragraphs." },
-      { title: "Failure-mode taxonomy", why: "So regressions don\u2019t hide behind averages." },
-    ],
-    links: {
-      github: "https://github.com/Chunduri-Aditya/Model-Behavior-Lab",
-      live: "#",
-      demo: "#",
-    },
-    metrics: [
-      { label: "Core", value: "Evals as tests" },
-      { label: "Output", value: "Reports + diffs" },
-    ],
-  },
-  {
-    id: "metalearnml",
-    title: "MetaLearnML",
-    subtitle: "AutoML (Meta-Learning)",
-    icon: <Gauge className="w-6 h-6 text-emerald-400" />,
-    tags: ["AutoML", "Meta-Learning", "PyTorch", "Neo4j", "FastAPI", "Scikit-learn"],
-    oneLiner:
-      "A self-improving AutoML engine that learns from past runs to choose better pipelines faster than brute-force search.",
-    story:
-      "Most AutoML feels like expensive guessing. I wanted an engine that learns from its own history, predicts what will work, then validates and records why.",
-    evidence: [
-      "Task inference (classification vs regression)",
-      "Ranked preprocessing strategies",
-      "Meta-learning guided selection",
-      "Experiment graph tracking (Neo4j)",
-      "Multi-format reports",
+      "8 attack modules: prompt injection, MCP tool poisoning, RAG memory attacks, multi-agent manipulation, covert exfiltration, Cialdini-grounded behavioral drift, and more",
+      "Benchmarks 8 frontier models (Claude, GPT-4.1, Gemini 2.5, Llama 3.1, Mistral Large, DeepSeek V3) under one metric schema",
+      "Unified ASR (attack success rate) + utility-under-attack metrics",
+      "Reproducible seeds, judge-model versioning, CI-ready eval logs",
+      "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc",
+      "arXiv preprint in progress",
     ],
     architecture: {
       overview:
-        "Dataset \u2192 Task Inference \u2192 Preprocess Strategies \u2192 Meta-Learner \u2192 Select \u2192 Train \u2192 Log Graph \u2192 Report",
+        "Attack Module \u2192 Inspect AI Harness \u2192 Agent Under Test \u2192 Judge Model \u2192 Scored Log \u2192 ASR + Utility Metrics",
       diagram: `
-+-----------+   +-----------+   +------------------+   +-----------+
-|  Dataset  |-->|   Task    |-->|  Preprocessing   |-->|  Meta-    |
-|           |   | Inference |   |   Strategies     |   |  Learner  |
-+-----------+   +-----------+   +------------------+   +-----+-----+
-                                                             |
-                                                             v
-+-----------+   +-----------+   +------------------+   +-----------+
-|  Neo4j    |<--|  Training |<--|  Model Selection |<--| Prediction|
-|  Graph    |   |           |   |                  |   |           |
-+-----------+   +-----------+   +------------------+   +-----------+
-                                                             |
-                                                             v
-                                                      +-----------+
-                                                      |  Report   |
-                                                      +-----------+`,
++----------------+   +----------------+   +-------------------+
+|  Attack Suite  |-->|  Inspect AI    |-->|  Agent Under Test |
+|  (8 modules)   |   |  Harness       |   |  (8 frontier LLMs)|
++----------------+   +----------------+   +---------+---------+
+                                                     |
+                                                     v
++----------------+   +----------------+   +-------------------+
+|  ASR + Utility |<--|  Judge Model   |<--|  Tool + Memory    |
+|  Report        |   |  (versioned)   |   |  Trace            |
++----------------+   +----------------+   +-------------------+`,
       tradeoffs: [
-        "Extra system complexity vs selection speed (worth it over time)",
-        "Graph storage overhead vs insight (graphs explain \u2018why\u2019 better)",
-        "Parallelism vs laptop limits (configurable)",
+        "Breadth vs depth: 8 modules give surface coverage; each can go deeper later",
+        "Automated judge vs human rater (judge is cheaper, versioned for reproducibility)",
+        "Safety of running attacks vs value of knowing failure modes (sandboxed, logged, bounded)",
       ],
     },
     decisions: [
-      { title: "Meta-learning over brute force", why: "Use experience to reduce wasted compute." },
-      { title: "Neo4j tracking", why: "Relationships between experiments matter." },
-      { title: "Reports as artifacts", why: "Different stakeholders need different views." },
+      {
+        title: "Built on Inspect AI, not a custom harness",
+        why: "The field needs evals that compose; UK AISI\u2019s harness is the closest thing to a standard.",
+      },
+      {
+        title: "Unified metric schema across all 8 modules",
+        why: "Attacks only get comparable when the scoreboard is the same. ASR + utility-under-attack holds everywhere.",
+      },
+      {
+        title: "Judge-model versioning + reproducible seeds",
+        why: "A result that can\u2019t be re-run is a rumor. Every number on the dashboard has a receipt.",
+      },
     ],
     links: {
-      github: "https://github.com/Chunduri-Aditya/MetaLearnML",
+      github: "https://github.com/Chunduri-Aditya",
       live: "#",
       demo: "#",
     },
     metrics: [
-      { label: "Goal", value: "Smarter selection" },
-      { label: "Stack", value: "PyTorch + Neo4j" },
+      { label: "Modules", value: "8 attacks" },
+      { label: "Models", value: "8 frontier" },
     ],
   },
   {
     id: "ai-remixmate",
-    title: "The Pattern Matcher",
-    subtitle: "AI RemixMate",
-    icon: <Activity className="w-6 h-6 text-purple-400" />,
-    tags: ["Librosa", "Signal Proc", "Demucs", "Whisper", "Multimodal"],
+    title: "AI RemixMate",
+    subtitle: "AI-Powered DJ Mixing Engine",
+    icon: <Music className="w-6 h-6 text-purple-400" />,
+    tags: ["PyTorch", "Librosa", "Demucs", "FastAPI", "Gradio", "Audio ML"],
     oneLiner:
-      "A DJ-style pipeline that matches tracks using audio features + lyrical alignment, then builds transitions.",
+      "An end-to-end audio ML pipeline that decomposes tracks into stems, analyzes BPM / key / energy, and matches them with Camelot-Wheel harmonic logic. Open-sourced, GPU-accelerated, 9 GitHub stars.",
     story:
-      "A clean transition is hidden engineering: tempo, key, energy, phrasing, meaning. I decomposed \u2018DJ instinct\u2019 into measurable signals, then stitched tracks using stems and alignment.",
+      "A clean transition is hidden engineering. I pulled it apart into measurable pieces\u2014source separation with Demucs, spectral features with Librosa, harmonic matching with the Camelot Wheel\u2014and wired them into a single pipeline anyone can point a folder of tracks at.",
     evidence: [
-      "Stem separation (Demucs)",
-      "Audio similarity (MFCC/chroma/etc.)",
-      "Whisper transcription for lyrics alignment",
-      "Rule-guided transitions (fades/alignment)",
-      "Cached feature DB for fast matching",
+      "Demucs source separation + Librosa spectral analysis + Camelot-Wheel harmonic matching",
+      "FastAPI backend with GPU acceleration",
+      "Gradio web UI supporting 8+ audio formats",
+      "Real-time BPM, key, and energy analysis",
+      "Open-sourced; 9 GitHub stars; only pipeline integrating all three components (confirmed via landscape analysis)",
     ],
     architecture: {
-      overview: "Ingest \u2192 Stems \u2192 Features + Lyrics \u2192 Similarity \u2192 Select match \u2192 Render transition",
+      overview:
+        "Track A + B \u2192 Demucs Stems \u2192 Librosa Features (BPM/Key/Energy) \u2192 Camelot Wheel \u2192 Match \u2192 Render",
       diagram: `
-+-----------+   +-----------+   +----------------------+   +-------------+
-|  Track A  |-->|  Demucs   |-->|  Features + Lyrics    |-->| Similarity  |
-+-----------+   +-----------+   +----------------------+   +------+------+
-                                                               |
-+-----------+   +-----------+   +----------------------+        v
-|  Track B  |-->|  Demucs   |-->|  Features + Lyrics    |   +----------+
-+-----------+   +-----------+   +----------------------+   |  Match    |
-                                                           +----+-----+
-                                                                |
-                                                                v
-                                                           +----------+
-                                                           |  Render  |
-                                                           +----------+`,
++-----------+   +-----------+   +----------------------+   +---------------+
+|  Track A  |-->|  Demucs   |-->|  Librosa (BPM/Key/   |-->|  Camelot      |
++-----------+   |  (stems)  |   |   Energy features)   |   |  Wheel Match  |
+                +-----------+   +----------------------+   +-------+-------+
++-----------+   +-----------+   +----------------------+           |
+|  Track B  |-->|  Demucs   |-->|  Librosa features    |-----------+
++-----------+   +-----------+   +----------------------+           |
+                                                                    v
+                                                            +--------------+
+                                                            |   Render     |
+                                                            |  (FastAPI    |
+                                                            |   + Gradio)  |
+                                                            +--------------+`,
       tradeoffs: [
-        "Match quality vs compute (cache + batch)",
+        "Match quality vs compute (cached features + batch)",
         "Beat-perfect sync vs musical feel (rules + smoothing)",
-        "Audio-only vs multimodal (lyrics add meaning)",
+        "Local CPU vs GPU (pipeline is GPU-accelerated but works either way)",
       ],
     },
     decisions: [
-      { title: "Stems first", why: "Vocals are the hardest to blend\u2014separate them." },
-      { title: "Multimodal matching", why: "Emotion and meaning don\u2019t live only in audio features." },
-      { title: "Rules + signals", why: "Rules keep it musical while signals keep it measurable." },
+      {
+        title: "Stems first, features second",
+        why: "Vocals are the hardest to blend. Separate them, then reason about the instrumentals.",
+      },
+      {
+        title: "Camelot Wheel for key matching",
+        why: "DJs already trust it. Encoding it explicitly beats a black-box similarity score.",
+      },
+      {
+        title: "Open-sourced with a Gradio UI",
+        why: "The system only matters if someone can try it in a browser without cloning and configuring.",
+      },
     ],
     links: {
       github: "https://github.com/Chunduri-Aditya/ai-remixmate",
@@ -292,104 +148,200 @@ const PROJECTS: Project[] = [
       demo: "#",
     },
     metrics: [
-      { label: "Signals", value: "Audio + lyrics" },
-      { label: "Output", value: "Rendered mixes" },
+      { label: "Stars", value: "9 on GitHub" },
+      { label: "Formats", value: "8+ audio types" },
     ],
   },
   {
-    id: "take-action-project",
-    title: "Action-First Daily Agent",
-    subtitle: "Take_Action_Project (AFDA)",
-    icon: <Timer className="w-6 h-6 text-cyan-400" />,
-    tags: ["Streamlit", "LLM", "Productivity", "Action-Gating"],
+    id: "akashic-tree",
+    title: "AkashicTree",
+    subtitle: "Automated Content Generation Pipeline",
+    icon: <Sparkles className="w-6 h-6 text-purple-400" />,
+    tags: ["Diffusers", "FLUX.1", "Ollama", "ElevenLabs", "Python", "Multimodal"],
     oneLiner:
-      "A personal agent that forces momentum by revealing only one next step\u2014built as a \u2018do-engine\u2019 instead of a planning tool.",
+      "A model-agnostic ACG pipeline that coordinates text (Ollama), image (FLUX.1 / Diffusers), and audio (ElevenLabs) from a single brief\u2014with drop-in backend switching that cut per-iteration inference cost 90%.",
     story:
-      "Planning can become a hiding place. AFDA only shows one actionable micro-step and unlocks the next after proof-of-work. It turns intention into movement.",
+      "Generative pipelines usually lock you into one provider per modality. I wanted a brief to fan out into text, image, and audio with whichever backend makes sense that day\u2014local Ollama for development, cloud for quality runs\u2014without changing a line of the orchestration layer.",
     evidence: [
-      "One micro-step at a time",
-      "Action-gating (progress requires action)",
-      "Minimal UI \u2192 fewer decisions",
-      "Local-first storage",
+      "Single-brief \u2192 text + image + audio via one orchestration layer",
+      "Tiered backend switching: local Ollama inference vs cloud APIs (GPT-4o-mini, FLUX.1)",
+      "Cut per-iteration inference cost 90% during dev cycles",
+      "Cut production time 80% vs the manual equivalent",
+      "Drop-in model substitution at every stage",
     ],
     architecture: {
-      overview: "Goal Input \u2192 Token \u2192 Micro-Step \u2192 Action Gate \u2192 Completion \u2192 Next Step",
+      overview:
+        "Brief \u2192 Orchestration Layer \u2192 (Text: Ollama \u2194 Cloud) \u2192 (Image: FLUX.1 / Diffusers) \u2192 (Audio: ElevenLabs) \u2192 Assembled Output",
       diagram: `
-+-----------+   +-----------+   +-----------+   +-----------+
-|   Goal    |-->|   Token   |-->|  Micro-   |-->|  Action   |
-|  Input    |   | Generation|   |  Step     |   |   Gate    |
-+-----------+   +-----------+   +-----------+   +-----+-----+
-                                                       |
-                                                       v
-+-----------+   +-----------+   +-----------+   +-----------+
-|  Learning |<--|   Next    |<--| Completion|   |  User     |
-|  System   |   |   Step    |   |   Check   |   |  Action   |
-+-----------+   +-----------+   +-----------+   +-----------+`,
++-----------+   +----------------------+
+|  Brief    |-->|  Orchestration Layer  |
++-----------+   +----+----------+-------+
+                     |          |          |
+          +----------+   +------+----+     +-------+
+          v              v           v             v
+  +---------------+ +--------------+ +--------------+
+  |  Text         | | Image        | | Audio        |
+  |  (Ollama <->  | | (FLUX.1 /    | | (ElevenLabs) |
+  |   Cloud API)  | |  Diffusers)  | |              |
+  +-------+-------+ +------+-------+ +------+-------+
+          |                |                |
+          +----------------+----------------+
+                           |
+                           v
+                   +----------------+
+                   |   Assembled    |
+                   |    Output      |
+                   +----------------+`,
       tradeoffs: [
-        "Simplicity vs feature breadth (simplicity wins for consistency)",
-        "Gating vs flexibility (gating reduces overwhelm)",
-        "Local vs cloud sync (privacy + speed first)",
+        "Local inference (cheap, private) vs cloud API (quality ceiling) \u2014 pipeline supports both",
+        "Model abstraction overhead vs lock-in risk (worth it for swap freedom)",
+        "Batch throughput vs interactive UX (pipeline handles both paths)",
       ],
     },
     decisions: [
-      { title: "Single next action", why: "Overwhelm kills motion; one step is doable." },
-      { title: "Action-gating", why: "Clarity often arrives after action, not before." },
-      { title: "Minimal interface", why: "Fewer controls \u2192 less friction \u2192 more doing." },
+      {
+        title: "Unified inference abstraction",
+        why: "Text / image / audio should be swap points, not rewrites.",
+      },
+      {
+        title: "Tiered backend switching",
+        why: "The cheapest model that hits the bar is the right one. That bar changes per iteration.",
+      },
+      {
+        title: "Model-agnostic orchestration",
+        why: "The orchestration layer outlives any specific model. Build it to survive the next upgrade.",
+      },
     ],
     links: {
-      github: "https://github.com/Chunduri-Aditya/Take_Action_Project",
+      github: "https://github.com/Chunduri-Aditya/Automated-GenAI-Media-Pipeline-Akashic-Tree",
       live: "#",
       demo: "#",
     },
     metrics: [
-      { label: "Mode", value: "Action-first" },
-      { label: "UI", value: "Streamlit" },
+      { label: "Cost", value: "\u221290% per iter" },
+      { label: "Time", value: "\u221280% prod cycle" },
     ],
   },
   {
-    id: "chatdb",
-    title: "Natural Language to SQL",
-    subtitle: "ChatDB",
-    icon: <Database className="w-6 h-6 text-cyan-400" />,
-    tags: ["NLP", "SQL", "SQLite", "SQLAlchemy", "Templates"],
+    id: "ai-health-journal",
+    title: "AI Health Journal",
+    subtitle: "Privacy-First LLM Assistant (On-Device RAG)",
+    icon: <Lock className="w-6 h-6 text-emerald-400" />,
+    tags: ["RAG", "Ollama", "ChromaDB", "DPO", "Flask", "Local-First"],
     oneLiner:
-      "A system that loads CSVs, infers schema, and converts natural language questions into executable SQL safely and predictably.",
+      "A production RAG assistant running entirely on-device: 7B-parameter Ollama inference, ChromaDB vector store, DPO-aligned outputs, zero cloud dependency.",
     story:
-      "I wanted database querying without context switching into SQL. ChatDB loads data, understands the schema, and produces reliable SQL using templates.",
+      "Reflection shouldn\u2019t require exporting your private thoughts into someone else\u2019s dataset. I built the whole stack locally\u2014vector retrieval, inference, DPO alignment\u2014so the system grounds its answers in your own history without anything leaving the machine.",
     evidence: [
-      "CSV \u2192 SQL loader with schema inference",
-      "Template-based SQL generation (predictable)",
-      "Interactive CLI workflows",
-      "Supports WHERE / GROUP BY / aggregations",
+      "7B-parameter LLM running entirely on-device via Ollama",
+      "ChromaDB vector retrieval, sub-second context injection across 10,000+ document chunks",
+      "DPO (Direct Preference Optimization) fine-tuning for health-domain alignment",
+      "Flask API layer \u2014 zero external API dependencies",
+      "Local-first by default; no data egress",
     ],
     architecture: {
-      overview: "CSV \u2192 Schema \u2192 SQLite \u2192 NL Query \u2192 Intent \u2192 SQL \u2192 Execute \u2192 Results",
+      overview:
+        "Input \u2192 Embed \u2192 ChromaDB Retrieve \u2192 Compose Prompt \u2192 Ollama 7B (DPO-aligned) \u2192 Verified Response",
       diagram: `
 +-----------+   +-----------+   +-----------+   +-----------+
-|   CSV     |-->|  Schema   |-->|  SQLite   |-->|   NL      |
-|   File    |   | Detection |   |   Load    |   |  Query    |
+|  Input    |-->|  Embed    |-->|  ChromaDB |-->|  Retrieve |
+|  (text)   |   |           |   |  (vector) |   |   top-k   |
 +-----------+   +-----------+   +-----------+   +-----+-----+
                                                        |
                                                        v
 +-----------+   +-----------+   +-----------+   +-----------+
-|  Results  |<--| Execution |<--|    SQL    |<--|  Intent   |
-|           |   |           |   | Generation|   |  Parsing  |
+|  Response |<--|  Verify   |<--|  Ollama   |<--|  Compose  |
+|           |   |           |   |  7B (DPO) |   |   prompt  |
 +-----------+   +-----------+   +-----------+   +-----------+`,
       tradeoffs: [
-        "Templates vs LLM (templates are safer, cheaper, predictable)",
-        "SQLite portability vs Postgres power (portability first)",
-        "Simple intents vs full semantic parsing (tight scope \u2192 better reliability)",
+        "On-device (private, limited by local hardware) vs cloud (scale, but leak risk)",
+        "Retrieval recall vs precision (tight top-k + DPO alignment keep it grounded)",
+        "DPO training cost vs alignment quality (one-time investment, compounds per response)",
       ],
     },
     decisions: [
-      { title: "Schema detection", why: "Users shouldn\u2019t hand-author schemas for CSVs." },
-      { title: "Template SQL", why: "Reliability beats surprise." },
-      { title: "CLI-first", why: "Fast iteration beats fancy UI early on." },
+      {
+        title: "On-device everything",
+        why: "Health context is the last thing I\u2019d hand to a cloud endpoint I don\u2019t control.",
+      },
+      {
+        title: "DPO over SFT",
+        why: "Direct preference signals are closer to what \u2018useful for me\u2019 actually means than instruction-tuned defaults.",
+      },
+      {
+        title: "RAG as grounding, not retrieval",
+        why: "The point isn\u2019t surfacing passages. It\u2019s anchoring responses so they can\u2019t drift.",
+      },
     ],
-    links: { github: "https://github.com/Chunduri-Aditya/ChatDB", live: "#", demo: "#" },
+    links: {
+      github: "https://github.com/Chunduri-Aditya/ai-health-journal",
+      live: "#",
+      demo: "#",
+    },
     metrics: [
-      { label: "Focus", value: "Reliability" },
-      { label: "Design", value: "Template-based" },
+      { label: "Inference", value: "7B on-device" },
+      { label: "Retrieval", value: "10k+ chunks, sub-sec" },
+    ],
+  },
+  {
+    id: "model-behavior-lab",
+    title: "Model Behavior Lab",
+    subtitle: "Adversarial LLM Benchmarking Platform",
+    icon: <Eye className="w-6 h-6 text-cyan-400" />,
+    tags: ["Evals", "Ollama", "Plotly", "CI/CD", "Adversarial", "Python"],
+    oneLiner:
+      "An adversarial evaluation platform running 5,000+ automated tests across 10+ frontier models\u2014measuring instruction-hierarchy violations, hallucination rate, and refusal consistency with zero manual review.",
+    story:
+      "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: versioned tests, scored outputs, CI-integrated benchmarks. If a new model lands, the numbers are already waiting.",
+    evidence: [
+      "5,000+ automated tests across 10+ frontier models (GPT-4, Claude, Llama, Mistral)",
+      "Measures instruction-hierarchy violations, hallucination rate, refusal consistency",
+      "CI/CD integrated \u2014 new model versions benchmark automatically on release",
+      "Modular JSON test suites \u2014 any Ollama or API-accessible model is a drop-in target",
+      "Evaluation setup time: hours \u2192 under 5 minutes per release cycle",
+    ],
+    architecture: {
+      overview:
+        "JSON Test Suite \u2192 CI Runner \u2192 Model Pool (Ollama / API) \u2192 Scorers \u2192 Plotly Reports + Diffs",
+      diagram: `
++------------------+   +----------------+   +-------------------+
+|  JSON Test Suite |-->|  CI Runner     |-->|  Model Pool       |
+|  (adversarial)   |   |  (GH Actions)  |   |  (10+ frontier)   |
++------------------+   +----------------+   +---------+---------+
+                                                       |
+                                                       v
++------------------+   +----------------+   +-------------------+
+|  Plotly Reports  |<--|  Scorers       |<--|  Raw Outputs      |
+|  + Diffs         |   |  (automated)   |   |                   |
++------------------+   +----------------+   +-------------------+`,
+      tradeoffs: [
+        "Automated scoring vs human rater (automated wins at scale; calibrated against judge model)",
+        "Strict scoring vs flexibility (JSON schema keeps it configurable, not rigid)",
+        "Breadth (many models) vs depth (full probe) \u2014 CI handles breadth, targeted runs handle depth",
+      ],
+    },
+    decisions: [
+      {
+        title: "JSON-driven test suites",
+        why: "Evaluation should be reviewable like code, not buried in notebooks.",
+      },
+      {
+        title: "CI-integrated benchmarking",
+        why: "If a regression is only visible when someone remembers to run it, it\u2019s invisible.",
+      },
+      {
+        title: "Failure-mode taxonomy (violations / hallucination / refusal)",
+        why: "Averages hide regressions. Categories surface them.",
+      },
+    ],
+    links: {
+      github: "https://github.com/Chunduri-Aditya/Model-Behavior-Lab",
+      live: "#",
+      demo: "#",
+    },
+    metrics: [
+      { label: "Scale", value: "5,000+ tests" },
+      { label: "Models", value: "10+ frontier" },
     ],
   },
 ];

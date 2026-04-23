@@ -11,6 +11,7 @@ import {
   Wrench,
   Database,
   Mail,
+  ShieldCheck,
 } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 
@@ -24,26 +25,32 @@ const getPublicPath = (path: string): string => {
 
 const SKILLS = [
   {
-    category: "Analysis (Pattern Rec)",
-    tools: ["Python", "SQL", "Pandas", "NumPy", "Scikit-learn"],
-    icon: <Cpu size={16} />,
-    accent: "cyan",
+    category: "Eval & Adversarial (Safety)",
+    tools: ["Inspect AI", "AgentDojo", "DPO", "Red Teaming", "Prompt Injection"],
+    icon: <ShieldCheck size={16} />,
+    accent: "rose",
   },
   {
-    category: "Synthesis (Creation)",
-    tools: ["LangChain", "Ollama", "Stable Diffusion", "TTS"],
+    category: "LLM & Orchestration",
+    tools: ["LangChain", "Ollama", "Hugging Face", "RAG", "ChromaDB"],
     icon: <Sparkles size={16} />,
     accent: "purple",
   },
   {
-    category: "Deployment (Reliability)",
-    tools: ["Docker", "FastAPI", "Flask", "Streamlit"],
+    category: "ML Foundations",
+    tools: ["PyTorch", "TensorFlow", "Scikit-learn", "OpenCV", "Librosa", "Demucs"],
+    icon: <Cpu size={16} />,
+    accent: "cyan",
+  },
+  {
+    category: "Systems & Cloud",
+    tools: ["Docker", "AWS", "FastAPI", "Flask", "GitHub Actions", "CI/CD"],
     icon: <Wrench size={16} />,
     accent: "emerald",
   },
   {
-    category: "Recall (Memory)",
-    tools: ["ChromaDB", "Pinecone", "PostgreSQL", "RAG"],
+    category: "Data & Storage",
+    tools: ["PostgreSQL", "ChromaDB", "Neo4j", "Pandas", "NumPy", "Plotly"],
     icon: <Database size={16} />,
     accent: "blue",
   },
@@ -216,18 +223,32 @@ const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
               Want the receipts?
             </h5>
             <p className="text-xs text-slate-500 mb-5">
-              Resume PDF + GitHub + short project demos.
+              Two resume tracks \u2014 pick what matches the role.
             </p>
             <div className="grid gap-2">
               <motion.a
-                href={getPublicPath("Docs/Aditya_Ch_Resume.pdf")}
+                href={getPublicPath("Docs/Aditya_Ch_Resume_LLM.pdf")}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors border border-purple-500/20 hover:border-purple-500/40"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
+                aria-label="Download LLM-focused resume"
               >
-                <FileText size={16} /> Resume (PDF)
+                <FileText size={16} className="text-purple-300" />
+                <span>Resume \u2014 LLM / Safety track</span>
+              </motion.a>
+              <motion.a
+                href={getPublicPath("Docs/Aditya_Ch_Resume_ML.pdf")}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors border border-cyan-500/20 hover:border-cyan-500/40"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                aria-label="Download ML-focused resume"
+              >
+                <FileText size={16} className="text-cyan-300" />
+                <span>Resume \u2014 ML / SWE track</span>
               </motion.a>
               <motion.a
                 href="mailto:chunduri@usc.edu"
