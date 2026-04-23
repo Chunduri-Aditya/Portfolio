@@ -70,28 +70,28 @@ const ThinkingSection: React.FC<ThinkingSectionProps> = ({ mode }) => {
         title: "Truthful systems",
         text: isStory
           ? "If it\u2019s not reliable, it\u2019s not helpful. I\u2019d rather be slower than wrong."
-          : "Minimize hallucination risk with grounding, verification, and tests.",
+          : "Ground claims with retrieval, verify with evals, fail loudly when confidence is wrong.",
       },
       {
         icon: <CheckCircle2 size={16} className="text-cyan-300" />,
         title: "Reproducibility",
         text: isStory
           ? "I sleep better when tomorrow\u2019s run matches today\u2019s run."
-          : "Configs + deterministic eval paths + artifacts.",
+          : "Seeded configs + deterministic eval paths + versioned artifacts; same input, same verdict.",
       },
       {
         icon: <ArrowUpRight size={16} className="text-purple-300" />,
         title: "Leverage",
         text: isStory
           ? "I hunt the one lever that fixes five things at once."
-          : "Architecture that reduces future cognitive load.",
+          : "Build the eval harness once; every new attack vector becomes a unit test.",
       },
       {
         icon: <XCircle size={16} className="text-slate-200" />,
-        title: "Less drama",
+        title: "Stable behavior over heroics",
         text: isStory
           ? "I don\u2019t chase perfection. I chase stable behavior."
-          : "Clear definition of done + instrumentation to catch regressions.",
+          : "Regressions caught by instrumentation, not by vibes or late-night debugging.",
       },
     ],
     [isStory]
@@ -177,7 +177,7 @@ const ThinkingSection: React.FC<ThinkingSectionProps> = ({ mode }) => {
               <div className="text-sm text-slate-300 leading-relaxed">
                 {isStory
                   ? "My attention runs wide-angle and laser at the same time. The way I keep it useful is structure: lists, tests, logs, and clean interfaces\u2014so intensity becomes progress, not noise."
-                  : "I keep tight feedback loops and decision logs so exploration stays controlled."}
+                  : "Wide-angle attention and laser focus, running at the same time. Structure\u2014lists, tests, logs, decision trails\u2014keeps both aimed at signal, not noise."}
               </div>
             </div>
           </div>
