@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useMemo, useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Terminal,
   FileText,
@@ -30,15 +30,47 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
   const isStory = mode === "story";
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
+  // Throttle mousemove via rAF + write directly to the DOM so React doesn't
+  // re-render the entire hero on every pixel of cursor movement.
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+    if (prefersReducedMotion) return;
+    const section = sectionRef.current;
+    const glow = glowRef.current;
+    if (!section || !glow) return;
+
+    let frame = 0;
+    let nextX = 0;
+    let nextY = 0;
+
+    const flush = () => {
+      frame = 0;
+      glow.style.transform = `translate3d(${nextX - 200}px, ${nextY - 200}px, 0)`;
+      glow.style.opacity = "1";
     };
-    window.addEventListener("mousemove", handler);
-    return () => window.removeEventListener("mousemove", handler);
-  }, []);
+
+    const handleMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      nextX = e.clientX - rect.left;
+      nextY = e.clientY - rect.top;
+      if (!frame) frame = requestAnimationFrame(flush);
+    };
+
+    const handleLeave = () => {
+      glow.style.opacity = "0";
+    };
+
+    section.addEventListener("mousemove", handleMove);
+    section.addEventListener("mouseleave", handleLeave);
+    return () => {
+      section.removeEventListener("mousemove", handleMove);
+      section.removeEventListener("mouseleave", handleLeave);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [prefersReducedMotion]);
 
   const hero = useMemo(() => {
     const headline = isStory
@@ -70,22 +102,27 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
   const headlineWords = hero.headline.split(" ");
 
   return (
-    <section id="hero" className="relative min-h-[85vh] flex items-center mb-20 overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative min-h-[85vh] flex items-center mb-20 overflow-hidden"
+    >
       {/* Gradient mesh background */}
       <div className="absolute inset-0 gradient-mesh pointer-events-none" />
 
-      {/* Cursor glow */}
+      {/* Cursor glow (positioned via rAF in useEffect; opacity stays 0 until first move) */}
       <div
-        className="absolute pointer-events-none"
+        ref={glowRef}
+        aria-hidden="true"
+        className="absolute top-0 left-0 pointer-events-none will-change-transform"
         style={{
-          left: mousePos.x - 200,
-          top: mousePos.y - 200,
           width: 400,
           height: 400,
+          opacity: 0,
+          transition: "opacity 0.4s ease-out, background 0.5s ease-out",
           background: `radial-gradient(circle, ${
-            isStory ? "rgba(139, 92, 246, 0.06)" : "rgba(6, 182, 212, 0.06)"
+            isStory ? "rgba(139, 92, 246, 0.08)" : "rgba(6, 182, 212, 0.08)"
           } 0%, transparent 70%)`,
-          transition: "left 0.3s ease-out, top 0.3s ease-out",
         }}
       />
 
@@ -201,35 +238,19 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <ScrollText size={18} />
             How I Think
           </motion.button>
-          {/* Dual resume picker: one tile with ML + LLM tracks */}
-          <motion.div
-            className="inline-flex glass rounded-xl overflow-hidden"
+          <motion.a
+            href={getPublicPath("Docs/Aditya_Chunduri.pdf")}
+            target="_blank"
+            rel="noreferrer"
+            download="Aditya_Chunduri.pdf"
+            className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2 border border-slate-700/60 hover:border-cyan-500/40 hover:text-cyan-200"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
+            aria-label="View resume (PDF)"
           >
-            <div className="flex items-center gap-2 px-4 py-3.5 text-slate-200 font-medium">
-              <FileText size={18} />
-              Resume
-            </div>
-            <a
-              href={getPublicPath("Docs/Aditya_Ch_Resume_ML.pdf")}
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-3.5 border-l border-slate-800/60 text-xs font-mono text-cyan-300 hover:bg-cyan-500/10 hover:text-cyan-200 transition-colors flex items-center"
-              aria-label="Download ML-focused resume"
-            >
-              ML
-            </a>
-            <a
-              href={getPublicPath("Docs/Aditya_Ch_Resume_LLM.pdf")}
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-3.5 border-l border-slate-800/60 text-xs font-mono text-purple-300 hover:bg-purple-500/10 hover:text-purple-200 transition-colors flex items-center"
-              aria-label="Download LLM-focused resume"
-            >
-              LLM
-            </a>
-          </motion.div>
+            <FileText size={18} />
+            Resume
+          </motion.a>
         </motion.div>
       </div>
     </section>
