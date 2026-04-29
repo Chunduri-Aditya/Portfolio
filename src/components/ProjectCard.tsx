@@ -1,45 +1,8 @@
 import React, { memo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-
-type Mode = "signal" | "story";
-
-interface ProjectMetric {
-  label: string;
-  value: string;
-}
-
-interface ProjectLinks {
-  github?: string;
-  live?: string;
-  demo?: string;
-}
-
-interface ProjectDecision {
-  title: string;
-  why: string;
-}
-
-interface ProjectArchitecture {
-  overview: string;
-  diagram: string;
-  tradeoffs: string[];
-}
-
-export interface Project {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  tags: string[];
-  oneLiner: string;
-  story: string;
-  evidence: string[];
-  architecture: ProjectArchitecture;
-  decisions: ProjectDecision[];
-  links: ProjectLinks;
-  metrics: ProjectMetric[];
-}
+import type { Mode, Project } from "../data/content";
+import { Icon } from "../lib/iconMap";
 
 const ProjectCard = memo(function ProjectCard({
   project,
@@ -65,7 +28,11 @@ const ProjectCard = memo(function ProjectCard({
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-4">
           <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-800/50 group-hover:border-slate-700/50 transition-colors">
-            {project.icon}
+            <Icon
+              name={project.iconName}
+              size={24}
+              className={project.iconClassName}
+            />
           </div>
           <div>
             <h4 className="text-xl font-bold text-slate-100 mb-1 group-hover:text-white transition-colors">
@@ -74,11 +41,7 @@ const ProjectCard = memo(function ProjectCard({
             <p className="text-sm text-slate-500 font-mono">{project.subtitle}</p>
           </div>
         </div>
-        <motion.div
-          className="mt-1"
-          animate={{ x: 0 }}
-          whileHover={{ x: 4 }}
-        >
+        <motion.div className="mt-1" animate={{ x: 0 }} whileHover={{ x: 4 }}>
           <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
         </motion.div>
       </div>

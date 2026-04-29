@@ -1,4 +1,4 @@
-import { FAQIntent } from "../data/faqIntents";
+import { FAQIntent } from "../data/content";
 
 // Simple synonym map
 const synonyms: Record<string, string[]> = {

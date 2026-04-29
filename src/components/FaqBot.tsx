@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Send, MessageCircle, ChevronDown } from "lucide-react";
-import { faqIntents, FAQIntent } from "../data/faqIntents";
+import { X, Send, MessageCircle } from "lucide-react";
+import { FAQ_INTENTS, FAQ_BOT_UI } from "../data/content";
 import { matchIntent } from "../lib/matchIntent";
 
 interface Message {
@@ -39,7 +39,7 @@ const FaqBot: React.FC = () => {
       const introMessage: Message = {
         id: "intro",
         isBot: true,
-        text: "I'm a lightweight FAQ bot. Ask about my projects, resume, tech stack, or how I think.",
+        text: FAQ_BOT_UI.introMessage,
         links: [],
       };
       setMessages([introMessage]);
@@ -86,14 +86,13 @@ const FaqBot: React.FC = () => {
     setShowSuggestions(false);
 
     // Find matching intent
-    const matchedIntent = matchIntent(queryText, faqIntents);
+    const matchedIntent = matchIntent(queryText, FAQ_INTENTS);
 
     // Add bot response
     setTimeout(() => {
       if (matchedIntent) {
-        // Log intent selection
         logIntent(matchedIntent.id, queryText);
-        
+
         const botMessage: Message = {
           id: `bot-${Date.now()}`,
           text: matchedIntent.answer,
@@ -104,7 +103,7 @@ const FaqBot: React.FC = () => {
       } else {
         const fallbackMessage: Message = {
           id: `bot-fallback-${Date.now()}`,
-          text: "I'm not sure. Try one of these:",
+          text: FAQ_BOT_UI.fallbackMessage,
           isBot: true,
           links: [],
         };
@@ -129,14 +128,7 @@ const FaqBot: React.FC = () => {
     launcherRef.current?.focus();
   };
 
-  // Quick chips: Projects, Resume, Contact, Tech stack, How I think
-  const quickChips = [
-    { id: "summarize-projects", label: "Projects" },
-    { id: "resume", label: "Resume" },
-    { id: "contact-links", label: "Contact" },
-    { id: "skills-stack", label: "Tech stack" },
-    { id: "about-me", label: "How I think" },
-  ];
+  const quickChips = FAQ_BOT_UI.quickChips;
 
   return (
     <>
@@ -149,7 +141,7 @@ const FaqBot: React.FC = () => {
           aria-label="Open FAQ bot"
         >
           <MessageCircle size={20} />
-          <span className="hidden sm:inline">Ask about my work</span>
+          <span className="hidden sm:inline">{FAQ_BOT_UI.launcherLabel}</span>
         </button>
       )}
 
@@ -231,7 +223,7 @@ const FaqBot: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {quickChips.map((chip) => {
-                    const intent = faqIntents.find(i => i.id === chip.id);
+                    const intent = FAQ_INTENTS.find((i) => i.id === chip.id);
                     return (
                       <button
                         key={chip.id}
@@ -260,7 +252,7 @@ const FaqBot: React.FC = () => {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about my work..."
+                placeholder={FAQ_BOT_UI.inputPlaceholder}
                 className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
                 aria-label="Ask a question"
               />
