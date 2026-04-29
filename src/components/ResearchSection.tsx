@@ -1,34 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { BookOpen, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { AnimatedSection } from "./AnimatedSection";
+import { RESEARCH, type Mode, type ResearchAccent } from "../data/content";
+import { Icon } from "../lib/iconMap";
 
-type Mode = "signal" | "story";
-
-const getPublicPath = (path: string): string => {
-  const base = import.meta.env.BASE_URL;
-  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${base}${cleanPath}`;
-};
-
-const RESEARCH = {
-  badge: "PUBLICATION: IJRASET VOL 11",
-  title: "Wind Power Analysis using Digital Twins & ML",
-  story:
-    "Wind is messy. I built a Digital Twin on Azure to simulate the present and forecast the future\u2014then tested models that respect long-range time dependencies.",
-  signal:
-    "Hybrid forecasting model combining TCN + KNN inside a Digital Twin architecture on Azure to improve wind output forecasting.",
-  metrics: [
-    { label: "Architecture", value: "Digital Twin", accent: "cyan" },
-    { label: "Model", value: "TCN + KNN", accent: "purple" },
-    { label: "Cloud", value: "Azure", accent: "blue" },
-    { label: "Focus", value: "Forecasting", accent: "green" },
-  ] as const,
-  paperHref: getPublicPath("Docs/Publication_Paper_Wind.pdf"),
-  certHref: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf"),
-};
-
-const accentMap: Record<string, string> = {
+const accentMap: Record<ResearchAccent, string> = {
   cyan: "text-cyan-400 border-cyan-500/20 bg-cyan-500/10",
   purple: "text-purple-400 border-purple-500/20 bg-purple-500/10",
   blue: "text-blue-400 border-blue-500/20 bg-blue-500/10",
@@ -47,14 +24,14 @@ const ResearchSection: React.FC<ResearchSectionProps> = ({ mode }) => {
       {/* Header */}
       <div className="flex items-start gap-4 mb-8">
         <div className="p-3 rounded-xl glass">
-          <BookOpen className="text-purple-400 w-6 h-6" />
+          <Icon name={RESEARCH.header.iconName} size={24} className="text-purple-400" />
         </div>
         <div>
-          <h3 className="text-3xl font-bold text-slate-100 mb-2">Deep Theory</h3>
+          <h3 className="text-3xl font-bold text-slate-100 mb-2">
+            {RESEARCH.header.title}
+          </h3>
           <p className="text-slate-400 text-sm max-w-2xl">
-            {isStory
-              ? "I like models that respect the physics of reality."
-              : "Research + publication work."}
+            {RESEARCH.header.subtitle[mode]}
           </p>
         </div>
       </div>
@@ -74,9 +51,7 @@ const ResearchSection: React.FC<ResearchSectionProps> = ({ mode }) => {
             {RESEARCH.badge}
           </motion.div>
 
-          <h4 className="text-2xl font-bold text-slate-100 mb-3">
-            {RESEARCH.title}
-          </h4>
+          <h4 className="text-2xl font-bold text-slate-100 mb-3">{RESEARCH.title}</h4>
           <p className="text-slate-400 mb-6 max-w-2xl leading-relaxed">
             {isStory ? RESEARCH.story : RESEARCH.signal}
           </p>
@@ -87,9 +62,7 @@ const ResearchSection: React.FC<ResearchSectionProps> = ({ mode }) => {
                 key={m.label}
                 className={`rounded-xl border p-3 ${accentMap[m.accent]}`}
               >
-                <div className="text-xs font-mono text-slate-500 mb-1">
-                  {m.label}
-                </div>
+                <div className="text-xs font-mono text-slate-500 mb-1">{m.label}</div>
                 <div className="text-sm font-semibold">{m.value}</div>
               </div>
             ))}

@@ -1,27 +1,7 @@
-import React, { useMemo, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Terminal,
-  FileText,
-  ScrollText,
-  ShieldCheck,
-  Rocket,
-  Boxes,
-  Brain,
-  Gauge,
-  Target,
-  Wrench,
-  Radar,
-  ListChecks,
-} from "lucide-react";
-
-type Mode = "signal" | "story";
-
-const getPublicPath = (path: string): string => {
-  const base = import.meta.env.BASE_URL;
-  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${base}${cleanPath}`;
-};
+import { HERO, type Mode } from "../data/content";
+import { Icon } from "../lib/iconMap";
 
 interface HeroProps {
   mode: Mode;
@@ -72,34 +52,9 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
     };
   }, [prefersReducedMotion]);
 
-  const hero = useMemo(() => {
-    const headline = isStory
-      ? "I turn noise into signal."
-      : "Agents are shipping. I build the evals that catch what breaks.";
-    const subhead =
-      "M.S. Applied Data Science, USC (Dec 2025) \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing";
-    const intro = isStory
-      ? "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment\u2014reproducible, logged, standard-aligned. Current obsession: Agent Shield, an 8-module attack framework stress-testing 8 frontier models on the Inspect AI harness."
-      : "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield \u2014 8 adversarial modules (prompt injection, MCP tool poisoning, RAG memory attacks, behavioral drift) across 8 frontier models, with unified ASR + utility-under-attack metrics on Inspect AI. arXiv preprint in progress.";
-    const chips = isStory
-      ? [
-          { icon: <ShieldCheck size={14} />, text: "Evals over vibes" },
-          { icon: <Radar size={14} />, text: "Adversarial thinking" },
-          { icon: <Rocket size={14} />, text: "Reproducible by default" },
-          { icon: <Boxes size={14} />, text: "Systems > scripts" },
-          { icon: <Brain size={14} />, text: "Attention trained daily" },
-        ]
-      : [
-          { icon: <ShieldCheck size={14} />, text: "Inspect AI harness" },
-          { icon: <Target size={14} />, text: "ASR + utility-under-attack" },
-          { icon: <Gauge size={14} />, text: "Judge-model versioning" },
-          { icon: <ListChecks size={14} />, text: "CI-ready eval logs" },
-          { icon: <Wrench size={14} />, text: "Reproducible pipelines" },
-        ];
-    return { headline, subhead, intro, chips };
-  }, [isStory]);
-
-  const headlineWords = hero.headline.split(" ");
+  const headlineWords = HERO.headline[mode].split(" ");
+  const intro = HERO.intro[mode];
+  const chips = HERO.chips[mode];
 
   return (
     <section
@@ -141,7 +96,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
           </span>
-          System Status: ONLINE // Agent Shield Sprint Active
+          {HERO.statusBadge}
         </motion.div>
 
         {/* Headline — staggered word animation */}
@@ -172,7 +127,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          {hero.subhead}
+          {HERO.subhead}
         </motion.h2>
 
         {/* Intro with accent border */}
@@ -186,7 +141,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
         >
-          {hero.intro}
+          {intro}
         </motion.p>
 
         {/* Proof chips */}
@@ -196,7 +151,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.8 }}
         >
-          {hero.chips.map((c, i) => (
+          {chips.map((c, i) => (
             <motion.div
               key={c.text}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full glass text-sm text-slate-300 hover:text-slate-100 transition-colors"
@@ -205,7 +160,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
               transition={{ duration: 0.4, delay: 0.9 + i * 0.06 }}
               whileHover={{ scale: 1.05 }}
             >
-              {c.icon}
+              <Icon name={c.iconName} size={14} />
               <span>{c.text}</span>
             </motion.div>
           ))}
@@ -220,36 +175,36 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
         >
           <motion.button
             type="button"
-            onClick={() => scrollTo("projects")}
+            onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
             className="px-6 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-cyan-900/30 glow-cyan"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
-            <Terminal size={18} />
-            Inspect The Work
+            <Icon name={HERO.ctas.primary.iconName} size={18} />
+            {HERO.ctas.primary.label}
           </motion.button>
           <motion.button
             type="button"
-            onClick={() => scrollTo("thinking")}
+            onClick={() => scrollTo(HERO.ctas.secondary.targetSection)}
             className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
-            <ScrollText size={18} />
-            How I Think
+            <Icon name={HERO.ctas.secondary.iconName} size={18} />
+            {HERO.ctas.secondary.label}
           </motion.button>
           <motion.a
-            href={getPublicPath("Docs/Aditya_Chunduri.pdf")}
+            href={HERO.ctas.resume.href}
             target="_blank"
             rel="noreferrer"
-            download="Aditya_Chunduri.pdf"
+            download
             className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2 border border-slate-700/60 hover:border-cyan-500/40 hover:text-cyan-200"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
             aria-label="View resume (PDF)"
           >
-            <FileText size={18} />
-            Resume
+            <Icon name={HERO.ctas.resume.iconName} size={18} />
+            {HERO.ctas.resume.label}
           </motion.a>
         </motion.div>
       </div>

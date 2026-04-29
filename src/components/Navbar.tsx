@@ -10,8 +10,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-
-type Mode = "signal" | "story";
+import { NAV_LINKS, CONTACT, type Mode } from "../data/content";
 
 interface NavbarProps {
   mode: Mode;
@@ -21,14 +20,6 @@ interface NavbarProps {
   thoughts: string[];
   tickerIndex: number;
 }
-
-const navLinks = [
-  { id: "thinking", label: "Thinking" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "research", label: "Research" },
-  { id: "skills", label: "Skills" },
-];
 
 const ModeToggle = memo(function ModeToggle({
   mode,
@@ -60,6 +51,18 @@ const ModeToggle = memo(function ModeToggle({
     </motion.button>
   );
 });
+
+const SOCIAL_LINKS_DESKTOP = [
+  { href: `mailto:${CONTACT.email}`, icon: <Mail size={16} />, label: "Email" },
+  { href: CONTACT.github, icon: <Github size={16} />, label: "GitHub" },
+  { href: CONTACT.linkedin, icon: <Linkedin size={16} />, label: "LinkedIn" },
+];
+
+const SOCIAL_LINKS_MOBILE = [
+  { href: `mailto:${CONTACT.email}`, icon: <Mail size={18} />, label: "Email" },
+  { href: CONTACT.github, icon: <Github size={18} />, label: "GitHub" },
+  { href: CONTACT.linkedin, icon: <Linkedin size={18} />, label: "LinkedIn" },
+];
 
 const Navbar: React.FC<NavbarProps> = ({
   mode,
@@ -117,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
               {/* Links */}
               <div className="flex items-center gap-1">
-                {navLinks.map((link) => (
+                {NAV_LINKS.map((link) => (
                   <button
                     key={link.id}
                     type="button"
@@ -139,11 +142,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <ModeToggle mode={mode} setMode={setMode} />
 
               <div className="hidden sm:flex items-center gap-2">
-                {[
-                  { href: "mailto:chunduri@usc.edu", icon: <Mail size={16} />, label: "Email" },
-                  { href: "https://github.com/Chunduri-Aditya", icon: <Github size={16} />, label: "GitHub" },
-                  { href: "https://linkedin.com/in/chunduriaditya", icon: <Linkedin size={16} />, label: "LinkedIn" },
-                ].map((link) => (
+                {SOCIAL_LINKS_DESKTOP.map((link) => (
                   <motion.a
                     key={link.label}
                     href={link.href}
@@ -192,7 +191,7 @@ const Navbar: React.FC<NavbarProps> = ({
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
               <div className="flex flex-col gap-2">
-                {navLinks.map((link) => (
+                {NAV_LINKS.map((link) => (
                   <button
                     key={link.id}
                     type="button"
@@ -213,11 +212,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
               <div className="border-t border-slate-800 pt-4">
                 <div className="flex items-center gap-3">
-                  {[
-                    { href: "mailto:chunduri@usc.edu", icon: <Mail size={18} />, label: "Email" },
-                    { href: "https://github.com/Chunduri-Aditya", icon: <Github size={18} />, label: "GitHub" },
-                    { href: "https://linkedin.com/in/chunduriaditya", icon: <Linkedin size={18} />, label: "LinkedIn" },
-                  ].map((link) => (
+                  {SOCIAL_LINKS_MOBILE.map((link) => (
                     <a
                       key={link.label}
                       href={link.href}

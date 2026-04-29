@@ -1,61 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, Calendar } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
+import { EXPERIENCE, type ExperienceAccent, type Mode } from "../data/content";
+import { Icon } from "../lib/iconMap";
 
-type Mode = "signal" | "story";
-
-interface ExperienceItem {
-  org: string;
-  role: string;
-  location: string;
-  period: string;
-  accent: "cyan" | "purple" | "emerald";
-  story: string;
-  signal: string;
-  bullets: string[];
-  tags: string[];
-}
-
-const EXPERIENCE: ExperienceItem[] = [
-  {
-    org: "USC \u2014 Viterbi School of Engineering",
-    role: "Research Assistant \u00b7 Computer Vision & Medical Imaging",
-    location: "Los Angeles, CA",
-    period: "Aug 2024 \u2013 Dec 2024",
-    accent: "cyan",
-    story:
-      "Retinal vessels are small, the labels are noisy, and the downstream diagnosis depends on every pixel. I treated the segmentation problem like a systems problem: better loss, better pipeline, better data hygiene\u2014until the score stopped moving by accident.",
-    signal:
-      "Led U-Net segmentation + data pipeline work on the CVD-Masks retinal dataset across three concurrent projects, with reproducible experiment tracking and automated curation.",
-    bullets: [
-      "Engineered a U-Net segmentation pipeline for retinal artery-vein classification on CVD-Masks, achieving 94% Dice score through architectural tuning and custom loss functions",
-      "Designed modular PyTorch training pipelines with experiment tracking across 3 concurrent projects, cutting iteration cycles 30% and enabling reproducible comparisons",
-      "Built an automated medical image scraper with quality-validation controls, cutting manual curation time 40% across 10,000+ images",
-      "Presented findings in weekly cross-functional reviews, translating quantitative results into actionable research decisions",
-    ],
-    tags: ["PyTorch", "U-Net", "Medical Imaging", "Segmentation", "Experiment Tracking"],
-  },
-  {
-    org: "SSN College of Engineering",
-    role: "Research Intern \u00b7 Computer Vision & Object Detection",
-    location: "Remote",
-    period: "Jun 2021 \u2013 Jul 2021",
-    accent: "purple",
-    story:
-      "I wanted to understand what \u201creal-time\u201d actually costs. Fine-tuned YOLO, benchmarked it across five environmental conditions, and built enough reusable tooling that the next intern didn\u2019t have to start from scratch.",
-    signal:
-      "Object detection / tracking work: YOLO fine-tuning, 30+ fps pipelines, and reusable PyTorch/TensorFlow modules that eliminated manual annotation overhead.",
-    bullets: [
-      "Built real-time object tracking pipelines achieving 30+ fps; fine-tuned YOLO-based CNN architectures, improving detection robustness 15% across 5 environmental conditions",
-      "Automated a video dataset generation pipeline, eliminating 100% of manual frame-annotation overhead",
-      "Produced 10+ reusable PyTorch and TensorFlow modules standardizing deployment workflows and reducing onboarding time for new contributors",
-    ],
-    tags: ["YOLO", "PyTorch", "TensorFlow", "Object Tracking", "Real-Time"],
-  },
-];
-
-const accentMap: Record<string, { border: string; text: string; bg: string; dot: string }> = {
+const accentMap: Record<ExperienceAccent, { border: string; text: string; bg: string; dot: string }> = {
   cyan: {
     border: "border-cyan-500/20",
     text: "text-cyan-300",
@@ -88,21 +38,21 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ mode }) => {
       {/* Header */}
       <div className="flex items-start gap-4 mb-8">
         <div className="p-3 rounded-xl glass">
-          <Briefcase className="text-cyan-400 w-6 h-6" />
+          <Icon name={EXPERIENCE.header.iconName} size={24} className="text-cyan-400" />
         </div>
         <div>
-          <h3 className="text-3xl font-bold text-slate-100 mb-2">Field Work</h3>
+          <h3 className="text-3xl font-bold text-slate-100 mb-2">
+            {EXPERIENCE.header.title}
+          </h3>
           <p className="text-slate-400 text-sm max-w-2xl">
-            {isStory
-              ? "Places where the problem pushed back and forced me to build better tools."
-              : "Research roles. What I shipped, measured, and handed off."}
+            {EXPERIENCE.header.subtitle[mode]}
           </p>
         </div>
       </div>
 
       {/* Timeline */}
       <StaggerContainer className="flex flex-col gap-6">
-        {EXPERIENCE.map((exp) => {
+        {EXPERIENCE.items.map((exp) => {
           const a = accentMap[exp.accent];
           return (
             <StaggerItem key={`${exp.org}-${exp.period}`}>

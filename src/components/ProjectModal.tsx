@@ -1,15 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  XCircle,
-  CheckCircle2,
-  Github,
-  ExternalLink,
-  Play,
-} from "lucide-react";
-import type { Project } from "./ProjectCard";
-
-type Mode = "signal" | "story";
+import { XCircle, CheckCircle2, Github, ExternalLink, Play } from "lucide-react";
+import type { Mode, Project } from "../data/content";
+import { Icon } from "../lib/iconMap";
 
 function useLockBodyScroll(locked: boolean) {
   useEffect(() => {
@@ -86,7 +79,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
             {/* Header */}
             <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800/50 p-6 flex items-start justify-between z-10">
               <div className="flex items-start gap-4 flex-1">
-                <div className="p-3 rounded-xl glass">{project.icon}</div>
+                <div className="p-3 rounded-xl glass">
+                  <Icon
+                    name={project.iconName}
+                    size={24}
+                    className={project.iconClassName}
+                  />
+                </div>
                 <div className="flex-1">
                   <h3
                     id={`modal-title-${project.id}`}
@@ -192,10 +191,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 </h4>
                 <div className="space-y-3">
                   {project.decisions.map((decision, idx) => (
-                    <div
-                      key={idx}
-                      className="glass rounded-xl p-4"
-                    >
+                    <div key={idx} className="glass rounded-xl p-4">
                       <div className="text-sm font-semibold text-slate-200 mb-1">
                         {decision.title}
                       </div>

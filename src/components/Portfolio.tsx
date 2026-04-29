@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import Navbar from "./Navbar";
@@ -10,32 +10,19 @@ import ResearchSection from "./ResearchSection";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import FaqBot from "./FaqBot";
-
-type Mode = "signal" | "story";
+import { TICKER_THOUGHTS, type Mode } from "../data/content";
 
 const Portfolio: React.FC = () => {
   const [mode, setMode] = useState<Mode>("signal");
   const [tickerIndex, setTickerIndex] = useState(0);
   const [activeSection, setActiveSection] = useState("projects");
 
-  const thoughts = useMemo(
-    () => [
-      "Turning evaluation into unit tests...",
-      "Compressing big intent into small prompts...",
-      "Finding the smallest change that fixes the whole system...",
-      "Chasing edge cases (that\u2019s where truth hides)...",
-      "Making memory retrieval feel like remembering, not searching...",
-      "Shipping only when behavior is stable...",
-    ],
-    []
-  );
-
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setTickerIndex((prev) => (prev + 1) % thoughts.length);
+      setTickerIndex((prev) => (prev + 1) % TICKER_THOUGHTS.length);
     }, 3800);
     return () => window.clearInterval(interval);
-  }, [thoughts.length]);
+  }, []);
 
   const scrollTo = useCallback((id: string) => {
     setActiveSection(id);
@@ -54,7 +41,7 @@ const Portfolio: React.FC = () => {
         setMode={setMode}
         activeSection={activeSection}
         scrollTo={scrollTo}
-        thoughts={thoughts}
+        thoughts={TICKER_THOUGHTS}
         tickerIndex={tickerIndex}
       />
 

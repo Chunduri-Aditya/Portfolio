@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { matchIntent } from "./matchIntent";
-import { faqIntents } from "../data/faqIntents";
+import { FAQ_INTENTS as faqIntents } from "../data/content";
 
 describe("matchIntent", () => {
   it("should match exact utterance", () => {
