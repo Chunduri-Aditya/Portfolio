@@ -223,32 +223,21 @@ const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
               Want the receipts?
             </h5>
             <p className="text-xs text-slate-500 mb-5">
-              Two resume tracks \u2014 pick what matches the role.
+              One resume, all the proof.
             </p>
             <div className="grid gap-2">
               <motion.a
-                href={getPublicPath("Docs/Aditya_Ch_Resume_LLM.pdf")}
+                href={getPublicPath("Docs/Aditya_Chunduri.pdf")}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors border border-purple-500/20 hover:border-purple-500/40"
+                download="Aditya_Chunduri.pdf"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-200 transition-colors border border-cyan-500/30 hover:border-cyan-500/50"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                aria-label="Download LLM-focused resume"
-              >
-                <FileText size={16} className="text-purple-300" />
-                <span>Resume \u2014 LLM / Safety track</span>
-              </motion.a>
-              <motion.a
-                href={getPublicPath("Docs/Aditya_Ch_Resume_ML.pdf")}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors border border-cyan-500/20 hover:border-cyan-500/40"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                aria-label="Download ML-focused resume"
+                aria-label="Open resume PDF"
               >
                 <FileText size={16} className="text-cyan-300" />
-                <span>Resume \u2014 ML / SWE track</span>
+                <span>Resume (PDF)</span>
               </motion.a>
               <motion.a
                 href="mailto:chunduri@usc.edu"
@@ -268,7 +257,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
               >
                 LinkedIn
               </a>
-              <span className="text-slate-700">\u00b7</span>
+              <span className="text-slate-700" aria-hidden="true">·</span>
               <a
                 className="hover:text-cyan-400 transition-colors"
                 href="https://github.com/Chunduri-Aditya"

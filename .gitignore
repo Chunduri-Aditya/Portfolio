@@ -34,3 +34,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 vite.config.ts.timestamp-*
+
+# AI assistant scratch (worktrees, session state)
+.claude/

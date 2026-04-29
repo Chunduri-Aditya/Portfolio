@@ -174,7 +174,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       key={idx}
                       className="text-sm text-slate-400 flex items-start gap-2"
                     >
-                      <span className="text-cyan-500/50">\u2022</span>
+                      <span className="text-cyan-500/50" aria-hidden="true">•</span>
                       <span>{tradeoff}</span>
                     </div>
                   ))}

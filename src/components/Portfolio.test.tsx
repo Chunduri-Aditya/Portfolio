@@ -12,22 +12,19 @@ vi.mock("./FaqBot", () => ({
 describe("Portfolio", () => {
   test("renders hero and projects section", () => {
     render(<Portfolio />);
-    expect(screen.getByText(/Curiosity is noisy/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Inspect The Work/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /View resume/i })).toBeInTheDocument();
   });
 
   test("opens and closes a project modal", async () => {
     const user = userEvent.setup();
     render(<Portfolio />);
 
-    // Open first project card by accessible name pattern
-    const card = screen.getByRole("button", { name: /Open project:/i });
+    const card = screen.getAllByRole("button", { name: /Open project:/i })[0];
     await user.click(card);
 
-    // Modal title appears
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Close via close button
     await user.click(screen.getByRole("button", { name: /Close modal/i }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
@@ -36,7 +33,7 @@ describe("Portfolio", () => {
     const user = userEvent.setup();
     render(<Portfolio />);
 
-    const card = screen.getByRole("button", { name: /Open project:/i });
+    const card = screen.getAllByRole("button", { name: /Open project:/i })[0];
     await user.click(card);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
@@ -51,7 +48,6 @@ describe("Portfolio", () => {
     const input = screen.getByRole("textbox", { name: /Search projects/i });
     await user.type(input, "Demucs");
 
-    // Should still show at least one card matching Demucs
     expect(screen.getAllByRole("button", { name: /Open project:/i }).length).toBeGreaterThan(0);
   });
 
@@ -59,12 +55,10 @@ describe("Portfolio", () => {
     const user = userEvent.setup();
     render(<Portfolio />);
 
-    // Toggle a tag (use one that exists)
-    const tagBtn = await screen.findByRole("button", { name: "Whisper" });
+    const tagBtn = await screen.findByRole("button", { name: "Inspect AI", pressed: false });
     await user.click(tagBtn);
     expect(tagBtn).toHaveAttribute("aria-pressed", "true");
 
-    // Reset clears filters
     await user.click(screen.getByRole("button", { name: /Reset/i }));
     expect(tagBtn).toHaveAttribute("aria-pressed", "false");
   });
