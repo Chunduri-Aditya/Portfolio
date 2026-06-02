@@ -32,7 +32,7 @@ export const ASSETS = {
 export const CONTACT = {
   email: "chunduri@usc.edu",
   github: "https://github.com/Chunduri-Aditya",
-  linkedin: "https://linkedin.com/in/chunduriaditya",
+  linkedin: "https://linkedin.com/in/aditya-chunduri",
   location: "Los Angeles, CA",
 } as const;
 
@@ -59,23 +59,23 @@ export interface HeroContent {
 }
 
 export const HERO: HeroContent = {
-  statusBadge: "System Status: ONLINE // Agent Shield Sprint Active",
+  statusBadge: "System Status: ONLINE // Agent Shield Build Active",
   headline: {
     signal: "Agents are shipping. I build the evals that catch what breaks.",
     story: "I turn noise into signal.",
   },
   subhead:
-    "M.S. Applied Data Science, USC (Dec 2025) \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing",
+    "M.S. Applied Data Science, USC \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing",
   intro: {
     signal:
-      "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield \u2014 8 adversarial modules (prompt injection, MCP tool poisoning, RAG memory attacks, behavioral drift) across 8 frontier models, with unified ASR + utility-under-attack metrics on Inspect AI. arXiv preprint in progress.",
+      "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield \u2014 adversarial evals for prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift across 8 frontier models, scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS, all on Inspect AI.",
     story:
-      "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment\u2014reproducible, logged, standard-aligned. Current obsession: Agent Shield, an 8-module attack framework stress-testing 8 frontier models on the Inspect AI harness.",
+      "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment\u2014reproducible, logged, standard-aligned. Current obsession: Agent Shield, an attack framework stress-testing 8 frontier models on the Inspect AI harness.",
   },
   chips: {
     signal: [
       { iconName: "ShieldCheck", text: "Inspect AI harness" },
-      { iconName: "Target", text: "ASR + utility-under-attack" },
+      { iconName: "Target", text: "ASR + benign utility" },
       { iconName: "Gauge", text: "Judge-model versioning" },
       { iconName: "ListChecks", text: "CI-ready eval logs" },
       { iconName: "Wrench", text: "Reproducible pipelines" },
@@ -337,41 +337,41 @@ export const PROJECTS: ProjectsSectionContent = {
       tags: [
         "Inspect AI",
         "AgentDojo",
-        "Adversarial Eval",
+        "HarmBench",
         "Prompt Injection",
         "MCP Security",
-        "Red Teaming",
+        "OWASP / MITRE ATLAS",
         "Python",
       ],
       oneLiner:
-        "An 8-module adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool poisoning, RAG memory attacks, and behavioral drift\u2014built on UK AISI\u2019s Inspect AI harness.",
+        "An adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift\u2014built on UK AISI\u2019s Inspect AI harness and mapped to OWASP and MITRE ATLAS.",
       story:
-        "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one metric schema, eight adversarial modules\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
+        "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one scoring schema, seeded tasks\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
       evidence: [
-        "8 attack modules: prompt injection, MCP tool poisoning, RAG memory attacks, multi-agent manipulation, covert exfiltration, Cialdini-grounded behavioral drift, and more",
-        "Benchmarks 8 frontier models (Claude, GPT-4.1, Gemini 2.5, Llama 3.1, Mistral Large, DeepSeek V3) under one metric schema",
-        "Unified ASR (attack success rate) + utility-under-attack metrics",
-        "Reproducible seeds, judge-model versioning, CI-ready eval logs",
+        "Attack coverage: prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift",
+        "Benchmarks 8 frontier models under one scoring schema",
+        "Unified metrics: attack success rate, benign utility, and transparency rate",
+        "Seeded JSONL tasks so runs stay comparable across models",
         "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc",
-        "arXiv preprint in progress",
+        "Threats mapped to OWASP and MITRE ATLAS",
       ],
       architecture: {
         overview:
-          "Attack Module \u2192 Inspect AI Harness \u2192 Agent Under Test \u2192 Judge Model \u2192 Scored Log \u2192 ASR + Utility Metrics",
+          "Seeded Task \u2192 Inspect AI Harness \u2192 Agent Under Test \u2192 Scorers \u2192 Scored Log \u2192 ASR + Utility + Transparency",
         diagram: `
 +----------------+   +----------------+   +-------------------+
 |  Attack Suite  |-->|  Inspect AI    |-->|  Agent Under Test |
-|  (8 modules)   |   |  Harness       |   |  (8 frontier LLMs)|
+|  (4 classes)   |   |  Harness       |   |  (8 frontier LLMs)|
 +----------------+   +----------------+   +---------+---------+
                                                      |
                                                      v
 +----------------+   +----------------+   +-------------------+
-|  ASR + Utility |<--|  Judge Model   |<--|  Tool + Memory    |
-|  Report        |   |  (versioned)   |   |  Trace            |
+|  ASR + Utility |<--|  Scorers       |<--|  Tool + Memory    |
+|  + Transparency|   |  (seeded)      |   |  Trace            |
 +----------------+   +----------------+   +-------------------+`,
         tradeoffs: [
-          "Breadth vs depth: 8 modules give surface coverage; each can go deeper later",
-          "Automated judge vs human rater (judge is cheaper, versioned for reproducibility)",
+          "Breadth vs depth: 4 attack classes give surface coverage; each can go deeper later",
+          "Automated scoring vs human rater (automated is cheaper and seeded for reproducibility)",
           "Safety of running attacks vs value of knowing failure modes (sandboxed, logged, bounded)",
         ],
       },
@@ -381,12 +381,12 @@ export const PROJECTS: ProjectsSectionContent = {
           why: "The field needs evals that compose; UK AISI\u2019s harness is the closest thing to a standard.",
         },
         {
-          title: "Unified metric schema across all 8 modules",
-          why: "Attacks only get comparable when the scoreboard is the same. ASR + utility-under-attack holds everywhere.",
+          title: "Unified scoring across every attack class",
+          why: "Attacks only get comparable when the scoreboard is the same. ASR, benign utility, and transparency hold everywhere.",
         },
         {
-          title: "Judge-model versioning + reproducible seeds",
-          why: "A result that can\u2019t be re-run is a rumor. Every number on the dashboard has a receipt.",
+          title: "Seeded JSONL tasks + OWASP / MITRE ATLAS mapping",
+          why: "A result that can\u2019t be re-run is a rumor, and a threat without a taxonomy is a one-off. Every run is reproducible and mapped.",
         },
       ],
       links: {
@@ -395,7 +395,7 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Modules", value: "8 attacks" },
+        { label: "Attacks", value: "4 classes" },
         { label: "Models", value: "8 frontier" },
       ],
     },
@@ -405,17 +405,17 @@ export const PROJECTS: ProjectsSectionContent = {
       subtitle: "AI-Powered DJ Mixing Engine",
       iconName: "Music",
       iconClassName: "text-purple-400",
-      tags: ["PyTorch", "Librosa", "Demucs", "FastAPI", "Gradio", "Audio ML"],
+      tags: ["PyTorch", "Librosa", "Demucs", "FastAPI", "Streamlit", "Audio ML"],
       oneLiner:
-        "An end-to-end audio ML pipeline that decomposes tracks into stems, analyzes BPM / key / energy, and matches them with Camelot-Wheel harmonic logic. Open-sourced, GPU-accelerated, 9 GitHub stars.",
+        "A Python DJ engine that renders beat-locked, key-aware transitions between any two tracks using Demucs stem separation and music information retrieval, with dynamic EQ fades and ITU-R LUFS mastering.",
       story:
         "A clean transition is hidden engineering. I pulled it apart into measurable pieces\u2014source separation with Demucs, spectral features with Librosa, harmonic matching with the Camelot Wheel\u2014and wired them into a single pipeline anyone can point a folder of tracks at.",
       evidence: [
-        "Demucs source separation + Librosa spectral analysis + Camelot-Wheel harmonic matching",
-        "FastAPI backend with GPU acceleration",
-        "Gradio web UI supporting 8+ audio formats",
-        "Real-time BPM, key, and energy analysis",
-        "Open-sourced; 9 GitHub stars; only pipeline integrating all three components (confirmed via landscape analysis)",
+        "Demucs stem separation + Librosa music-information-retrieval features (BPM / key / energy)",
+        "Beat-locked, key-aware transitions with dynamic EQ fades",
+        "ITU-R LUFS mastering for consistent loudness",
+        "FastAPI backend with GPU acceleration + reusable audio preprocessing modules",
+        "Streamlit interface; open-sourced",
       ],
       architecture: {
         overview:
@@ -430,9 +430,10 @@ export const PROJECTS: ProjectsSectionContent = {
 +-----------+   +-----------+   +----------------------+           |
                                                                     v
                                                             +--------------+
-                                                            |   Render     |
-                                                            |  (FastAPI    |
-                                                            |   + Gradio)  |
+                                                            |  EQ Fades +  |
+                                                            |  LUFS Master |
+                                                            |  (FastAPI +  |
+                                                            |   Streamlit) |
                                                             +--------------+`,
         tradeoffs: [
           "Match quality vs compute (cached features + batch)",
@@ -450,7 +451,7 @@ export const PROJECTS: ProjectsSectionContent = {
           why: "DJs already trust it. Encoding it explicitly beats a black-box similarity score.",
         },
         {
-          title: "Open-sourced with a Gradio UI",
+          title: "Open-sourced with a Streamlit UI",
           why: "The system only matters if someone can try it in a browser without cloning and configuring.",
         },
       ],
@@ -460,8 +461,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Stars", value: "9 on GitHub" },
-        { label: "Formats", value: "8+ audio types" },
+        { label: "Stems", value: "Demucs separation" },
+        { label: "Mastering", value: "ITU-R LUFS" },
       ],
     },
     {
@@ -472,15 +473,15 @@ export const PROJECTS: ProjectsSectionContent = {
       iconClassName: "text-purple-400",
       tags: ["Diffusers", "FLUX.1", "Ollama", "ElevenLabs", "Python", "Multimodal"],
       oneLiner:
-        "A model-agnostic ACG pipeline that coordinates text (Ollama), image (FLUX.1 / Diffusers), and audio (ElevenLabs) from a single brief\u2014with drop-in backend switching that cut per-iteration inference cost 90%.",
+        "An agentic, model-agnostic GenAI media pipeline that turns a single brief into text, image, and audio\u2014coordinating local Ollama inference, Diffusers / FLUX.1, and ElevenLabs voice through one modular workflow.",
       story:
         "Generative pipelines usually lock you into one provider per modality. I wanted a brief to fan out into text, image, and audio with whichever backend makes sense that day\u2014local Ollama for development, cloud for quality runs\u2014without changing a line of the orchestration layer.",
       evidence: [
         "Single-brief \u2192 text + image + audio via one orchestration layer",
-        "Tiered backend switching: local Ollama inference vs cloud APIs (GPT-4o-mini, FLUX.1)",
-        "Cut per-iteration inference cost 90% during dev cycles",
-        "Cut production time 80% vs the manual equivalent",
-        "Drop-in model substitution at every stage",
+        "Local Ollama inference for text generation",
+        "Image generation with Diffusers / FLUX.1",
+        "Voice synthesis with ElevenLabs",
+        "Modular, drop-in model substitution at every stage",
       ],
       architecture: {
         overview:
@@ -531,8 +532,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Cost", value: "\u221290% per iter" },
-        { label: "Time", value: "\u221280% prod cycle" },
+        { label: "Modalities", value: "Text \u00b7 Image \u00b7 Audio" },
+        { label: "Workflow", value: "Agentic, modular" },
       ],
     },
     {
@@ -600,39 +601,39 @@ export const PROJECTS: ProjectsSectionContent = {
     {
       id: "model-behavior-lab",
       title: "Model Behavior Lab",
-      subtitle: "Adversarial LLM Benchmarking Platform",
+      subtitle: "Local LLM Evaluation Platform",
       iconName: "Eye",
       iconClassName: "text-cyan-400",
-      tags: ["Evals", "Ollama", "Plotly", "CI/CD", "Adversarial", "Python"],
+      tags: ["Evals", "Ollama", "JSON Test Suites", "Plotly", "Python"],
       oneLiner:
-        "An adversarial evaluation platform running 5,000+ automated tests across 10+ frontier models\u2014measuring instruction-hierarchy violations, hallucination rate, and refusal consistency with zero manual review.",
+        "A local, Ollama-based LLM evaluation platform that benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and dashboards\u2014the methodology that became the base for Agent Shield.",
       story:
-        "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: versioned tests, scored outputs, CI-integrated benchmarks. If a new model lands, the numbers are already waiting.",
+        "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: JSON test suites, scored outputs, repeatable runs. If a new model lands, the numbers are already waiting. This became the groundwork for Agent Shield.",
       evidence: [
-        "5,000+ automated tests across 10+ frontier models (GPT-4, Claude, Llama, Mistral)",
-        "Measures instruction-hierarchy violations, hallucination rate, refusal consistency",
-        "CI/CD integrated \u2014 new model versions benchmark automatically on release",
-        "Modular JSON test suites \u2014 any Ollama or API-accessible model is a drop-in target",
-        "Evaluation setup time: hours \u2192 under 5 minutes per release cycle",
+        "Local Ollama-based evaluation \u2014 no external API dependency",
+        "Benchmarks reasoning, hallucination, emotion alignment, and code correctness",
+        "Modular JSON test suites \u2014 any Ollama model is a drop-in target",
+        "Repeatable runs with Plotly dashboards for cross-run comparison",
+        "Methodology became the base for Agent Shield",
       ],
       architecture: {
         overview:
-          "JSON Test Suite \u2192 CI Runner \u2192 Model Pool (Ollama / API) \u2192 Scorers \u2192 Plotly Reports + Diffs",
+          "JSON Test Suite \u2192 Runner \u2192 Ollama Model Pool \u2192 Scorers \u2192 Plotly Dashboards",
         diagram: `
 +------------------+   +----------------+   +-------------------+
-|  JSON Test Suite |-->|  CI Runner     |-->|  Model Pool       |
-|  (adversarial)   |   |  (GH Actions)  |   |  (10+ frontier)   |
+|  JSON Test Suite |-->|  Runner        |-->|  Ollama Model     |
+|  (categories)    |   |  (repeatable)  |   |  Pool (local)     |
 +------------------+   +----------------+   +---------+---------+
                                                        |
                                                        v
 +------------------+   +----------------+   +-------------------+
-|  Plotly Reports  |<--|  Scorers       |<--|  Raw Outputs      |
-|  + Diffs         |   |  (automated)   |   |                   |
+|  Plotly          |<--|  Scorers       |<--|  Raw Outputs      |
+|  Dashboards      |   |  (automated)   |   |                   |
 +------------------+   +----------------+   +-------------------+`,
         tradeoffs: [
-          "Automated scoring vs human rater (automated wins at scale; calibrated against judge model)",
+          "Local Ollama (private, repeatable) vs hosted APIs (scale, but cost + drift)",
           "Strict scoring vs flexibility (JSON schema keeps it configurable, not rigid)",
-          "Breadth (many models) vs depth (full probe) \u2014 CI handles breadth, targeted runs handle depth",
+          "Breadth (many categories) vs depth (full probe) \u2014 suites handle breadth, targeted runs handle depth",
         ],
       },
       decisions: [
@@ -641,11 +642,11 @@ export const PROJECTS: ProjectsSectionContent = {
           why: "Evaluation should be reviewable like code, not buried in notebooks.",
         },
         {
-          title: "CI-integrated benchmarking",
-          why: "If a regression is only visible when someone remembers to run it, it\u2019s invisible.",
+          title: "Local Ollama, repeatable runs",
+          why: "Same input, same verdict. Reproducibility comes first; scale can come later.",
         },
         {
-          title: "Failure-mode taxonomy (violations / hallucination / refusal)",
+          title: "Failure-mode categories (reasoning / hallucination / emotion / code)",
           why: "Averages hide regressions. Categories surface them.",
         },
       ],
@@ -655,8 +656,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Scale", value: "5,000+ tests" },
-        { label: "Models", value: "10+ frontier" },
+        { label: "Categories", value: "4 eval axes" },
+        { label: "Runtime", value: "Local Ollama" },
       ],
     },
   ],
@@ -922,31 +923,31 @@ export const SIDEBAR: SidebarContent = {
     items: [
       {
         category: "Eval & Adversarial (Safety)",
-        tools: ["Inspect AI", "AgentDojo", "DPO", "Red Teaming", "Prompt Injection"],
+        tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection"],
         iconName: "ShieldCheck",
         accent: "rose",
       },
       {
         category: "LLM & Orchestration",
-        tools: ["LangChain", "Ollama", "Hugging Face", "RAG", "ChromaDB"],
+        tools: ["LangChain", "Ollama", "Hugging Face", "RAG", "ChromaDB", "FAISS"],
         iconName: "Sparkles",
         accent: "purple",
       },
       {
         category: "ML Foundations",
-        tools: ["PyTorch", "TensorFlow", "Scikit-learn", "OpenCV", "Librosa", "Demucs"],
+        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "Librosa", "Demucs", "Diffusers"],
         iconName: "Cpu",
         accent: "cyan",
       },
       {
         category: "Systems & Cloud",
-        tools: ["Docker", "AWS", "FastAPI", "Flask", "GitHub Actions", "CI/CD"],
+        tools: ["Docker", "AWS", "FastAPI", "Flask", "GitHub Actions", "CI/CD", "Streamlit"],
         iconName: "Wrench",
         accent: "emerald",
       },
       {
         category: "Data & Storage",
-        tools: ["PostgreSQL", "ChromaDB", "Neo4j", "Pandas", "NumPy", "Plotly"],
+        tools: ["PostgreSQL", "ChromaDB", "Pandas", "NumPy", "Plotly"],
         iconName: "Database",
         accent: "blue",
       },
@@ -1016,7 +1017,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "tell me about aditya",
     ],
     answer:
-      "I'm Aditya Chunduri \u2014 M.S. Applied Data Science at USC (graduating Dec 2025), focused on AI agent security and LLM evaluation. I build reproducible adversarial-testing systems for frontier LLMs, with a current push on Agent Shield: an 8-module evaluation framework stress-testing 8 frontier models on UK AISI's Inspect AI harness.",
+      "I'm Aditya Chunduri \u2014 M.S. Applied Data Science from USC (Dec 2025), focused on AI agent security and LLM evaluation. I build reproducible adversarial-testing systems for frontier LLMs, with a current push on Agent Shield: an evaluation framework stress-testing 8 frontier models on UK AISI's Inspect AI harness, scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
@@ -1037,7 +1038,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "latest work",
     ],
     answer:
-      "Agent Shield \u2014 an LLM agent security evaluation framework. 8 adversarial modules (prompt injection, MCP tool poisoning, RAG memory attacks, multi-agent manipulation, covert exfiltration, Cialdini-grounded behavioral drift, and more) benchmarked across 8 frontier models on Inspect AI. Unified ASR + utility-under-attack metrics, reproducible seeds, judge-model versioning. arXiv preprint in progress.",
+      "Agent Shield \u2014 an LLM agent security evaluation framework. Adversarial evals for prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift, benchmarked across 8 frontier models on Inspect AI. Seeded JSONL tasks scored on attack success rate, benign utility, and transparency rate, with threats mapped to OWASP and MITRE ATLAS.",
     links: [
       { label: "Agent Shield details", href: "#projects", sectionId: "agent-shield" },
     ],
@@ -1058,7 +1059,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "red teaming llm",
     ],
     answer:
-      "Agent Shield is an 8-module adversarial evaluation framework for LLM agents. It tests prompt injection, MCP tool poisoning, RAG memory attacks, multi-agent manipulation, covert exfiltration, and Cialdini-grounded behavioral drift across 8 frontier models (Claude, GPT-4.1, Gemini 2.5, Llama 3.1, Mistral Large, DeepSeek V3). Built on UK AISI's Inspect AI harness with unified ASR + utility-under-attack metrics, reproducible seeds, and CI-ready eval logs.",
+      "Agent Shield is an adversarial evaluation framework for LLM agents. It tests prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift across 8 frontier models. Built on UK AISI's Inspect AI harness with seeded JSONL tasks and unified scoring (attack success rate, benign utility, transparency rate) so runs stay comparable, with threats mapped to OWASP and MITRE ATLAS.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "agent-shield" },
     ],
@@ -1086,7 +1087,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Five shipped systems, all focused on evaluation, adversarial testing, and grounded AI: Agent Shield (LLM agent security framework on Inspect AI), AI RemixMate (end-to-end audio ML pipeline with Demucs + Librosa + Camelot Wheel), AkashicTree (multimodal generation pipeline with 90% inference-cost reduction), AI Health Journal (on-device RAG with DPO alignment), and Model Behavior Lab (5,000+ adversarial tests across 10+ frontier models with CI/CD integration).",
+      "Five shipped systems, all focused on evaluation, adversarial testing, and grounded AI: Agent Shield (LLM agent security framework on Inspect AI), AI RemixMate (audio ML DJ engine with Demucs + Librosa + Camelot Wheel and LUFS mastering), AkashicTree (agentic multimodal generation pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment), and Model Behavior Lab (local Ollama eval platform across reasoning, hallucination, emotion, and code).",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1105,7 +1106,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "eval framework",
     ],
     answer:
-      "Model Behavior Lab is an adversarial LLM evaluation platform running 5,000+ automated tests across 10+ frontier models (GPT-4, Claude, Llama, Mistral). It measures instruction-hierarchy violations, hallucination rate, and refusal consistency with CI/CD integration so new model versions benchmark automatically. JSON test suites make any Ollama or API-accessible model a drop-in target.",
+      "Model Behavior Lab is a local, Ollama-based LLM evaluation platform. It benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and Plotly dashboards. JSON test suites make any Ollama model a drop-in target, and the methodology became the base for Agent Shield.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "model-behavior-lab" },
     ],
@@ -1146,7 +1147,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "librosa",
     ],
     answer:
-      "AI RemixMate is an end-to-end audio ML pipeline: Demucs source separation, Librosa spectral feature extraction, and Camelot-Wheel harmonic matching. FastAPI backend with GPU acceleration, Gradio web UI supporting 8+ audio formats, real-time BPM / key / energy analysis. Open-sourced with 9 GitHub stars \u2014 confirmed via landscape analysis as the only pipeline integrating all three components.",
+      "AI RemixMate is a Python DJ engine that renders beat-locked, key-aware transitions between any two tracks: Demucs stem separation, Librosa music-information-retrieval features (BPM / key / energy), and Camelot-Wheel harmonic matching, with dynamic EQ fades and ITU-R LUFS mastering. Served through a FastAPI backend and Streamlit interface with reusable audio preprocessing modules. Open-sourced.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
     ],
@@ -1166,7 +1167,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "automated content",
     ],
     answer:
-      "AkashicTree is a model-agnostic ACG (Automated Content Generation) pipeline coordinating text (Ollama), image (FLUX.1 / Diffusers), and audio (ElevenLabs) from a single brief. Tiered backend-switching between local Ollama inference and cloud APIs cut per-iteration inference cost 90% during development cycles, and production time fell 80% vs the manual equivalent.",
+      "AkashicTree is an agentic, model-agnostic GenAI media pipeline that turns a single brief into text, image, and audio. It coordinates local Ollama inference for text, Diffusers / FLUX.1 for image, and ElevenLabs for voice through one modular workflow, with drop-in model substitution at every stage.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "akashic-tree" },
     ],
@@ -1241,7 +1242,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "technical skills",
     ],
     answer:
-      "Eval & adversarial: Inspect AI, AgentDojo, DPO, red teaming, prompt injection. LLM & orchestration: LangChain, Ollama, Hugging Face, RAG, ChromaDB. ML foundations: PyTorch, TensorFlow, Scikit-learn, OpenCV, Librosa, Demucs. Systems & cloud: Docker, AWS, FastAPI, Flask, GitHub Actions, CI/CD. Languages: Python, C++, SQL, JavaScript, Bash.",
+      "Eval & adversarial: Inspect AI, AgentDojo, HarmBench, red teaming, prompt injection. LLM & orchestration: LangChain, Ollama, Hugging Face, RAG, ChromaDB, FAISS. ML foundations: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, Librosa, Demucs, Diffusers. Systems & cloud: Docker, AWS, FastAPI, Flask, GitHub Actions, CI/CD, Streamlit. Languages: Python, C++, SQL, JavaScript, Bash.",
     links: [
       { label: "View Skills", href: "#skills", sectionId: "skills" },
     ],
