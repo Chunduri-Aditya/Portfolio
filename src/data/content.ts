@@ -850,8 +850,10 @@ export interface SidebarContent {
     title: string;
     subtitle: string;
     resumeLabel: string;
+    resumeFullLabel: string;
     emailLabel: string;
     resumeHref: string;
+    resumeFullHref: string;
     emailHref: string;
   };
 }
@@ -971,10 +973,12 @@ export const SIDEBAR: SidebarContent = {
   },
   cta: {
     title: "Want the receipts?",
-    subtitle: "One resume, all the proof.",
+    subtitle: "1-page for applications · full version below.",
     resumeLabel: "Resume (PDF)",
+    resumeFullLabel: "Full Resume (2-page)",
     emailLabel: "Email",
     resumeHref: ASSETS.resumePdf,
+    resumeFullHref: ASSETS.resumePdfFull,
     emailHref: `mailto:${CONTACT.email}`,
   },
 };
