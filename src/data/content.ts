@@ -23,7 +23,8 @@ const getPublicPath = (path: string): string => {
 
 /* ── Asset paths (edit here to swap PDFs) ─────────────────────────────── */
 export const ASSETS = {
-  resumePdf: getPublicPath("Docs/Aditya_Chunduri.pdf"),
+  resumePdf: getPublicPath("Docs/Aditya_Chunduri_Master_Portfolio_1page.pdf"),
+  resumePdfFull: getPublicPath("Docs/Aditya_Chunduri_Master_Portfolio_2page.pdf"),
   publicationPaper: getPublicPath("Docs/Publication_Paper_Wind.pdf"),
   publicationCertificate: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf"),
 } as const;
@@ -348,12 +349,12 @@ export const PROJECTS: ProjectsSectionContent = {
       story:
         "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one scoring schema, seeded tasks\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
       evidence: [
-        "Attack coverage: prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift",
-        "Benchmarks 8 frontier models under one scoring schema",
-        "Unified metrics: attack success rate, benign utility, and transparency rate",
-        "Seeded JSONL tasks so runs stay comparable across models",
-        "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc",
-        "Threats mapped to OWASP and MITRE ATLAS",
+        "6 live attack modules, 24 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi-turn behavioral drift",
+        "Introduced Transparency Rate \u2014 whether an agent flags an attack to its operator \u2014 as a third axis alongside ASR and Benign Utility in a six-cell outcome model extending AgentDojo's 2x2 matrix",
+        "Seed-pinned evaluations across 4 models (Claude Sonnet 4.5, Llama 3.3 70B, Llama 3.1 8B, Gemini Flash) with Wilson 95% CIs at n=20",
+        "Three of four models score TR=0.000 on anchored injection; spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
+        "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc; all attacks mapped to OWASP LLM, OWASP Agentic, MITRE ATLAS, and AIVSS",
+        "Released as a Zenodo preprint (doi:10.5281/zenodo.20789431) with framework, attack registries, seeds, and logs",
       ],
       architecture: {
         overview:
@@ -390,69 +391,84 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya",
-        live: "#",
+        github: "https://github.com/Chunduri-Aditya/agent-shield",
+        live: "https://doi.org/10.5281/zenodo.20789431",
         demo: "#",
       },
       metrics: [
-        { label: "Attacks", value: "4 classes" },
-        { label: "Models", value: "8 frontier" },
+        { label: "Attack IDs", value: "6 modules · 24" },
+        { label: "Models", value: "4 frontier" },
       ],
     },
     {
       id: "ai-remixmate",
       title: "AI RemixMate",
-      subtitle: "AI-Powered DJ Mixing Engine",
+      subtitle: "Full-Stack DJ Engine with Research-Grade MIR",
       iconName: "Music",
       iconClassName: "text-purple-400",
-      tags: ["PyTorch", "Librosa", "Demucs", "FastAPI", "Streamlit", "Audio ML"],
+      tags: ["FastAPI", "React/TypeScript", "Demucs", "Beat This!", "CLAP", "Essentia", "librosa", "Audio ML"],
       oneLiner:
-        "A Python DJ engine that renders beat-locked, key-aware transitions between any two tracks using Demucs stem separation and music information retrieval, with dynamic EQ fades and ITU-R LUFS mastering.",
+        "A full-stack DJ engine: React/TypeScript frontend with SSE live streaming, FastAPI async job queue, and a research-grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search) with 374+ tests and -14 LUFS mastering.",
       story:
-        "A clean transition is hidden engineering. I pulled it apart into measurable pieces\u2014source separation with Demucs, spectral features with Librosa, harmonic matching with the Camelot Wheel\u2014and wired them into a single pipeline anyone can point a folder of tracks at.",
+        "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread\u2014replacing librosa beat detection with Beat This! (ISMIR 2024) for proper downbeats, swapping IIR bass shelving for a true cosine-taper stem ramp, adding TIV harmonic scoring from the MIR literature, and building CLAP 512-D semantic search so DJs can find tracks by sound, not just by name. Then wrapped it in a React frontend with real-time SSE job streaming so it actually behaves like a product.",
       evidence: [
-        "Demucs stem separation + Librosa music-information-retrieval features (BPM / key / energy)",
-        "Beat-locked, key-aware transitions with dynamic EQ fades",
-        "ITU-R LUFS mastering for consistent loudness",
-        "FastAPI backend with GPU acceleration + reusable audio preprocessing modules",
-        "Streamlit interface; open-sourced",
+        "FastAPI async job queue (SQLite write-through persistence) + React/TypeScript frontend, 8 pages, SSE live job streaming, Zustand state management",
+        "TIV harmonic scoring (Bernardes et al. 2016 Tonal Interval Space) replacing psychoacoustic consonance approximation",
+        "Beat This! (ISMIR 2024) downbeat detection with 8/16/32-bar grid snapping, replacing librosa beat_track",
+        "Cosine-taper stem bass ramp (no IIR bleed) + FxNorm per-stem-type LUFS normalization using corpus-derived targets",
+        "CLAP 512-D semantic search (crate_digger.py) + Essentia arousal/valence energy arc modeling for setlist planning",
+        "rekordbox XML + Serato GEOB cue export to bridge output into professional DJ software",
+        "374+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 9+ organic GitHub stars",
       ],
       architecture: {
         overview:
-          "Track A + B \u2192 Demucs Stems \u2192 Librosa Features (BPM/Key/Energy) \u2192 Camelot Wheel \u2192 Match \u2192 Render",
+          "Track A + B \u2192 Demucs Stems \u2192 Beat This! Downbeats \u2192 Bar-Grid Snap \u2192 TIV Harmonic Match \u2192 Stem Bass Ramp + FxNorm \u2192 -14 LUFS Master \u2192 FastAPI Job Queue \u2192 React SSE Frontend",
         diagram: `
-+-----------+   +-----------+   +----------------------+   +---------------+
-|  Track A  |-->|  Demucs   |-->|  Librosa (BPM/Key/   |-->|  Camelot      |
-+-----------+   |  (stems)  |   |   Energy features)   |   |  Wheel Match  |
-                +-----------+   +----------------------+   +-------+-------+
-+-----------+   +-----------+   +----------------------+           |
-|  Track B  |-->|  Demucs   |-->|  Librosa features    |-----------+
-+-----------+   +-----------+   +----------------------+           |
-                                                                    v
-                                                            +--------------+
-                                                            |  EQ Fades +  |
-                                                            |  LUFS Master |
-                                                            |  (FastAPI +  |
-                                                            |   Streamlit) |
-                                                            +--------------+`,
++-----------+   +-----------+   +----------------------+   +-------------------+
+|  Track A  |-->|  Demucs   |-->|  Beat This! (ISMIR   |-->|  Bar-Grid Snap    |
++-----------+   |  (stems)  |   |  2024) Downbeats     |   |  (8/16/32-bar)    |
+                +-----------+   +----------------------+   +--------+----------+
++-----------+   +-----------+   +----------------------+            |
+|  Track B  |-->|  Demucs   |-->|  TIV Harmonic Score  |------------+
++-----------+   +-----------+   +----------------------+            |
+                                                                     v
+                                                         +------------------------+
+                                                         |  Stem Bass Ramp        |
+                                                         |  (cosine taper)        |
+                                                         |  FxNorm LUFS per stem  |
+                                                         |  -14 LUFS Master       |
+                                                         +----------+-------------+
+                                                                    |
+                                          +-------------------------+
+                                          |
+                              +-----------v-----------+
+                              |  FastAPI Job Queue    |
+                              |  (SQLite + SSE)       |
+                              |  React/TS Frontend    |
+                              +-----------------------+`,
         tradeoffs: [
-          "Match quality vs compute (cached features + batch)",
-          "Beat-perfect sync vs musical feel (rules + smoothing)",
-          "Local CPU vs GPU (pipeline is GPU-accelerated but works either way)",
+          "Beat This! (accurate downbeats, ~50 MB model) vs librosa (fast, weaker bar detection) \u2014 Beat This! wins for cue snapping accuracy",
+          "TIV harmonic score (MIR literature, continuous) vs Camelot Wheel (DJ convention, discrete) \u2014 both exposed; TIV used for transition planning",
+          "CLAP 512-D (semantic audio search, 300 MB download) vs 35-D music_index (instant, keyword-only) \u2014 CLAP for search, 35-D as fallback",
+          "True stem bass ramp vs IIR shelving filter \u2014 ramp eliminates IIR bass bleed on sustained notes",
         ],
       },
       decisions: [
         {
-          title: "Stems first, features second",
-          why: "Vocals are the hardest to blend. Separate them, then reason about the instrumentals.",
+          title: "Replace librosa beat_track with Beat This! (ISMIR 2024)",
+          why: "librosa gives beat times but misses downbeats. Phrase-boundary cue snapping to 8/16/32-bar grid requires knowing which beat is beat 1. Beat This! predicts this directly.",
         },
         {
-          title: "Camelot Wheel for key matching",
-          why: "DJs already trust it. Encoding it explicitly beats a black-box similarity score.",
+          title: "TIV harmonic scoring alongside Camelot Wheel",
+          why: "Camelot is discrete (adjacent or not). TIV gives a continuous compatibility score [0,1] from the Tonal Interval Space, so transition planning can rank candidates, not just filter them.",
         },
         {
-          title: "Open-sourced with a Streamlit UI",
-          why: "The system only matters if someone can try it in a browser without cloning and configuring.",
+          title: "Cosine-taper stem bass ramp instead of IIR shelving",
+          why: "IIR filters have group delay and bleed on sustained bass notes. A cosine taper with derivative=0 at endpoints makes no audible click and hard-zeros Song A bass after the swap.",
+        },
+        {
+          title: "CLAP 512-D semantic search over 35-D handcrafted embeddings",
+          why: "35-D features (BPM, key, energy) can\u2019t capture timbral similarity. CLAP embeds audio into a space shared with text, so \u2018find me something that sounds like X\u2019 actually works.",
         },
       ],
       links: {
@@ -461,8 +477,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Stems", value: "Demucs separation" },
-        { label: "Mastering", value: "ITU-R LUFS" },
+        { label: "Tests", value: "374+" },
+        { label: "Mastering", value: "\u221214 LUFS" },
       ],
     },
     {
@@ -934,14 +950,14 @@ export const SIDEBAR: SidebarContent = {
         accent: "purple",
       },
       {
-        category: "ML Foundations",
-        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "Librosa", "Demucs", "Diffusers"],
+        category: "ML / CV / Audio",
+        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "librosa", "Demucs", "Beat This!", "CLAP", "Essentia", "Diffusers"],
         iconName: "Cpu",
         accent: "cyan",
       },
       {
-        category: "Systems & Cloud",
-        tools: ["Docker", "AWS", "FastAPI", "Flask", "GitHub Actions", "CI/CD", "Streamlit"],
+        category: "Systems & Engineering",
+        tools: ["FastAPI", "React/TypeScript", "Docker", "AWS", "Flask", "GitHub Actions", "CI/CD", "pytest"],
         iconName: "Wrench",
         accent: "emerald",
       },
@@ -1087,7 +1103,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Five shipped systems, all focused on evaluation, adversarial testing, and grounded AI: Agent Shield (LLM agent security framework on Inspect AI), AI RemixMate (audio ML DJ engine with Demucs + Librosa + Camelot Wheel and LUFS mastering), AkashicTree (agentic multimodal generation pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment), and Model Behavior Lab (local Ollama eval platform across reasoning, hallucination, emotion, and code).",
+      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 24 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 374+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1147,11 +1163,11 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "librosa",
     ],
     answer:
-      "AI RemixMate is a Python DJ engine that renders beat-locked, key-aware transitions between any two tracks: Demucs stem separation, Librosa music-information-retrieval features (BPM / key / energy), and Camelot-Wheel harmonic matching, with dynamic EQ fades and ITU-R LUFS mastering. Served through a FastAPI backend and Streamlit interface with reusable audio preprocessing modules. Open-sourced.",
+      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core — TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, and rekordbox XML + Serato GEOB cue export. 374+ tests, GitHub Actions CI, 9+ organic GitHub stars.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
     ],
-    tags: ["audio", "music", "remix", "demucs", "librosa", "camelot", "fastapi", "gradio"],
+    tags: ["audio", "music", "remix", "demucs", "librosa", "camelot", "fastapi", "react", "clap", "beat this", "tiv", "essentia"],
   },
   {
     id: "akashic-tree",
@@ -1242,7 +1258,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "technical skills",
     ],
     answer:
-      "Eval & adversarial: Inspect AI, AgentDojo, HarmBench, red teaming, prompt injection. LLM & orchestration: LangChain, Ollama, Hugging Face, RAG, ChromaDB, FAISS. ML foundations: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, Librosa, Demucs, Diffusers. Systems & cloud: Docker, AWS, FastAPI, Flask, GitHub Actions, CI/CD, Streamlit. Languages: Python, C++, SQL, JavaScript, Bash.",
+      "Eval & adversarial: Inspect AI, AgentDojo, OWASP LLM/Agentic, MITRE ATLAS, AIVSS, red teaming, prompt injection. LLM & orchestration: LangChain, Ollama, Hugging Face, RAG, ChromaDB. ML / CV / Audio: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, librosa, Demucs, Beat This!, CLAP, Essentia, Diffusers. Systems & engineering: FastAPI, React/TypeScript, Docker, AWS, Flask, GitHub Actions, CI/CD, pytest. Languages: Python, SQL, JavaScript/TypeScript, Bash, C/C++.",
     links: [
       { label: "View Skills", href: "#skills", sectionId: "skills" },
     ],
