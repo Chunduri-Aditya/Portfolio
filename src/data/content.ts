@@ -349,10 +349,10 @@ export const PROJECTS: ProjectsSectionContent = {
       story:
         "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one scoring schema, seeded tasks\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
       evidence: [
-        "6 live attack modules, 24 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi-turn behavioral drift",
+        "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi-turn behavioral drift",
         "Introduced Transparency Rate \u2014 whether an agent flags an attack to its operator \u2014 as a third axis alongside ASR and Benign Utility in a six-cell outcome model extending AgentDojo's 2x2 matrix",
-        "Seed-pinned evaluations across 4 models (Claude Sonnet 4.5, Llama 3.3 70B, Llama 3.1 8B, Gemini Flash) with Wilson 95% CIs at n=20",
-        "Three of four models score TR=0.000 on anchored injection; spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
+        "Seed-pinned n=20 evaluations logged on 4 of the 8 target frontier models so far (Claude Sonnet 4.5, Groq Llama 3.3 70B, Llama 3.1 8B, Gemini 3.5 Flash) with Wilson 95% CIs",
+        "Three of the four logged models score TR=0.000 on anchored injection — Sonnet 4.5 is the sole model with non-zero TR (0.150); spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
         "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc; all attacks mapped to OWASP LLM, OWASP Agentic, MITRE ATLAS, and AIVSS",
         "Released as a Zenodo preprint (doi:10.5281/zenodo.20789431) with framework, attack registries, seeds, and logs",
       ],
@@ -396,8 +396,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Attack IDs", value: "6 modules · 24" },
-        { label: "Models", value: "4 frontier" },
+        { label: "Attack IDs", value: "6 modules · 28" },
+        { label: "Models", value: "8 frontier" },
       ],
     },
     {
@@ -1107,7 +1107,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 24 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 374+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
+      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 28 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 374+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
