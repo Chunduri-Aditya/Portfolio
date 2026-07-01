@@ -27,6 +27,7 @@ export const ASSETS = {
   resumePdfFull: getPublicPath("Docs/Aditya_Chunduri_Master_Portfolio_2page.pdf"),
   publicationPaper: getPublicPath("Docs/Publication_Paper_Wind.pdf"),
   publicationCertificate: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf"),
+  agentShieldPaper: getPublicPath("Docs/Agent_Shield_Paper.pdf"),
 } as const;
 
 /* ── Contact / social (used by Navbar, Footer, Sidebar, FAQ bot) ──────── */
@@ -760,19 +761,27 @@ export const EXPERIENCE: ExperienceSectionContent = {
 
 export type ResearchAccent = "cyan" | "purple" | "blue" | "green";
 
+export interface PublicationLink {
+  label: string;
+  href: string;
+}
+
+export interface Publication {
+  badge: string;
+  title: string;
+  story: string;
+  signal: string;
+  metrics: { label: string; value: string; accent: ResearchAccent }[];
+  links: PublicationLink[];
+}
+
 export interface ResearchContent {
   header: {
     title: string;
     iconName: IconName;
     subtitle: { signal: string; story: string };
   };
-  badge: string;
-  title: string;
-  story: string;
-  signal: string;
-  metrics: { label: string; value: string; accent: ResearchAccent }[];
-  paperHref: string;
-  certHref: string;
+  publications: Publication[];
 }
 
 export const RESEARCH: ResearchContent = {
@@ -784,20 +793,46 @@ export const RESEARCH: ResearchContent = {
       story: "I like models that respect the physics of reality.",
     },
   },
-  badge: "PUBLICATION: IJRASET VOL 11",
-  title: "Wind Power Analysis using Digital Twins & ML",
-  story:
-    "Wind is messy. I built a Digital Twin on Azure to simulate the present and forecast the future\u2014then tested models that respect long-range time dependencies.",
-  signal:
-    "Hybrid forecasting model combining TCN + KNN inside a Digital Twin architecture on Azure to improve wind output forecasting.",
-  metrics: [
-    { label: "Architecture", value: "Digital Twin", accent: "cyan" },
-    { label: "Model", value: "TCN + KNN", accent: "purple" },
-    { label: "Cloud", value: "Azure", accent: "blue" },
-    { label: "Focus", value: "Forecasting", accent: "green" },
+  publications: [
+    {
+      badge: "PREPRINT \u00b7 ZENODO 2026",
+      title:
+        "Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security",
+      story:
+        "Most agent benchmarks ask two questions\u2014did the task succeed, did the attack succeed\u2014and never whether the agent told its operator anything was wrong. I added that missing axis: Transparency Rate. Silent resistance and resistance-out-loud stop being the same outcome.",
+      signal:
+        "Sole-author preprint introducing a transparency-aware evaluation protocol on Inspect AI. Adds Transparency Rate (TR) as a third axis to the AgentDojo outcome matrix, with an anchored prompt-injection result (n=20, Wilson 95% CIs) across four models and diagnostic probes over six adversarial surfaces.",
+      metrics: [
+        { label: "Contribution", value: "Transparency Rate", accent: "purple" },
+        { label: "Harness", value: "Inspect AI", accent: "cyan" },
+        { label: "Surfaces", value: "6 attack", accent: "green" },
+        { label: "Author", value: "Sole author", accent: "blue" },
+      ],
+      links: [
+        { label: "Read The Paper", href: ASSETS.agentShieldPaper },
+        { label: "View on Zenodo", href: "https://doi.org/10.5281/zenodo.20789431" },
+        { label: "GitHub", href: "https://github.com/Chunduri-Aditya/agent-shield" },
+      ],
+    },
+    {
+      badge: "PUBLICATION \u00b7 IJRASET VOL 11 (PEER-REVIEWED)",
+      title: "Wind Power Analysis using Digital Twins & ML",
+      story:
+        "Wind is messy. I built a Digital Twin on Azure to simulate the present and forecast the future\u2014then tested models that respect long-range time dependencies.",
+      signal:
+        "Hybrid forecasting model combining TCN + KNN inside a Digital Twin architecture on Azure to improve wind output forecasting.",
+      metrics: [
+        { label: "Architecture", value: "Digital Twin", accent: "cyan" },
+        { label: "Model", value: "TCN + KNN", accent: "purple" },
+        { label: "Cloud", value: "Azure", accent: "blue" },
+        { label: "Focus", value: "Forecasting", accent: "green" },
+      ],
+      links: [
+        { label: "Read The Paper", href: ASSETS.publicationPaper },
+        { label: "View Certificate", href: ASSETS.publicationCertificate },
+      ],
+    },
   ],
-  paperHref: ASSETS.publicationPaper,
-  certHref: ASSETS.publicationCertificate,
 };
 
 /* ============================================================================
@@ -1240,13 +1275,14 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "ijraset",
     ],
     answer:
-      "Published research on Wind Power Analysis using Digital Twins & ML in IJRASET Vol 11 (Aug 2023, co-author). The work combines KNN and TCN inside a Digital Twin architecture on Azure to improve wind forecasting with long-range time dependencies.",
+      "Two papers. (1) Sole-author preprint — “Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security” (Zenodo, 2026), introducing Transparency Rate as a third evaluation axis on the Inspect AI harness. (2) Peer-reviewed publication — “Wind Power Analysis using Digital Twins & ML” in IJRASET Vol 11 (Aug 2023, co-author), combining KNN + TCN inside a Digital Twin on Azure for wind forecasting.",
     links: [
-      { label: "Read Paper", href: ASSETS.publicationPaper },
-      { label: "View Certificate", href: ASSETS.publicationCertificate },
+      { label: "Agent Shield Paper", href: ASSETS.agentShieldPaper },
+      { label: "View on Zenodo", href: "https://doi.org/10.5281/zenodo.20789431" },
+      { label: "Wind Paper (IJRASET)", href: ASSETS.publicationPaper },
       { label: "Research Section", href: "#research", sectionId: "research" },
     ],
-    tags: ["research", "paper", "publication", "wind", "digital twin", "tcn", "knn", "azure"],
+    tags: ["research", "paper", "publication", "preprint", "zenodo", "transparency rate", "agent shield", "wind", "digital twin", "tcn", "knn", "azure"],
   },
   {
     id: "skills-stack",
