@@ -409,7 +409,7 @@ export const PROJECTS: ProjectsSectionContent = {
       iconClassName: "text-purple-400",
       tags: ["FastAPI", "React/TypeScript", "Demucs", "Beat This!", "CLAP", "Essentia", "librosa", "Audio ML"],
       oneLiner:
-        "A full-stack DJ engine: React/TypeScript frontend with SSE live streaming, FastAPI async job queue, and a research-grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search) with 374+ tests and -14 LUFS mastering.",
+        "A full-stack DJ engine: React/TypeScript frontend with SSE live streaming, FastAPI async job queue, and a research-grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search) with 520+ tests and -14 LUFS mastering.",
       story:
         "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread\u2014replacing librosa beat detection with Beat This! (ISMIR 2024) for proper downbeats, swapping IIR bass shelving for a true cosine-taper stem ramp, adding TIV harmonic scoring from the MIR literature, and building CLAP 512-D semantic search so DJs can find tracks by sound, not just by name. Then wrapped it in a React frontend with real-time SSE job streaming so it actually behaves like a product.",
       evidence: [
@@ -419,7 +419,8 @@ export const PROJECTS: ProjectsSectionContent = {
         "Cosine-taper stem bass ramp (no IIR bleed) + FxNorm per-stem-type LUFS normalization using corpus-derived targets",
         "CLAP 512-D semantic search (crate_digger.py) + Essentia arousal/valence energy arc modeling for setlist planning",
         "rekordbox XML + Serato GEOB cue export to bridge output into professional DJ software",
-        "374+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 9+ organic GitHub stars",
+        "Live-testing pass against the running app caught what the shape-only test suite couldn't: a compatibility scorer marking key-clashing pairs ‘compatible,’ a library-count undercount from a partial indexing write, and a duplicate song-naming policy causing request floods",
+        "520+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 13+ organic GitHub stars",
       ],
       architecture: {
         overview:
@@ -478,7 +479,7 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Tests", value: "374+" },
+        { label: "Tests", value: "520+" },
         { label: "Mastering", value: "\u221214 LUFS" },
       ],
     },
@@ -1142,7 +1143,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 28 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 374+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
+      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 28 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 520+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1202,7 +1203,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "librosa",
     ],
     answer:
-      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core — TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, and rekordbox XML + Serato GEOB cue export. 374+ tests, GitHub Actions CI, 9+ organic GitHub stars.",
+      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core — TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, and rekordbox XML + Serato GEOB cue export. 520+ tests, GitHub Actions CI, 13+ organic GitHub stars.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
     ],
