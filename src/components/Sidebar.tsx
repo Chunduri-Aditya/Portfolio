@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, FileText } from "lucide-react";
+import { Mail } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import { SIDEBAR, CONTACT, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
@@ -139,15 +139,6 @@ const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
                 <Icon name="FileText" size={16} className="text-cyan-300" />
                 <span>{cta.resumeLabel}</span>
               </motion.a>
-              <a
-                href={cta.resumeFullHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors mt-2"
-              >
-                <FileText size={11} />
-                {cta.resumeFullLabel}
-              </a>
               <motion.a
                 href={cta.emailHref}
                 className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors"

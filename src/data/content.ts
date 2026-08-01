@@ -23,8 +23,7 @@ const getPublicPath = (path: string): string => {
 
 /* ── Asset paths (edit here to swap PDFs) ─────────────────────────────── */
 export const ASSETS = {
-  resumePdf: getPublicPath("Docs/Aditya_Chunduri_Master_Portfolio_1page.pdf"),
-  resumePdfFull: getPublicPath("Docs/Aditya_Chunduri_Master_Portfolio_2page.pdf"),
+  resumePdf: getPublicPath("Docs/Aditya_Chunduri.pdf"),
   publicationPaper: getPublicPath("Docs/Publication_Paper_Wind.pdf"),
   publicationCertificate: getPublicPath("Docs/IJRASET_Certificate_Wind.pdf"),
   agentShieldPaper: getPublicPath("Docs/Agent_Shield_Paper.pdf"),
@@ -70,9 +69,9 @@ export const HERO: HeroContent = {
     "M.S. Applied Data Science, USC \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing",
   intro: {
     signal:
-      "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield \u2014 adversarial evals for prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift across 8 frontier models, scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS, all on Inspect AI.",
+      "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield, adversarial evals for prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift across frontier models, scored on attack success rate, benign utility, and transparency, mapped to OWASP and MITRE ATLAS, all on Inspect AI. Now paired with a local runtime perimeter that screens MCP tool descriptions before an agent ever reads them.",
     story:
-      "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment\u2014reproducible, logged, standard-aligned. Current obsession: Agent Shield, an attack framework stress-testing 8 frontier models on the Inspect AI harness.",
+      "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment: reproducible, logged, standard aligned. Current obsession: Agent Shield, an attack framework on the Inspect AI harness that grew a second half, a local perimeter that screens untrusted tool descriptions at runtime instead of only scoring them afterward.",
   },
   chips: {
     signal: [
@@ -333,7 +332,7 @@ export const PROJECTS: ProjectsSectionContent = {
     {
       id: "agent-shield",
       title: "Agent Shield",
-      subtitle: "LLM Agent Security Evaluation Framework",
+      subtitle: "Adversarial Eval Framework + Local Runtime Perimeter",
       iconName: "ShieldCheck",
       iconClassName: "text-rose-400",
       tags: [
@@ -342,39 +341,59 @@ export const PROJECTS: ProjectsSectionContent = {
         "HarmBench",
         "Prompt Injection",
         "MCP Security",
+        "Runtime Perimeter",
         "OWASP / MITRE ATLAS",
         "Python",
       ],
       oneLiner:
-        "An adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift\u2014built on UK AISI\u2019s Inspect AI harness and mapped to OWASP and MITRE ATLAS.",
+        "An adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift, built on UK AISI\u2019s Inspect AI harness and mapped to OWASP and MITRE ATLAS. Now with a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
       story:
-        "Agents are being deployed faster than they\u2019re being measured. I\u2019m building a reproducible attack surface\u2014one harness, one scoring schema, seeded tasks\u2014so failures show up as scored diffs, not vibes. The kind of eval I\u2019d want to see before trusting an agent with anything real.",
+        "Agents are being deployed faster than they\u2019re being measured. I built a reproducible attack surface first: one harness, one scoring schema, seeded tasks, so failures show up as scored diffs and not vibes. Then the results made the second half obvious. If no model flags a poisoned tool description, scoring that after the fact isn\u2019t enough, so the same repo now ships a local perimeter that screens tool descriptions before the agent ever reads them.",
       evidence: [
-        "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi-turn behavioral drift",
-        "Introduced Transparency Rate \u2014 whether an agent flags an attack to its operator \u2014 as a third axis alongside ASR and Benign Utility in a six-cell outcome model extending AgentDojo's 2x2 matrix",
-        "Seed-pinned n=20 evaluations logged on 4 of the 8 target frontier models so far (Claude Sonnet 4.5, Groq Llama 3.3 70B, Llama 3.1 8B, Gemini 3.5 Flash) with Wilson 95% CIs",
-        "Three of the four logged models score TR=0.000 on anchored injection — Sonnet 4.5 is the sole model with non-zero TR (0.150); spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
-        "Built on Inspect AI (UK AISI harness) \u2014 standard-aligned, not ad hoc; all attacks mapped to OWASP LLM, OWASP Agentic, MITRE ATLAS, and AIVSS",
+        "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi turn behavioral drift",
+        "Introduced Transparency Rate, whether an agent flags an attack to its operator, as a third axis alongside ASR and Benign Utility in a six cell outcome model extending AgentDojo's 2x2 matrix",
+        "Two anchored surfaces at n=20 with Wilson 95% CIs: inputs/ (prompt injection) logged on 4 of the 8 target frontier models, and tools/ (MCP tool description poisoning) logged on Sonnet 4.5 and Llama 3.1 8B. Every other module is labeled a diagnostic probe, not a powered result",
+        "On anchored prompt injection, Sonnet 4.5 is the sole model with non-zero TR (0.150); the other three sit at 0.000. Spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
+        "On anchored MCP tool poisoning (TL-01, n=20), both logged models score ASR 0.000 and TR 0.000: the poisoned description is neither executed nor flagged. Resisting quietly and never telling the operator is exactly the gap TR exists to name",
+        "Local runtime perimeter (agent-shield-guard, agent-shield-mcp-proxy) screens untrusted text and MCP tool descriptions, quarantines known poisons, and raises operator alerts. A library and CLI by design, deliberately not a hosted firewall",
+        "Bounded research control plane that makes no network calls of its own: query redaction, CIA classification, source screening, approval manifests, retrieved content screening, quarantine, and append only audit events wrapped around whichever agent does the fetching",
+        "TR-v2 LLM judge built as a challenger to the v1 phrase list scorer, held back from promotion until a human labeled holdout clears a 5% false positive gate",
+        "Built on Inspect AI (UK AISI harness), standard aligned rather than ad hoc; all attacks mapped to OWASP LLM, OWASP Agentic, MITRE ATLAS, and AIVSS",
         "Released as a Zenodo preprint (doi:10.5281/zenodo.20789431) with framework, attack registries, seeds, and logs",
       ],
       architecture: {
         overview:
-          "Seeded Task \u2192 Inspect AI Harness \u2192 Agent Under Test \u2192 Scorers \u2192 Scored Log \u2192 ASR + Utility + Transparency",
+          "Two surfaces. Eval: Seeded Task \u2192 Inspect AI Harness \u2192 Agent Under Test \u2192 Scorers \u2192 ASR + Utility + Transparency. Runtime: Untrusted Text / MCP Tool Description \u2192 Screener \u2192 Quarantine or Pass \u2192 Operator Alert",
         diagram: `
+  EVAL SURFACE (scored, seeded, reproducible)
 +----------------+   +----------------+   +-------------------+
 |  Attack Suite  |-->|  Inspect AI    |-->|  Agent Under Test |
-|  (4 classes)   |   |  Harness       |   |  (8 frontier LLMs)|
+|  6 modules     |   |  Harness       |   |  (frontier LLMs)  |
+|  28 attack IDs |   |  (seed-pinned) |   |                   |
 +----------------+   +----------------+   +---------+---------+
                                                      |
                                                      v
 +----------------+   +----------------+   +-------------------+
 |  ASR + Utility |<--|  Scorers       |<--|  Tool + Memory    |
-|  + Transparency|   |  (seeded)      |   |  Trace            |
-+----------------+   +----------------+   +-------------------+`,
+|  + Transparency|   |  (TR-v1 live,  |   |  Trace            |
+|    (n=20 CI)   |   |   TR-v2 chal.) |   |                   |
++----------------+   +----------------+   +-------------------+
+
+  RUNTIME SURFACE (local library + CLI, separate claim)
++----------------+   +----------------+   +-------------------+
+|  Untrusted     |-->|  agent-shield- |-->|  Quarantine  or   |
+|  text / MCP    |   |  guard / proxy |   |  pass to agent    |
+|  tool descs    |   |  (screeners)   |   +---------+---------+
++----------------+   +----------------+             |
+                                                     v
+                                          +-------------------+
+                                          |  Operator Alert   |
+                                          +-------------------+`,
         tradeoffs: [
-          "Breadth vs depth: 4 attack classes give surface coverage; each can go deeper later",
+          "Anchored vs diagnostic: only 2 surfaces are powered at n=20; the rest are labeled probes rather than quietly presented as results",
           "Automated scoring vs human rater (automated is cheaper and seeded for reproducibility)",
           "Safety of running attacks vs value of knowing failure modes (sandboxed, logged, bounded)",
+          "Local library vs hosted service: shipping a library keeps the claim checkable and avoids a product promise the evidence does not support yet",
         ],
       },
       decisions: [
@@ -390,6 +409,14 @@ export const PROJECTS: ProjectsSectionContent = {
           title: "Seeded JSONL tasks + OWASP / MITRE ATLAS mapping",
           why: "A result that can\u2019t be re-run is a rumor, and a threat without a taxonomy is a one-off. Every run is reproducible and mapped.",
         },
+        {
+          title: "Label anchored results separately from diagnostic probes",
+          why: "Six live modules is not six powered results. Two surfaces carry n=20 and Wilson intervals; the rest are explicitly marked probes so the README can never be misread as a leaderboard.",
+        },
+        {
+          title: "Ship the runtime perimeter as a local library, not a service",
+          why: "The eval numbers and the runtime guard are different claims with different evidence. Keeping the perimeter local and CLI-shaped keeps them from being quoted as one thing.",
+        },
       ],
       links: {
         github: "https://github.com/Chunduri-Aditya/agent-shield",
@@ -398,7 +425,7 @@ export const PROJECTS: ProjectsSectionContent = {
       },
       metrics: [
         { label: "Attack IDs", value: "6 modules · 28" },
-        { label: "Models", value: "8 frontier" },
+        { label: "Anchored", value: "2 surfaces · n=20" },
       ],
     },
     {
@@ -419,8 +446,12 @@ export const PROJECTS: ProjectsSectionContent = {
         "Cosine-taper stem bass ramp (no IIR bleed) + FxNorm per-stem-type LUFS normalization using corpus-derived targets",
         "CLAP 512-D semantic search (crate_digger.py) + Essentia arousal/valence energy arc modeling for setlist planning",
         "rekordbox XML + Serato GEOB cue export to bridge output into professional DJ software",
-        "Live-testing pass against the running app caught what the shape-only test suite couldn't: a compatibility scorer marking key-clashing pairs ‘compatible,’ a library-count undercount from a partial indexing write, and a duplicate song-naming policy causing request floods",
-        "520+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 13+ organic GitHub stars",
+        "Learned spectral matching: mel band trajectory matching picks track B's entry phrase against A's outro evolution, with drop aware scoring so B's drop lands just after handover and never mid crossfade. Per band weights update online from thumbs up/down verdicts, one shot per render",
+        "Post render spectral sync: a time varying multiband EQ eases the overlap spectrum from A to B, transient preserving via onset flux protection, gain capped and edge tapered, bass band left untouched",
+        "Masking aware multiband EQ (Hafezi & Reiss 2015) behind a defensive import, so a missing dependency degrades to no EQ instead of breaking the render",
+        "Two mixing engines selectable per job: a frozen byte faithful vendor of the April 2026 algorithm alongside the current pipeline, with every result recording which engine produced it",
+        "Live-testing passes against the running app kept catching what the shape-only test suite couldn't: a compatibility scorer marking key-clashing pairs ‘compatible,’ a library-count undercount from a partial indexing write, a duplicate song-naming policy causing request floods, and a job executor that never emitted terminal SSE frames so job cards froze at their last progress percentage forever. Each one has a regression test now",
+        "520+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 18 organic GitHub stars",
       ],
       architecture: {
         overview:
@@ -471,6 +502,14 @@ export const PROJECTS: ProjectsSectionContent = {
         {
           title: "CLAP 512-D semantic search over 35-D handcrafted embeddings",
           why: "35-D features (BPM, key, energy) can\u2019t capture timbral similarity. CLAP embeds audio into a space shared with text, so \u2018find me something that sounds like X\u2019 actually works.",
+        },
+        {
+          title: "Learn spectral band weights from listener verdicts, one shot per render",
+          why: "Whether a transition sounds right is a taste judgment no offline metric captures. A thumbs up/down per render is the cheapest honest signal available, and capping it at one update per render keeps a single opinionated session from overfitting the weights.",
+        },
+        {
+          title: "Keep the old mixing engine as a frozen, selectable option",
+          why: "The rewrite is not automatically better on every track. Vendoring the previous engine byte-faithfully and tagging each result with its engine makes it a comparison rather than a bet.",
         },
       ],
       links: {
@@ -545,7 +584,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/Automated-GenAI-Media-Pipeline-Akashic-Tree",
+        github: "https://github.com/Chunduri-Aditya/Automated-GenAI-Media-Pipeline-Akashic-Tree-",
         live: "#",
         demo: "#",
       },
@@ -557,53 +596,75 @@ export const PROJECTS: ProjectsSectionContent = {
     {
       id: "ai-health-journal",
       title: "AI Health Journal",
-      subtitle: "Privacy-First LLM Assistant (On-Device RAG)",
+      subtitle: "Local RAG Journal with a Measured Safety Floor",
       iconName: "Lock",
       iconClassName: "text-emerald-400",
-      tags: ["RAG", "Ollama", "ChromaDB", "DPO", "Flask", "Local-First"],
+      tags: ["RAG", "Ollama", "ChromaDB", "Retrieval Evals", "Mutation Testing", "DPO", "Flask", "Local-First"],
       oneLiner:
-        "A production RAG assistant running entirely on-device: 7B-parameter Ollama inference, ChromaDB vector store, DPO-aligned outputs, zero cloud dependency.",
+        "A local first journaling assistant where the two claims that actually matter, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline instead of asserted.",
       story:
-        "Reflection shouldn\u2019t require exporting your private thoughts into someone else\u2019s dataset. I built the whole stack locally\u2014vector retrieval, inference, DPO alignment\u2014so the system grounds its answers in your own history without anything leaving the machine.",
+        "Aggregate recall said 0.875 and looked healthy. Broken out by category, one bucket sat at 0.667: entries about a good day were retrieving the user\u2019s worst entries, because the embedder encoded topic and not emotional valence. In a journaling app the retrieved entries become the grounding context the person reads back, so on a good day the system was quietly reflecting their hardest writing at them. That is the bug that convinced me the aggregate number is the enemy, and that everything here needs a per category breakdown and an eval I have personally broken on purpose.",
       evidence: [
-        "7B-parameter LLM running entirely on-device via Ollama",
-        "ChromaDB vector retrieval, sub-second context injection across 10,000+ document chunks",
-        "DPO (Direct Preference Optimization) fine-tuning for health-domain alignment",
-        "Flask API layer \u2014 zero external API dependencies",
-        "Local-first by default; no data egress",
+        "Retrieval ablation across 4 strategies (dense MiniLM, BM25, hybrid RRF, dense nomic-embed-text) on a corpus where every query is tagged with the confusion it was built to induce",
+        "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted Recall@3 to 0.979 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
+        "Two alternative fixes built, measured, and rejected: a score threshold (relevant and irrelevant distributions overlap completely) and a valence aware reranker (helped the weak embedder, actively hurt the strong one). Both kept documented rather than deleted, so they do not get re proposed",
+        "Crisis safety floor at sensitivity 1.000 and specificity 0.971, deterministic and LLM free, so it still holds on an offline machine or a failed verifier call",
+        "That eval was verified by breaking the thing it measures: deleting one euphemistic crisis pattern drops sensitivity to 0.909, names both missed entries, and exits non zero",
+        "Five detector reframe quality rubric (minimising, toxic positivity, commanding language, ungrounded genericness, invalidating pivots), each detector proven load bearing by independent disable mutation testing: recall drops 1.000 to 0.800, missing exactly its own cases",
+        "Multi model Draft, Verify, Revise pipeline over local Ollama models, auto selected against the machine's capacity rather than pinned to one model size",
+        "Local first by default: PRIVACY_MODE=strict scrubs PII before storage, and Pinecone and Anthropic are both opt in gates that ship off",
+        "Stated limits, on the card because they are on the repo: 31 document retrieval corpus, 24 queries, case sets authored with the implementation visible. Sensitivity is therefore optimistic and specificity is the more trustworthy half",
       ],
       architecture: {
         overview:
-          "Input \u2192 Embed \u2192 ChromaDB Retrieve \u2192 Compose Prompt \u2192 Ollama 7B (DPO-aligned) \u2192 Verified Response",
+          "Entry \u2192 PII Scrub \u2192 Embed (nomic-embed-text) \u2192 Chroma Retrieve \u2192 Safety Tier Gate \u2192 Draft / Verify / Revise over local Ollama \u2192 Reflection",
         diagram: `
-+-----------+   +-----------+   +-----------+   +-----------+
-|  Input    |-->|  Embed    |-->|  ChromaDB |-->|  Retrieve |
-|  (text)   |   |           |   |  (vector) |   |   top-k   |
-+-----------+   +-----------+   +-----------+   +-----+-----+
-                                                       |
-                                                       v
-+-----------+   +-----------+   +-----------+   +-----------+
-|  Response |<--|  Verify   |<--|  Ollama   |<--|  Compose  |
-|           |   |           |   |  7B (DPO) |   |   prompt  |
-+-----------+   +-----------+   +-----------+   +-----------+`,
++-----------+   +-----------+   +----------------+   +-----------+
+|  Entry    |-->| PII Scrub |-->|  Embed         |-->|  Chroma   |
+|  (text)   |   | (strict)  |   | nomic-embed    |   |  top-k    |
++-----------+   +-----------+   +----------------+   +-----+-----+
+                                                           |
+                                                           v
+                                              +------------------------+
+                                              |  Safety Tier Gate      |
+                                              |  crisis / distress /   |
+                                              |  normal (deterministic)|
+                                              +-----------+------------+
+                                                          |
+                          crisis: reframe cleared,        |  normal
+                          points to human support         v
+                                              +------------------------+
+                                              |  Draft -> Verify ->    |
+                                              |  Revise (local Ollama) |
+                                              +-----------+------------+
+                                                          |
+                                                          v
+                                              +------------------------+
+                                              |  Grounded Reflection   |
+                                              +------------------------+`,
         tradeoffs: [
-          "On-device (private, limited by local hardware) vs cloud (scale, but leak risk)",
-          "Retrieval recall vs precision (tight top-k + DPO alignment keep it grounded)",
-          "DPO training cost vs alignment quality (one-time investment, compounds per response)",
+          "Sensitivity gated at 1.000 while specificity is gated lower: a false positive shows one unnecessary supportive message, a false negative lets a reframe reach someone in real danger. The two errors are not equally bad and the gates say so",
+          "Deterministic floor vs LLM verifier: the floor is weaker but survives an offline machine, so it is the layer the guarantee rests on",
+          "On device (private, bounded by local hardware) vs cloud (scale, leak risk). Cloud exists as an opt in gate, never a default",
+          "Small self authored eval sets vs no measurement at all: worth having, worth caveating in the same breath",
         ],
       },
       decisions: [
         {
-          title: "On-device everything",
-          why: "Health context is the last thing I\u2019d hand to a cloud endpoint I don\u2019t control.",
+          title: "Report retrieval per category, never as an aggregate",
+          why: "The aggregate was 0.875 and hid a category sitting at 0.667. An average is where a failure goes to hide.",
         },
         {
-          title: "DPO over SFT",
-          why: "Direct preference signals are closer to what \u2018useful for me\u2019 actually means than instruction-tuned defaults.",
+          title: "Verify every eval by breaking it before trusting a green run",
+          why: "A guard that passes against the bug it exists to catch is not a test. Deleting a crisis pattern has to turn the build red, or the build was never watching.",
         },
         {
-          title: "RAG as grounding, not retrieval",
-          why: "The point isn\u2019t surfacing passages. It\u2019s anchoring responses so they can\u2019t drift.",
+          title: "Keep the rejected challengers documented instead of deleting them",
+          why: "A proposal that failed measurement is the only thing that stops it being re proposed six months later.",
+        },
+        {
+          title: "Deterministic safety floor underneath the model, not inside it",
+          why: "The tier gate cannot depend on an LLM call succeeding. Whatever else fails, the crisis path still has to hold.",
         },
       ],
       links: {
@@ -612,8 +673,8 @@ export const PROJECTS: ProjectsSectionContent = {
         demo: "#",
       },
       metrics: [
-        { label: "Inference", value: "7B on-device" },
-        { label: "Retrieval", value: "10k+ chunks, sub-sec" },
+        { label: "Retrieval", value: "0.979 Recall@3" },
+        { label: "Crisis floor", value: "1.000 sensitivity" },
       ],
     },
     {
@@ -676,6 +737,79 @@ export const PROJECTS: ProjectsSectionContent = {
       metrics: [
         { label: "Categories", value: "4 eval axes" },
         { label: "Runtime", value: "Local Ollama" },
+      ],
+    },
+    {
+      id: "attention-drift-detector",
+      title: "Attention Drift Detector",
+      subtitle: "On Device Attention Monitoring (No Video Leaves the Machine)",
+      iconName: "Radar",
+      iconClassName: "text-cyan-400",
+      tags: ["MediaPipe", "OpenCV", "solvePnP", "Gaze Estimation", "SQLite", "Local-First"],
+      oneLiner:
+        "A webcam tool that classifies focus, drift, and absence in real time from head pose and iris gaze, nudges you after five continuous seconds of drift, and writes a session report. No video is ever recorded: only derived angles and labels reach disk.",
+      story:
+        "I wanted to know what my attention actually did during deep work, and every tool that offered to tell me wanted the camera feed in someone else's cloud. The interesting constraint was throwing the pixels away: if only derived numbers persist, the privacy claim stops being a policy promise and becomes a property of the data on disk.",
+      evidence: [
+        "MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second sliding window",
+        "Three states (focused, drifting, absent) with an OS notification firing after 5 continuous seconds of drift",
+        "No video recorded and nothing leaves the machine: only derived numbers (head angles, gaze vectors) and session labels persist, in local SQLite",
+        "HTML session report generated automatically on quit, plus a live OpenCV overlay showing state, focus ratio, and drift count",
+        "50 tests across 5 modules, running in under a second with no webcam and no network required, and a --dummy mode that exercises the full pipeline on synthetic frames",
+      ],
+      architecture: {
+        overview:
+          "Webcam Frame → MediaPipe Face Mesh → Head Pose (solvePnP) + Iris Gaze → Classifier → Temporal Smoother → Drift Event → Nudge + SQLite → HTML Report",
+        diagram: `
++-----------+   +------------------+   +--------------------+
+|  Webcam   |-->|  MediaPipe Face  |-->|  Head Pose         |
+|  Frame    |   |  Mesh (478 pts)  |   |  (solvePnP)        |
++-----------+   +------------------+   |  + Iris Gaze       |
+                                       +---------+----------+
+   frame discarded, never stored                 |
+                                                 v
++--------------------+   +------------------+   +--------------------+
+|  Temporal Smoother |<--|  Classifier      |<--|  Derived Angles    |
+|  (1s window)       |   |  focus/drift/    |   |  + Vectors only    |
++---------+----------+   |  absent          |   +--------------------+
+          |              +------------------+
+          v
++--------------------+   +------------------+
+|  Drift Event       |-->|  OS Nudge        |
+|  (5s continuous)   |   |  + SQLite log    |
++--------------------+   +--------+---------+
+                                  |
+                                  v
+                         +------------------+
+                         |  HTML Report     |
+                         +------------------+`,
+        tradeoffs: [
+          "Rule based classifier vs a learned model: rules are inspectable and need no training data, at the cost of ceiling accuracy",
+          "Temporal smoothing adds latency to state changes but stops a single blink or glance registering as drift",
+          "Discarding frames makes the privacy claim structural, and also makes any later model training impossible without re collecting data. Worth it",
+        ],
+      },
+      decisions: [
+        {
+          title: "Throw the pixels away at the first stage",
+          why: "A privacy promise that depends on me not misusing stored video is weaker than a pipeline where the video was never written down.",
+        },
+        {
+          title: "Rule based classification over a trained model",
+          why: "I can read a threshold and argue with it. A small model trained on my own face would be less inspectable and no more trustworthy.",
+        },
+        {
+          title: "A dummy frame mode as a first class entry point",
+          why: "A pipeline that can only be tested with a face in front of a camera cannot be tested in CI. Synthetic frames make the whole path runnable in under a second.",
+        },
+      ],
+      links: {
+        live: "#",
+        demo: "#",
+      },
+      metrics: [
+        { label: "Pipeline", value: "478 landmarks" },
+        { label: "Tests", value: "50 · under 1s" },
       ],
     },
   ],
@@ -886,10 +1020,8 @@ export interface SidebarContent {
     title: string;
     subtitle: string;
     resumeLabel: string;
-    resumeFullLabel: string;
     emailLabel: string;
     resumeHref: string;
-    resumeFullHref: string;
     emailHref: string;
   };
 }
@@ -977,7 +1109,7 @@ export const SIDEBAR: SidebarContent = {
     items: [
       {
         category: "Eval & Adversarial (Safety)",
-        tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection"],
+        tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection", "MCP Proxying", "Mutation Testing", "Wilson CIs"],
         iconName: "ShieldCheck",
         accent: "rose",
       },
@@ -989,7 +1121,7 @@ export const SIDEBAR: SidebarContent = {
       },
       {
         category: "ML / CV / Audio",
-        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "librosa", "Demucs", "Beat This!", "CLAP", "Essentia", "Diffusers"],
+        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "MediaPipe", "librosa", "Demucs", "Beat This!", "CLAP", "Essentia", "Diffusers"],
         iconName: "Cpu",
         accent: "cyan",
       },
@@ -1009,12 +1141,10 @@ export const SIDEBAR: SidebarContent = {
   },
   cta: {
     title: "Want the receipts?",
-    subtitle: "1-page for applications · full version below.",
+    subtitle: "One resume, kept current.",
     resumeLabel: "Resume (PDF)",
-    resumeFullLabel: "Full Resume (2-page)",
     emailLabel: "Email",
     resumeHref: ASSETS.resumePdf,
-    resumeFullHref: ASSETS.resumePdfFull,
     emailHref: `mailto:${CONTACT.email}`,
   },
 };
@@ -1073,7 +1203,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "tell me about aditya",
     ],
     answer:
-      "I'm Aditya Chunduri \u2014 M.S. Applied Data Science from USC (Dec 2025), focused on AI agent security and LLM evaluation. I build reproducible adversarial-testing systems for frontier LLMs, with a current push on Agent Shield: an evaluation framework stress-testing 8 frontier models on UK AISI's Inspect AI harness, scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS.",
+      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025), focused on AI agent security and LLM evaluation. I build reproducible adversarial-testing systems for frontier LLMs, with a current push on Agent Shield: an evaluation framework on UK AISI's Inspect AI harness scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS, now paired with a local runtime perimeter that screens MCP tool descriptions before an agent reads them.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
@@ -1094,7 +1224,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "latest work",
     ],
     answer:
-      "Agent Shield \u2014 an LLM agent security evaluation framework. Adversarial evals for prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift, benchmarked across 8 frontier models on Inspect AI. Seeded JSONL tasks scored on attack success rate, benign utility, and transparency rate, with threats mapped to OWASP and MITRE ATLAS.",
+      "Agent Shield, an LLM agent security evaluation framework. Adversarial evals for prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift on Inspect AI, with two surfaces anchored at n=20 and Wilson intervals and the rest labeled diagnostic probes. Seeded JSONL tasks scored on attack success rate, benign utility, and transparency rate, threats mapped to OWASP and MITRE ATLAS. The newest half is a local runtime perimeter (agent-shield-guard, agent-shield-mcp-proxy) that screens tool descriptions in flight rather than scoring them afterward.",
     links: [
       { label: "Agent Shield details", href: "#projects", sectionId: "agent-shield" },
     ],
@@ -1115,7 +1245,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "red teaming llm",
     ],
     answer:
-      "Agent Shield is an adversarial evaluation framework for LLM agents. It tests prompt injection, MCP tool misuse, RAG memory poisoning, and behavioral drift across 8 frontier models. Built on UK AISI's Inspect AI harness with seeded JSONL tasks and unified scoring (attack success rate, benign utility, transparency rate) so runs stay comparable, with threats mapped to OWASP and MITRE ATLAS.",
+      "Agent Shield is an adversarial evaluation framework for LLM agents: 6 live attack modules and 28 attack IDs covering prompt injection, MCP tool poisoning, RAG memory poisoning, covert exfiltration, social engineering, and multi turn drift. Built on UK AISI's Inspect AI harness with seeded JSONL tasks and unified scoring (attack success rate, benign utility, transparency rate), threats mapped to OWASP and MITRE ATLAS. Two surfaces are anchored at n=20 with Wilson 95% CIs and the rest are labeled diagnostic probes, on purpose. The finding that drove the runtime half: on anchored MCP tool poisoning both logged models score ASR 0.000 and TR 0.000, meaning the poisoned description is neither executed nor flagged to the operator.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "agent-shield" },
     ],
@@ -1143,7 +1273,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Five shipped systems: Agent Shield (LLM agent security eval framework on Inspect AI — 6 modules, 28 attack IDs, Zenodo preprint), AI RemixMate (full-stack DJ engine — React/TypeScript + FastAPI + TIV harmonic scoring + Beat This! + CLAP 512-D search, 520+ tests), AkashicTree (agentic multimodal pipeline: text + image + audio), AI Health Journal (on-device RAG with DPO alignment, ChromaDB, zero egress), and Model Behavior Lab (local Ollama eval platform — methodology that became Agent Shield).",
+      "Six shipped systems. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 520+ tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.979 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1182,7 +1312,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "dpo",
     ],
     answer:
-      "AI Health Journal is a privacy-first LLM assistant running a 7B-parameter model entirely on-device via Ollama. ChromaDB handles sub-second vector retrieval across 10,000+ document chunks. DPO (Direct Preference Optimization) fine-tunes responses for health-domain alignment. Zero cloud dependency, zero data egress.",
+      "AI Health Journal is a local first journaling assistant built around a multi model Draft, Verify, Revise pipeline over Ollama, with Chroma and nomic-embed-text for retrieval. The point is that its two load bearing claims are measured, not asserted: a 4 way retrieval ablation (0.979 Recall@3, and a valence_flip category that went 0.667 to 1.000 after the embedder swap) and a deterministic crisis safety floor at 1.000 sensitivity, verified by deliberately breaking it. PRIVACY_MODE=strict scrubs PII before storage; Pinecone and Anthropic are opt in gates that ship off.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-health-journal" },
     ],
@@ -1203,7 +1333,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "librosa",
     ],
     answer:
-      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core — TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, and rekordbox XML + Serato GEOB cue export. 520+ tests, GitHub Actions CI, 13+ organic GitHub stars.",
+      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core. TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, masking aware multiband EQ (Hafezi & Reiss 2015), and rekordbox XML + Serato GEOB cue export. Newest layer is a learned spectral pipeline: mel band trajectory matching picks track B's entry phrase with drop aware scoring, and per band weights update online from thumbs up/down verdicts. 520+ tests, GitHub Actions CI, 18 organic GitHub stars.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
     ],
@@ -1228,6 +1358,26 @@ export const FAQ_INTENTS: FAQIntent[] = [
       { label: "View Project", href: "#projects", sectionId: "akashic-tree" },
     ],
     tags: ["content", "generation", "multimodal", "flux", "diffusers", "elevenlabs", "ollama"],
+  },
+  {
+    id: "attention-drift-detector",
+    title: "Attention Drift Detector",
+    utterances: [
+      "attention drift detector",
+      "attention monitoring",
+      "webcam tool",
+      "focus tracker",
+      "gaze tracking",
+      "mediapipe",
+      "computer vision project",
+      "deep work tool",
+    ],
+    answer:
+      "Attention Drift Detector is an on device webcam tool that classifies focus, drift, and absence in real time: MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second window. It nudges you after 5 continuous seconds of drift and writes an HTML session report. No video is ever recorded, only derived angles and session labels reach local SQLite. 50 tests run in under a second with no webcam or network needed.",
+    links: [
+      { label: "View Project", href: "#projects", sectionId: "attention-drift-detector" },
+    ],
+    tags: ["attention", "drift", "webcam", "mediapipe", "opencv", "gaze", "computer vision", "privacy", "local-first", "focus"],
   },
   {
     id: "experience-roles",
