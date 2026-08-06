@@ -861,11 +861,11 @@ export const EXPERIENCE: ExperienceSectionContent = {
       story:
         "Retinal vessels are small, the labels are noisy, and the downstream diagnosis depends on every pixel. I treated the segmentation problem like a systems problem: better loss, better pipeline, better data hygiene\u2014until the score stopped moving by accident.",
       signal:
-        "Led U-Net segmentation + data pipeline work on the CVD-Masks retinal dataset across three concurrent projects, with reproducible experiment tracking and automated curation.",
+        "Led U-Net segmentation and data pipeline work on the CHASE_DB1 and DRIVE retinal fundus datasets, with reproducible experiment tracking and automated curation.",
       bullets: [
-        "Engineered a U-Net segmentation pipeline for retinal artery-vein classification on CVD-Masks, achieving 94% Dice score through architectural tuning and custom loss functions",
-        "Designed modular PyTorch training pipelines with experiment tracking across 3 concurrent projects, cutting iteration cycles 30% and enabling reproducible comparisons",
-        "Built an automated medical image scraper with quality-validation controls, cutting manual curation time 40% across 10,000+ images",
+        "Engineered a TensorFlow/Keras U-Net segmentation pipeline for retinal artery-vein classification on CHASE_DB1 and DRIVE, reaching 0.98 AUC, 0.99 pixel accuracy, and 0.91 Dice across an 80-image evaluation set",
+        "Designed modular training pipelines with per-run experiment tracking, enabling reproducible comparison across five model versions with saved metrics and training curves",
+        "Built an automated medical image scraper with quality-validation controls, reducing manual curation effort",
         "Presented findings in weekly cross-functional reviews, translating quantitative results into actionable research decisions",
       ],
       tags: ["PyTorch", "U-Net", "Medical Imaging", "Segmentation", "Experiment Tracking"],
@@ -877,15 +877,14 @@ export const EXPERIENCE: ExperienceSectionContent = {
       period: "Jun 2021 \u2013 Jul 2021",
       accent: "purple",
       story:
-        "I wanted to understand what \u201creal-time\u201d actually costs. Fine-tuned YOLO, benchmarked it across five environmental conditions, and built enough reusable tooling that the next intern didn\u2019t have to start from scratch.",
+        "A short remote internship early in my undergrad, and my first real exposure to computer vision. Annotating aerial imagery taught me how much of detection work is dataset quality rather than model choice.",
       signal:
-        "Object detection / tracking work: YOLO fine-tuning, 30+ fps pipelines, and reusable PyTorch/TensorFlow modules that eliminated manual annotation overhead.",
+        "Introductory object detection: annotated an aerial imagery dataset in Roboflow and trained YOLOv5 on it for small object detection.",
       bullets: [
-        "Built real-time object tracking pipelines achieving 30+ fps; fine-tuned YOLO-based CNN architectures, improving detection robustness 15% across 5 environmental conditions",
-        "Automated a video dataset generation pipeline, eliminating 100% of manual frame-annotation overhead",
-        "Produced 10+ reusable PyTorch and TensorFlow modules standardizing deployment workflows and reducing onboarding time for new contributors",
+        "Annotated and managed an aerial imagery dataset in Roboflow for small object detection",
+        "Trained and evaluated a YOLOv5 model on the annotated dataset",
       ],
-      tags: ["YOLO", "PyTorch", "TensorFlow", "Object Tracking", "Real-Time"],
+      tags: ["YOLOv5", "Roboflow", "Object Detection", "Aerial Imagery"],
     },
   ],
 };
@@ -1394,7 +1393,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "internship",
     ],
     answer:
-      "Two research roles. At USC Viterbi (Aug\u2013Dec 2024), I was a Research Assistant in Computer Vision & Medical Imaging \u2014 built a U-Net segmentation pipeline for retinal artery-vein classification reaching 94% Dice on CVD-Masks, plus modular training pipelines across 3 concurrent projects and an automated medical image scraper processing 10,000+ images. At SSN College (Jun\u2013Jul 2021), I worked on real-time object tracking at 30+ fps with YOLO-based CNNs and shipped 10+ reusable PyTorch/TensorFlow modules.",
+      "Two research roles. At USC Viterbi (Aug\u2013Dec 2024), I was a Research Assistant in Computer Vision & Medical Imaging \u2014 built a TensorFlow/Keras U-Net segmentation pipeline for retinal artery-vein classification on CHASE_DB1 and DRIVE, reaching 0.98 AUC and 0.91 Dice, plus modular training pipelines with per-run experiment tracking and an automated medical image scraper. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset in Roboflow and trained a YOLOv5 model on it for small object detection.",
     links: [
       { label: "Experience section", href: "#experience", sectionId: "experience" },
     ],
