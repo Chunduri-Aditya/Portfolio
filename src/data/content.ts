@@ -813,8 +813,8 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
     },
     {
-      id: "wardloom",
-      title: "Wardloom",
+      id: "sourcewarden",
+      title: "Sourcewarden",
       subtitle: "Security-Gated n8n Workflow Orchestration",
       iconName: "Layers",
       iconClassName: "text-blue-400",
@@ -879,7 +879,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/wardloom",
+        github: "https://github.com/Chunduri-Aditya/sourcewarden",
         live: "#",
         demo: "#",
       },
