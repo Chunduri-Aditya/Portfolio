@@ -584,7 +584,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/Automated-GenAI-Media-Pipeline-Akashic-Tree-",
+        github: "https://github.com/Chunduri-Aditya/AkashicTree",
         live: "#",
         demo: "#",
       },
@@ -810,6 +810,83 @@ export const PROJECTS: ProjectsSectionContent = {
       metrics: [
         { label: "Pipeline", value: "478 landmarks" },
         { label: "Tests", value: "50 · under 1s" },
+      ],
+    },
+    {
+      id: "wardloom",
+      title: "Wardloom",
+      subtitle: "Security-Gated n8n Workflow Orchestration",
+      iconName: "Layers",
+      iconClassName: "text-blue-400",
+      tags: ["FastAPI", "RAG", "n8n", "Security", "Ed25519", "Docker", "Python"],
+      oneLiner:
+        "A merged retrieval and multi-agent orchestration system for building n8n workflows, wrapped in a read-only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
+      story:
+        "Two repos had grown side by side: one doing retrieval over n8n's docs and community examples, the other running a six-role agent pipeline behind an Ed25519-signed approval ledger. I merged them into a single system, then wanted a web layer on top. The obvious move was a chatbox that drives the whole pipeline end to end. The correct move was to check what was actually callable first. The orchestration lives entirely in prompt files a human runs through an AI coding agent, gated on purpose so nothing mutates a live workflow without a signed approval. Wiring a chatbox straight into that would mean rebuilding the approval flow in a browser or quietly bypassing it. I scoped the web layer to what was real and safe to expose: grounded retrieval and live status, not execution.",
+      evidence: [
+        "2,256-row retrieval index across official n8n docs and community workflow examples, with an explicit evidence precedence: live instance schema, then official docs, then community examples, then untrusted references",
+        "Six-role agent orchestration (supervisor, security firewall, skeleton architect, module builder, deviation monitor, eval tuner) gated by an Ed25519-signed run ledger, one-time nonces, and a 15-minute authorization window",
+        "Deterministic secret-detection policy blocks any self-improvement feedback containing a PEM key, named credential, or GitHub/OpenAI token pattern, fail closed",
+        "FastAPI chat endpoint returns cited evidence for every answer, never a plan without a source",
+        "Monitoring dashboard recomputes all security control hashes live against the signed manifest instead of trusting a cached result",
+        "20 of 20 tests passing, including a mutation test that flips one byte in a tracked file and confirms the hash check reports a mismatch for that file and a match for the rest",
+        "Ships as a single Docker image and degrades to a clear empty state instead of failing when the retrieval index isn't mounted",
+      ],
+      architecture: {
+        overview:
+          "Query -> FastAPI /chat -> retriever (router -> vector store -> rerank) over the retrieval index -> cited evidence back to the browser. Separately, /dashboard reads self-improvement run status, eval and tuning artifacts, and the security control hash manifest live, recomputing every hash rather than trusting a cache.",
+        diagram: `
+                    +-------------------+
+                    |      Browser       |
+                    +----+----------+---+
+                         |          |
+                   /chat |          | /dashboard
+                         v          v
+        +-------------------+   +-----------------------+
+        |  Retriever          |   |  Live status reads:    |
+        |  router -> store    |   |  self-improvement,     |
+        |  -> rerank          |   |  eval/tuning files,    |
+        +---------+----------+   |  security hash recompute|
+                  |               |  module manifest        |
+                  v               +-----------+------------+
+        +-------------------+                 |
+        | Retrieval index    |                 v
+        | (docs + examples)  |       +-----------------------+
+        +---------+----------+       |  Rendered, read-only   |
+                  |                   |  dashboard              |
+                  v                   +-----------------------+
+        +-------------------+
+        |  Cited evidence     |
+        +-------------------+`,
+        tradeoffs: [
+          "Read-only dashboard vs a live agent driver — a driver would demo better, but it either duplicates the approval ledger in the browser or bypasses it, so read-only won",
+          "Recomputing every security hash on each dashboard load vs trusting a cache — slower page load, but a cached match can go stale and lie",
+          "Single Docker image with no baked-in index vs bundling one — keeps the image small and the index out of version control, at the cost of an empty-state chat until it's mounted",
+        ],
+      },
+      decisions: [
+        {
+          title: "Read-only web layer, not an agent driver",
+          why: "The six-role pipeline's whole design point is a human approving every mutation through a signed run ledger. A chatbox that shells out to run it directly would either rebuild that approval flow or bypass it, so the web layer only reads: retrieval and status, never execution.",
+        },
+        {
+          title: "Reimplemented the hash check in Python instead of shelling out",
+          why: "The existing hash generator is Node-only, write-capable, and maintainer-only. Giving a read-only backend any path to a write-capable script defeats the point of read-only.",
+        },
+        {
+          title: "Merged the two source repos before building anything on top",
+          why: "Two repos evolving in parallel meant two copies of the same evidence-precedence logic. One index, one manifest, one place for a security fix to actually land.",
+        },
+      ],
+      links: {
+        github: "https://github.com/Chunduri-Aditya/wardloom",
+        live: "#",
+        demo: "#",
+      },
+      metrics: [
+        { label: "Retrieval Index", value: "2,256 rows" },
+        { label: "Security Hashes", value: "Verified live" },
+        { label: "Tests", value: "20/20 passing" },
       ],
     },
   ],
