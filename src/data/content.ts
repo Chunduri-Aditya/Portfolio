@@ -51,6 +51,8 @@ export interface HeroContent {
   headline: { signal: string; story: string };
   subhead: string;
   intro: { signal: string; story: string };
+  /** "Plain" depth tier — jargon-free headline + intro, tone-neutral. */
+  plain: { headline: string; intro: string };
   chips: { signal: Chip[]; story: Chip[] };
   ctas: {
     primary: { label: string; iconName: IconName; targetSection: string };
@@ -72,6 +74,11 @@ export const HERO: HeroContent = {
       "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield, adversarial evals for prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift across frontier models, scored on attack success rate, benign utility, and transparency, mapped to OWASP and MITRE ATLAS, all on Inspect AI. Now paired with a local runtime perimeter that screens MCP tool descriptions before an agent ever reads them.",
     story:
       "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment: reproducible, logged, standard aligned. Current obsession: Agent Shield, an attack framework on the Inspect AI harness that grew a second half, a local perimeter that screens untrusted tool descriptions at runtime instead of only scoring them afterward.",
+  },
+  plain: {
+    headline: "I test AI assistants for the ways they can be tricked or broken, before they ship.",
+    intro:
+      "Companies are handing AI agents real tools and real autonomy, fast. I build the systems that catch how those agents fail \u2014 being manipulated, leaking data, drifting off task \u2014 in a lab, with results anyone can reproduce, instead of finding out in production. The same work also ships a small local filter that screens dangerous instructions before an agent reads them.",
   },
   chips: {
     signal: [
@@ -95,6 +102,20 @@ export const HERO: HeroContent = {
     resume: { label: "Resume", iconName: "FileText", href: ASSETS.resumePdf },
   },
 };
+
+/* ── HUD telemetry readout (Hero operator panel). Real, verifiable counts only. ── */
+export interface HudStat {
+  label: string;
+  value: string;
+}
+
+export const HUD_STATS: HudStat[] = [
+  { label: "SYSTEMS BUILT", value: "9" },
+  { label: "PAPERS", value: "2" },
+  { label: "PEAK TEST COUNT", value: "520+" },
+  { label: "FRONTIER MODELS RED-TEAMED", value: "8" },
+  { label: "ATTACK IDS CATALOGUED", value: "28" },
+];
 
 /* ============================================================================
  * SECTION 2 — TICKER THOUGHTS  (rotates in the navbar pill)
@@ -290,6 +311,8 @@ interface ProjectArchitecture {
   tradeoffs: string[];
 }
 
+export type ProjectStatus = "SHIPPED" | "PREPRINT" | "COURSEWORK";
+
 export interface Project {
   id: string;
   title: string;
@@ -297,7 +320,16 @@ export interface Project {
   iconName: IconName;
   iconClassName?: string;
   tags: string[];
+  /** HUD class label, e.g. "AI-SAFETY / EVAL". Uppercase, terse. */
+  discipline: string;
+  status: ProjectStatus;
+  /** Tier 1 — always visible on the card. One punchy "normal person" line, <= ~14 words. */
+  hook: string;
+  /** Tier 2 — "Plain" / ELI5. 2-3 sentences, zero jargon. Tone-neutral (not signal/story). */
+  plain: string;
+  /** Tier 3 — "Technical", crisp variant. */
   oneLiner: string;
+  /** Tier 3 — "Technical", narrative variant. */
   story: string;
   evidence: string[];
   architecture: ProjectArchitecture;
@@ -327,7 +359,7 @@ export const PROJECTS: ProjectsSectionContent = {
       story: "Systems I built because I couldn\u2019t stop thinking about the problem.",
     },
   },
-  searchPlaceholder: "Search (RAG, evals, whisper, demucs, privacy...)",
+  searchPlaceholder: "Search (RAG, evals, homography, demucs, privacy...)",
   projects: [
     {
       id: "agent-shield",
@@ -345,6 +377,12 @@ export const PROJECTS: ProjectsSectionContent = {
         "OWASP / MITRE ATLAS",
         "Python",
       ],
+      discipline: "AI-SAFETY / EVAL",
+      status: "SHIPPED",
+      hook:
+        "I break AI agents on purpose, so they fail in my lab instead of in production.",
+      plain:
+        "Companies are wiring AI assistants into real tools faster than anyone can check whether they're safe. I built the test rig that attacks these assistants the way a bad actor would — hidden instructions, poisoned tools, slow manipulation — and scores how often they fall for it, whether they warn their owner, and whether they still do their normal job. The same project also ships a small local filter that screens sketchy tool descriptions before the AI ever reads them.",
       oneLiner:
         "An adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift, built on UK AISI\u2019s Inspect AI harness and mapped to OWASP and MITRE ATLAS. Now with a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
       story:
@@ -435,6 +473,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Music",
       iconClassName: "text-purple-400",
       tags: ["FastAPI", "React/TypeScript", "Demucs", "Beat This!", "CLAP", "Essentia", "librosa", "Audio ML"],
+      discipline: "AUDIO-ML",
+      status: "SHIPPED",
+      hook:
+        "A DJ engine that mixes two songs into one clean transition, with 520+ tests proving it.",
+      plain:
+        "Blending two tracks so the switch sounds seamless is real engineering: you have to match the key, the tempo, and the exact bar where the beat lands, then fade the bass out without a thud. This is a full app that does all of that automatically — pick two songs, get a mixed track — with a research-grade audio core and a web interface that streams job progress live.",
       oneLiner:
         "A full-stack DJ engine: React/TypeScript frontend with SSE live streaming, FastAPI async job queue, and a research-grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search) with 520+ tests and -14 LUFS mastering.",
       story:
@@ -529,6 +573,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Sparkles",
       iconClassName: "text-purple-400",
       tags: ["Diffusers", "FLUX.1", "Ollama", "ElevenLabs", "Python", "Multimodal"],
+      discipline: "GENAI / PIPELINE",
+      status: "SHIPPED",
+      hook:
+        "One short brief in; a matching script, image, and voiceover out. Swap any model, no rewrites.",
+      plain:
+        "Most tools that generate media lock you into one company's model for text, another for images, another for voice. This pipeline takes a single prompt and produces all three, and lets you swap the underlying model at any stage — cheap local models while you experiment, better cloud ones for the final run — without touching the rest of the code.",
       oneLiner:
         "An agentic, model-agnostic GenAI media pipeline that turns a single brief into text, image, and audio\u2014coordinating local Ollama inference, Diffusers / FLUX.1, and ElevenLabs voice through one modular workflow.",
       story:
@@ -600,6 +650,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Lock",
       iconClassName: "text-emerald-400",
       tags: ["RAG", "Ollama", "ChromaDB", "Retrieval Evals", "Mutation Testing", "DPO", "Flask", "Local-First"],
+      discipline: "RAG / SAFETY",
+      status: "SHIPPED",
+      hook:
+        "A private journaling AI where the two claims that matter — recall and crisis safety — are measured, not promised.",
+      plain:
+        "A journaling assistant that runs entirely on your own computer, so nothing you write ever leaves the machine. The point is honesty about its own quality: it measures whether it actually pulls up the right past entry (an average score was hiding one category that was quietly failing), and it has a plain, deterministic safety check for crisis language that was tested by deliberately breaking it.",
       oneLiner:
         "A local first journaling assistant where the two claims that actually matter, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline instead of asserted.",
       story:
@@ -684,6 +740,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Eye",
       iconClassName: "text-cyan-400",
       tags: ["Evals", "Ollama", "JSON Test Suites", "Plotly", "Python"],
+      discipline: "EVAL / TOOLING",
+      status: "SHIPPED",
+      hook:
+        "Stop arguing about which model is 'better'. Score it with a repeatable test suite instead.",
+      plain:
+        "A local tool for comparing language models on concrete tasks — reasoning, making things up, emotional tone, writing correct code — with runs you can repeat and charts to line them up. It's the measurement habit that later grew into Agent Shield.",
       oneLiner:
         "A local, Ollama-based LLM evaluation platform that benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and dashboards\u2014the methodology that became the base for Agent Shield.",
       story:
@@ -746,6 +808,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Radar",
       iconClassName: "text-cyan-400",
       tags: ["MediaPipe", "OpenCV", "solvePnP", "Gaze Estimation", "SQLite", "Local-First"],
+      discipline: "CV / LOCAL-FIRST",
+      status: "SHIPPED",
+      hook:
+        "A webcam focus tracker that never records video. Only the numbers it computes touch the disk.",
+      plain:
+        "A tool that watches, through your webcam, whether you're focused, drifting, or away during deep work, and nudges you after five seconds of drift. Every tool like this wants your camera feed in someone's cloud; this one throws the pixels away immediately and keeps only derived numbers, so the privacy claim is a property of the data on disk, not a promise.",
       oneLiner:
         "A webcam tool that classifies focus, drift, and absence in real time from head pose and iris gaze, nudges you after five continuous seconds of drift, and writes a session report. No video is ever recorded: only derived angles and labels reach disk.",
       story:
@@ -819,6 +887,12 @@ export const PROJECTS: ProjectsSectionContent = {
       iconName: "Layers",
       iconClassName: "text-blue-400",
       tags: ["FastAPI", "RAG", "n8n", "Security", "Ed25519", "Docker", "Python"],
+      discipline: "SYSTEMS / SECURITY",
+      status: "SHIPPED",
+      hook:
+        "A chatbot that helps you build n8n workflows, and only exposes what's actually safe to expose.",
+      plain:
+        "Two projects had grown up side by side: one that searches n8n's docs, one that runs a locked-down multi-agent build pipeline behind signed approvals. I merged them and put a web layer on top. The disciplined call was scoping that web layer to grounded search and live status only, because wiring a chatbox straight into the build pipeline would mean rebuilding or bypassing its approval controls.",
       oneLiner:
         "A merged retrieval and multi-agent orchestration system for building n8n workflows, wrapped in a read-only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
       story:
@@ -889,6 +963,169 @@ export const PROJECTS: ProjectsSectionContent = {
         { label: "Tests", value: "20/20 passing" },
       ],
     },
+    {
+      id: "metalearnml",
+      title: "MetaLearnML",
+      subtitle: "Meta-Learned AutoML Ranking, Measured Against Its Baselines",
+      iconName: "Boxes",
+      iconClassName: "text-emerald-400",
+      tags: [
+        "AutoML",
+        "scikit-learn",
+        "PyTorch",
+        "Meta-Learning",
+        "Benchmarking",
+        "Leakage Control",
+        "GitHub Actions CI",
+      ],
+      discipline: "AUTOML / BENCHMARK",
+      status: "SHIPPED",
+      hook:
+        "I built an AutoML ranker, then a benchmark that proved it doesn't save time, and kept that result.",
+      plain:
+        "AutoML tools promise to reach a good model faster by predicting which candidates are worth trying. I built one, then built a careful 15-dataset benchmark to check the promise. It ranks candidates better than random guessing, but it did not measurably cut the work needed to reach a good model, and the project keeps that negative result written down rather than quietly dropping it.",
+      oneLiner:
+        "A tabular AutoML engine that ranks preprocessing×model candidates with a meta-learner trained on past runs, plus a 15-dataset benchmark built to measure whether that learned ranking actually beats proxy and random baselines. On end-to-end evaluation savings it does not, and the repo records that.",
+      story:
+        "The pitch for meta-learned model selection is that it saves you evaluations. I built the engine and then built the benchmark that would catch me if it didn’t. On ranking quality the meta-learner is clearly better than random (median Spearman 0.57 vs 0.02). On the thing that matters, evaluations saved to reach a good model, the measured reduction was 0.0% with a 95% CI of 0 to 50%. The benchmark report marks the resume-impact criterion as not met. Keeping that result visible is the point of the project.",
+      evidence: [
+        "Candidate universe: up to 12 preprocessing strategies × 7 (classification) or 9 (regression) models, ranked by fast proxy evaluation plus an optional RandomForest meta-learner over prior-run meta-features",
+        "Leakage controls: outer dev/test split before any encoder is fit, fold-local preprocessing, a single scored touch of the test partition, deterministic splits, SHA-256 content-addressed candidate identity, and a versioned meta-feature schema that refuses to load on drift",
+        "Benchmark: 15 OpenML datasets (8 classification, 7 regression), outer seeds [13, 42, 97], 5 inner folds, 20 seeded candidate orderings, methods {exhaustive, proxy, meta, proxy+meta, random}",
+        "Ranking quality, meta vs random: median Spearman 0.57 vs 0.02, Recall@5 0.40 vs 0.20",
+        "End-to-end: proxy+meta held 100% median quality retention at a budget of 10 candidates with 0.0 median normalized regret, but the median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%)",
+        "60 test functions (~82 cases with parametrization), 74.18% line coverage against a 70% gate, Ruff-clean, GitHub Actions CI",
+        "Optional FastAPI read API and Neo4j experiment-graph logging, kept as optional infrastructure rather than load-bearing claims",
+      ],
+      architecture: {
+        overview:
+          "CSV + label → task inference → candidate universe (preprocessing × model) → proxy score + meta-learner rank → fold-local CV on top-k → refit winner on all dev rows → single test score → deployable bundle + benchmark report",
+        diagram: `
++---------------+   +------------------+   +----------------------+
+|  CSV + label  |-->|  Task inference  |-->|  Candidate universe  |
++---------------+   +------------------+   |  preproc x model     |
+                                          +-----------+----------+
+                                                      |
+                                                      v
++----------------------+   +------------------+   +----------------------+
+|  Fold-local CV on    |<--|  Proxy score +   |<--|  Meta-features over   |
+|  top-k candidates    |   |  meta-learner    |   |  prior runs (RF)     |
++----------+-----------+   +------------------+   +----------------------+
+           |
+           v
++----------------------+   +------------------+
+|  Refit winner on all |-->|  Single test     |
+|  dev rows            |   |  score + bundle  |
++----------------------+   +--------+---------+
+                                    |
+                                    v
+                         +----------------------+
+                         |  Benchmark report:   |
+                         |  ranking vs speedup  |
+                         +----------------------+`,
+        tradeoffs: [
+          "Meta-learner vs proxy-only ranking: the meta-learner ranks better, but did not convert that into fewer end-to-end evaluations in the measured suite",
+          "Report the null result vs bury it: the benchmark explicitly records that the speedup criterion was not met, so the claim cannot drift upward later",
+          "Fixed 15-dataset suite vs broader coverage: a locked suite with committed result rows is reproducible; generalization beyond it is not claimed",
+          "RandomForest over meta-features vs gradient-based meta-learning: a small inspectable regressor was enough to test the hypothesis and cheap to retrain",
+        ],
+      },
+      decisions: [
+        {
+          title: "Build the benchmark that could disprove the engine",
+          why: "Meta-learned ranking is supposed to save evaluations. The only honest way to claim that is a leakage-resistant suite that measures it, including when the answer is no.",
+        },
+        {
+          title: "Write ‘resume-impact criterion not met’ into the repo",
+          why: "A negative result that lives only in my head gets rounded up to a positive one later. In the benchmark report, it stays honest.",
+        },
+        {
+          title: "Separate ranking quality from end-to-end savings",
+          why: "The meta-learner genuinely ranks better than random. That is not the same as reaching a good model in fewer evaluations, and conflating the two is the trap.",
+        },
+        {
+          title: "Content-address candidates and version the meta-feature schema",
+          why: "Reproducible identity and a schema that refuses to load on drift are what make a re-run comparable to the original.",
+        },
+      ],
+      links: {
+        github: "https://github.com/Chunduri-Aditya/MetaLearnML",
+      },
+      metrics: [
+        { label: "Ranking (meta vs random)", value: "0.57 vs 0.02 ρ" },
+        { label: "Measured speedup", value: "0.0% (CI 0–50%)" },
+      ],
+    },
+    {
+      id: "chatdb",
+      title: "ChatDB",
+      subtitle: "Rule-Based Natural-Language-to-SQL CLI",
+      iconName: "Database",
+      iconClassName: "text-blue-400",
+      tags: ["Python", "pandas", "SQLAlchemy", "SQLite", "Regex", "CLI"],
+      discipline: "DEV-TOOL / SQL",
+      status: "COURSEWORK",
+      hook:
+        "Plain-English questions into SQL with five regex rules and zero machine learning.",
+      plain:
+        "A command-line tool from a database course: load a spreadsheet, ask something like 'total sales grouped by region' in plain English, get the SQL back. It uses five hand-written pattern rules rather than any AI, and if it doesn't recognize your question it says so instead of guessing.",
+      oneLiner:
+        "A rule-based command-line tool that loads a CSV into SQLite and turns a fixed grammar of plain-English aggregate questions into SQL using regex pattern matching, not a model.",
+      story:
+        "Built for a USC database course. The constraint I set was natural-language-to-SQL with zero ML: five hand-written regex patterns, exact column matching, and a sample-query generator that teaches the grammar it actually supports. It is honest about its edges, an unrecognized query returns an error string rather than guessing.",
+      evidence: [
+        "CSV ingestion with pandas: column-name normalization, then dtype-based classification into datetime / measure / attribute columns to drive query planning",
+        "Five named regex intent patterns (sum / average / min / max / count, each grouped-by) mapped to SQL GROUP BY templates",
+        "SQLAlchemy write-through into SQLite; the shipped CLI path prints the generated SQL rather than executing it",
+        "Randomized sample-query generator so a new user sees the supported phrasing instead of guessing",
+        "Exact, case-sensitive column matching with no fuzzy fallback; an unrecognized query returns an explicit error, never a wrong guess",
+      ],
+      architecture: {
+        overview:
+          "CSV → pandas load + column-type inference → SQLite via SQLAlchemy → NL query → regex intent match → SQL GROUP BY template → printed SQL",
+        diagram: `
++-----------+   +----------------------+   +------------------+
+|  CSV file |-->|  pandas load         |-->|  SQLite          |
++-----------+   |  + column-type infer |   |  (SQLAlchemy)    |
+                +----------------------+   +--------+---------+
+                                                    |
++-----------+   +----------------------+            |
+|  NL query |-->|  Regex intent match  |<-----------+
++-----------+   |  (5 patterns)        |
+                +----------+-----------+
+                           |
+              match        |        no match
+                           v
+                +----------------------+   +------------------+
+                |  SQL GROUP BY        |   |  "Error: unable  |
+                |  template -> print   |   |   to detect ..." |
+                +----------------------+   +------------------+`,
+        tradeoffs: [
+          "Regex rules vs a parser or a model: rules are fully inspectable and need no training data, at the cost of covering only a fixed aggregate-by-group grammar",
+          "Print the SQL vs execute it: printing keeps the tool a transparent translator and sidesteps unsafe interpolation in the shipped path",
+          "Exact column matching vs fuzzy: exact matching fails loudly on a typo instead of silently querying the wrong column",
+        ],
+      },
+      decisions: [
+        {
+          title: "Regex intent matching, no NLP",
+          why: "For a fixed grammar of aggregate-by-group questions, five readable patterns beat a parser you cannot debug and a model you cannot ship in a CLI.",
+        },
+        {
+          title: "Return an error on no match, never a guessed query",
+          why: "A natural-language-to-SQL tool that guesses is worse than one that says it does not understand. No match is an explicit failure, not a fallback.",
+        },
+        {
+          title: "Infer column roles from pandas dtypes at load time",
+          why: "Classifying columns as dates / measures / attributes once, up front, is what lets a short regex decide what can be summed and what can be grouped.",
+        },
+      ],
+      links: {},
+      metrics: [
+        { label: "Translation", value: "5 regex patterns" },
+        { label: "Stack", value: "pandas · SQLAlchemy" },
+      ],
+    },
   ],
 };
 
@@ -904,7 +1141,13 @@ export interface ExperienceItem {
   location: string;
   period: string;
   accent: ExperienceAccent;
+  /** Tier 1 — always visible. One plain line on what the role actually was. */
+  hook: string;
+  /** Tier 2 — "Plain" / ELI5. 1-2 sentences, zero jargon. */
+  plain: string;
+  /** Tier 3 — "Technical", narrative variant. */
   story: string;
+  /** Tier 3 — "Technical", crisp variant. */
   signal: string;
   bullets: string[];
   tags: string[];
@@ -930,22 +1173,50 @@ export const EXPERIENCE: ExperienceSectionContent = {
   },
   items: [
     {
+      org: "Easley Dunn Productions, Inc.",
+      role: "AI/ML Engineer Intern \u00b7 Gameplay Analyzer Team",
+      location: "Remote",
+      period: "Aug 2026 \u2013 Oct 2026",
+      accent: "emerald",
+      hook:
+        "Built the tool a video team uses to check whether a camera-to-field mapping is trustworthy before they accept it.",
+      plain:
+        "For a studio turning NFL Blitz gameplay video into tracking data, I built the review tool that decides whether a computed field alignment is good enough to keep, then chased down why one class of alignments kept failing and proved which cause was real.",
+      story:
+        "The brief was computer vision for tracking NFL Blitz gameplay. What it needed first was a way to trust a homography before accepting it, so I built the reviewer tool and the schema gates around it. Then I spent the diagnosis time proving which failure mechanism was real and which coordinate bug was a red herring.",
+      signal:
+        "Built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, then diagnosed a class of homography failures down to its geometric mechanism.",
+      bullets: [
+        "Built a single-reviewer browser tool (Python, OpenCV, NumPy, JavaScript, stdlib HTTP server) for field/template correspondence labeling: homography fitting with per-point residual reporting, 44-keypoint projection, overlay review, and attempt-state handling",
+        "Added the guardrails that make a labeled homography trustworthy: minimum-point and convex-hull spatial-distribution checks, schema validation before writes, OS-level immutable attempt records, restart-persistent pointers, and JSONL audit logging",
+        "Reproduced the frame-6 reference homography to a maximum matrix difference of 4.73e-11 with 0-pixel correspondence residuals, and verified the saved domain-gate result",
+        "Isolated correspondence-span length as the supported failure mechanism for frame-15: narrow spans (~8\u201317 yards) produced homographies that failed full-field validity, wide spans (~42 yards) stayed locally consistent, shown through six controlled test categories",
+        "Found a real template-scale coordinate bug (the tool assumed an edge-to-edge 100-yard field; the asset is inset, ~8-yard error at the goal line) and confirmed it was not the cause of the frame-15 rejections",
+        "Defined ACCEPTED / REJECTED / UNLABELABLE / ADJUDICATION_REQUIRED attempt schemas; the validation suite passes 6/6 positive and 16/16 negative fixtures",
+      ],
+      tags: ["Python", "OpenCV", "NumPy", "Homography", "Computer Vision", "Schema Validation"],
+    },
+    {
       org: "USC \u2014 Viterbi School of Engineering",
       role: "Research Assistant \u00b7 Computer Vision & Medical Imaging",
       location: "Los Angeles, CA",
       period: "Aug 2024 \u2013 Dec 2024",
       accent: "cyan",
+      hook:
+        "Made clean artery-vs-vein training masks for a team's retinal-scan segmentation model.",
+      plain:
+        "On a research team building a model that traces blood vessels in eye scans, my job was the data side: separating arteries from veins in the training images cleanly enough that the model had something honest to learn from.",
       story:
-        "Retinal vessels are small, the labels are noisy, and the downstream diagnosis depends on every pixel. I treated the segmentation problem like a systems problem: better loss, better pipeline, better data hygiene\u2014until the score stopped moving by accident.",
+        "Retinal vessels are small and the labels are noisy, and every downstream diagnosis rides on the mask quality. My part was the data side: separating artery from vein cleanly enough that the team's model had something honest to learn from.",
       signal:
-        "Led U-Net segmentation and data pipeline work on the CHASE_DB1 and DRIVE retinal fundus datasets, with reproducible experiment tracking and automated curation.",
+        "Contributed mask generation and refinement to a team U-Net artery-vein segmentation project on retinal fundus images, with MLflow experiment tracking across dataset and augmentation variants.",
       bullets: [
-        "Engineered a TensorFlow/Keras U-Net segmentation pipeline for retinal artery-vein classification on CHASE_DB1 and DRIVE, reaching 0.98 AUC, 0.99 pixel accuracy, and 0.91 Dice across an 80-image evaluation set",
-        "Designed modular training pipelines with per-run experiment tracking, enabling reproducible comparison across five model versions with saved metrics and training curves",
-        "Built an automated medical image scraper with quality-validation controls, reducing manual curation effort",
-        "Presented findings in weekly cross-functional reviews, translating quantitative results into actionable research decisions",
+        "Built an AV mask-generation pipeline from color-segmented retinal fundus images: artery/vein separation via RGB-channel differencing, producing binary and RGB training masks for the team's U-Net model",
+        "Ran threshold-tuning and overlap-mask extraction experiments (brute-force RGB and HSV color-space searches) to refine artery / vein / overlap boundaries",
+        "Iterated on mask refinement to hand the team clean training data; the team's segmentation model reached ~0.94 AUC and ~94% pixel accuracy",
+        "Contributed to team brainstorming on modeling approaches, with runs tracked in MLflow across the RITE and FIVES datasets and augmentation variants",
       ],
-      tags: ["PyTorch", "U-Net", "Medical Imaging", "Segmentation", "Experiment Tracking"],
+      tags: ["TensorFlow/Keras", "U-Net", "segmentation_models", "MLflow", "Medical Imaging"],
     },
     {
       org: "SSN College of Engineering",
@@ -953,6 +1224,10 @@ export const EXPERIENCE: ExperienceSectionContent = {
       location: "Remote",
       period: "Jun 2021 \u2013 Jul 2021",
       accent: "purple",
+      hook:
+        "First taste of computer vision: labeled aerial photos and trained a small object detector on them.",
+      plain:
+        "A short remote internship early in undergrad. I annotated a dataset of aerial imagery and trained a YOLOv5 model to spot small objects in it, which is where I learned that detection work is mostly about dataset quality.",
       story:
         "A short remote internship early in my undergrad, and my first real exposure to computer vision. Annotating aerial imagery taught me how much of detection work is dataset quality rather than model choice.",
       signal:
@@ -980,7 +1255,13 @@ export interface PublicationLink {
 export interface Publication {
   badge: string;
   title: string;
+  /** Tier 1 — always visible. One plain line on what the paper argues. */
+  hook: string;
+  /** Tier 2 — "Plain" / ELI5. 1-2 sentences, zero jargon. */
+  plain: string;
+  /** Tier 3 — "Technical", narrative variant. */
   story: string;
+  /** Tier 3 — "Technical", crisp variant. */
   signal: string;
   metrics: { label: string; value: string; accent: ResearchAccent }[];
   links: PublicationLink[];
@@ -1009,6 +1290,10 @@ export const RESEARCH: ResearchContent = {
       badge: "PREPRINT \u00b7 ZENODO 2026",
       title:
         "Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security",
+      hook:
+        "When an AI resists an attack but never mentions it, that's not the same as staying safe. I measure the difference.",
+      plain:
+        "Security tests for AI agents usually check two things: did the attack work, and did the agent still do its job. They skip a third thing that matters \u2014 did the agent tell its owner something was wrong? This paper adds that measurement, so 'quietly resisted' and 'resisted and reported it' stop counting as the same result.",
       story:
         "Most agent benchmarks ask two questions\u2014did the task succeed, did the attack succeed\u2014and never whether the agent told its operator anything was wrong. I added that missing axis: Transparency Rate. Silent resistance and resistance-out-loud stop being the same outcome.",
       signal:
@@ -1028,6 +1313,10 @@ export const RESEARCH: ResearchContent = {
     {
       badge: "PUBLICATION \u00b7 IJRASET VOL 11 (PEER-REVIEWED)",
       title: "Wind Power Analysis using Digital Twins & ML",
+      hook:
+        "Forecasting wind-farm output by building a live software model of the farm and pairing two ML methods.",
+      plain:
+        "Wind power is hard to predict, which makes it hard to plan around. This peer-reviewed paper builds a 'digital twin' \u2014 a running software copy of a wind farm on Azure \u2014 and combines two forecasting methods to predict output more accurately.",
       story:
         "Wind is messy. I built a Digital Twin on Azure to simulate the present and forecast the future\u2014then tested models that respect long-range time dependencies.",
       signal:
@@ -1209,7 +1498,7 @@ export const SIDEBAR: SidebarContent = {
       },
       {
         category: "Data & Storage",
-        tools: ["PostgreSQL", "ChromaDB", "Pandas", "NumPy", "Plotly"],
+        tools: ["PostgreSQL", "SQLAlchemy", "SQLite", "ChromaDB", "Pandas", "NumPy", "Plotly"],
         iconName: "Database",
         accent: "blue",
       },
@@ -1269,9 +1558,9 @@ export const FAQ_INTENTS: FAQIntent[] = [
     title: "About me",
     utterances: [
       "tell me about this person",
-      "tell me about you",
+      "tell me about yourself",
       "who are you",
-      "about you",
+      "about yourself",
       "introduce yourself",
       "what do you do",
       "what is your background",
@@ -1285,7 +1574,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
       { label: "Resume", href: ASSETS.resumePdf },
     ],
-    tags: ["about", "who", "introduction", "background", "person", "aditya", "you"],
+    tags: ["about", "who", "introduction", "background", "person", "aditya", "yourself"],
   },
   {
     id: "current-focus",
@@ -1349,7 +1638,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Six shipped systems. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 520+ tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.979 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored.",
+      "Nine builds. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 520+ tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.979 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored. Sourcewarden: security gated retrieval + multi agent orchestration for n8n, exposed read only. MetaLearnML: a meta learned AutoML ranker plus the 15 dataset benchmark that measured it produced no end to end speedup, and kept that result. ChatDB: a rule based natural language to SQL CLI from a database course, five regex patterns, no ML.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1456,27 +1745,92 @@ export const FAQ_INTENTS: FAQIntent[] = [
     tags: ["attention", "drift", "webcam", "mediapipe", "opencv", "gaze", "computer vision", "privacy", "local-first", "focus"],
   },
   {
+    id: "sourcewarden",
+    title: "Sourcewarden",
+    utterances: [
+      "sourcewarden",
+      "source warden",
+      "n8n workflows",
+      "workflow orchestration",
+      "security gated",
+      "read only dashboard",
+      "ed25519",
+    ],
+    answer:
+      "Sourcewarden merges a retrieval system over n8n's docs and community examples with a six-role, Ed25519-gated agent orchestration pipeline, behind a read-only FastAPI layer. Every chat answer is grounded in cited evidence, and the monitoring dashboard recomputes all security-control hashes live against a signed manifest instead of trusting a cache. The deliberate call was scoping the web layer to retrieval and status only, never execution, so it can't rebuild or bypass the pipeline's signed approval flow. 2,256-row retrieval index, 20/20 tests including a byte-flip mutation test, ships as one Docker image.",
+    links: [
+      { label: "View Project", href: "#projects", sectionId: "sourcewarden" },
+    ],
+    tags: ["n8n", "workflow", "orchestration", "security", "ed25519", "fastapi", "rag", "docker", "read-only"],
+  },
+  {
+    id: "metalearnml",
+    title: "MetaLearnML",
+    utterances: [
+      "metalearnml",
+      "meta learn ml",
+      "meta learning",
+      "automl",
+      "auto ml",
+      "model selection",
+      "candidate ranking",
+      "automl benchmark",
+    ],
+    answer:
+      "MetaLearnML is a tabular AutoML engine that ranks preprocessing-by-model candidates with a RandomForest meta-learner over prior runs, plus a 15-dataset OpenML benchmark built to test whether that ranking actually saves work. It does not: median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%), and the benchmark report marks the resume-impact criterion as not met. What it does do is rank better than random (median Spearman 0.57 vs 0.02). Leakage controls throughout: outer dev/test split before any encoder fit, fold-local preprocessing, one scored test touch, content-addressed candidate identity. 60 test functions, 74.18% coverage, GitHub Actions CI.",
+    links: [
+      { label: "View Project", href: "#projects", sectionId: "metalearnml" },
+      { label: "GitHub", href: "https://github.com/Chunduri-Aditya/MetaLearnML" },
+    ],
+    tags: ["automl", "meta-learning", "model-selection", "benchmark", "ranking", "leakage", "scikit-learn", "openml", "null-result"],
+  },
+  {
+    id: "chatdb",
+    title: "ChatDB",
+    utterances: [
+      "chatdb",
+      "chat db",
+      "natural language to sql",
+      "nl to sql",
+      "text to sql",
+      "sql cli",
+      "csv to sql",
+      "regex sql tool",
+    ],
+    answer:
+      "ChatDB is a rule-based natural-language-to-SQL command-line tool built for a USC database course. No ML: it loads a CSV into SQLite with pandas and SQLAlchemy, infers column types (datetime / measure / attribute), and matches a fixed grammar of aggregate-by-group questions with five hand-written regex patterns to SQL GROUP BY templates. The shipped path prints the SQL rather than executing it, exact column matching has no fuzzy fallback, and an unrecognized query returns an explicit error instead of a guess. Local-only, single commit, not pushed to GitHub.",
+    links: [
+      { label: "View Project", href: "#projects", sectionId: "chatdb" },
+    ],
+    tags: ["sql", "nl-to-sql", "cli", "pandas", "sqlalchemy", "regex", "database", "coursework", "rule-based"],
+  },
+  {
     id: "experience-roles",
-    title: "Research experience",
+    title: "Roles & experience",
     utterances: [
       "research experience",
       "have you done research",
       "usc viterbi",
       "research assistant",
+      "easley dunn",
+      "nfl blitz",
+      "internship",
       "ssn",
       "medical imaging",
       "past roles",
       "work experience",
-      "internship",
     ],
     answer:
-      "Two research roles. At USC Viterbi (Aug\u2013Dec 2024), I was a Research Assistant in Computer Vision & Medical Imaging \u2014 built a TensorFlow/Keras U-Net segmentation pipeline for retinal artery-vein classification on CHASE_DB1 and DRIVE, reaching 0.98 AUC and 0.91 Dice, plus modular training pipelines with per-run experiment tracking and an automated medical image scraper. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset in Roboflow and trained a YOLOv5 model on it for small object detection.",
+      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Aug\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset and trained a YOLOv5 model for small object detection.",
     links: [
       { label: "Experience section", href: "#experience", sectionId: "experience" },
     ],
     tags: [
       "experience",
       "research",
+      "easley dunn",
+      "nfl blitz",
+      "homography",
       "usc",
       "viterbi",
       "ssn",
@@ -1484,7 +1838,6 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "u-net",
       "yolo",
       "internship",
-      "research assistant",
     ],
   },
   {
