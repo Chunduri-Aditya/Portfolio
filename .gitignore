@@ -37,3 +37,6 @@ vite.config.ts.timestamp-*
 
 # AI assistant scratch (worktrees, session state)
 .claude/
+
+# local design QA screenshots
+.hud-shots/
