@@ -99,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Desktop cluster */}
-          <div className="hidden items-center gap-4 lg:flex">
+          <div className="hidden items-center gap-4 xl:flex">
             {/* Telemetry ticker */}
             <div className="flex items-center gap-2 border border-hairline px-2.5 py-1">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-online animate-blink" />
@@ -192,7 +192,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => setMobileOpen((o) => !o)}
-              className="border border-hairline p-2 text-phosphor-dim transition-colors hover:text-phosphor lg:hidden"
+              className="border border-hairline p-2 text-phosphor-dim transition-colors hover:text-phosphor xl:hidden"
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
             >
@@ -207,14 +207,14 @@ const Navbar: React.FC<NavbarProps> = ({
         {mobileOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-40 bg-ground/80 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-ground/80 backdrop-blur-sm xl:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
-              className="fixed inset-x-0 top-14 z-40 border-b border-hairline bg-ground p-5 lg:hidden"
+              className="fixed inset-x-0 top-14 z-40 border-b border-hairline bg-ground p-5 xl:hidden"
               initial={{ y: "-100%" }}
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}

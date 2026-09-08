@@ -24,11 +24,15 @@
 body {
   margin: 0;
   font-family: 'Archivo Variable', system-ui, -apple-system, sans-serif;
-  font-variation-settings: 'wght' 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--ground);
   color: var(--phosphor);
+}
+
+/* Push the variable weight axis hard for display headers. */
+.font-display {
+  font-variation-settings: 'wght' 760;
 }
 
 /* ============================================================================

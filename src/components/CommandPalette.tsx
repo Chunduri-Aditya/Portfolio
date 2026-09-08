@@ -1,21 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Search,
-  ArrowRight,
-  Github,
-  Linkedin,
-  Mail,
-  FileText,
-  ToggleLeft,
-  ToggleRight,
-  CornerDownLeft,
-} from "lucide-react";
+import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO, PROJECTS, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
+import { useDepth } from "../lib/depth";
 
-type Group = "Navigate" | "Projects" | "Links" | "Appearance";
+type Group = "Navigate" | "Missions" | "Links" | "Display";
 
 interface PaletteCommand {
   id: string;
@@ -27,7 +18,7 @@ interface PaletteCommand {
   action: () => void;
 }
 
-const GROUP_ORDER: Group[] = ["Navigate", "Projects", "Links", "Appearance"];
+const GROUP_ORDER: Group[] = ["Navigate", "Missions", "Links", "Display"];
 
 const isMac =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
@@ -51,39 +42,52 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   scrollTo,
   onSelectProject,
 }) => {
+  const { depth, setDepth } = useDepth();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   useLockBodyScroll(isOpen);
 
   const commands = useMemo<PaletteCommand[]>(() => {
     const nextMode = mode === "signal" ? "story" : "signal";
+    const nextDepth = depth === "technical" ? "plain" : "technical";
     return [
-      { id: "nav-hero", group: "Navigate" as Group, label: "Home", sublabel: "Back to the top", icon: <ArrowRight size={16} />, action: () => scrollTo("hero") },
+      {
+        id: "nav-hero",
+        group: "Navigate" as Group,
+        label: "Top",
+        sublabel: "Operator dossier",
+        icon: <ArrowUpRight size={15} strokeWidth={1.5} />,
+        action: () => scrollTo("hero"),
+      },
       ...NAV_LINKS.map((link) => ({
         id: `nav-${link.id}`,
         group: "Navigate" as Group,
         label: link.label,
         sublabel: `Jump to ${link.label}`,
-        icon: <ArrowRight size={16} />,
+        icon: <ArrowUpRight size={15} strokeWidth={1.5} />,
         action: () => scrollTo(link.id),
       })),
       ...PROJECTS.projects.map((p) => ({
         id: `project-${p.id}`,
-        group: "Projects" as Group,
+        group: "Missions" as Group,
         label: p.title,
-        sublabel: p.subtitle,
-        icon: <Icon name={p.iconName} size={16} className={p.iconClassName} />,
-        keywords: p.tags.join(" "),
-        action: () => onSelectProject(p.id),
+        sublabel: p.discipline,
+        icon: <Icon name={p.iconName} size={15} className={p.iconClassName} />,
+        keywords: `${p.tags.join(" ")} ${p.discipline}`,
+        action: () => {
+          scrollTo("projects");
+          onSelectProject(p.id);
+        },
       })),
       {
         id: "link-github",
         group: "Links" as Group,
         label: "GitHub",
         sublabel: CONTACT.github.replace("https://", ""),
-        icon: <Github size={16} />,
+        icon: <Github size={15} strokeWidth={1.5} />,
         action: () => window.open(CONTACT.github, "_blank", "noopener,noreferrer"),
       },
       {
@@ -91,7 +95,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Links" as Group,
         label: "LinkedIn",
         sublabel: CONTACT.linkedin.replace("https://", ""),
-        icon: <Linkedin size={16} />,
+        icon: <Linkedin size={15} strokeWidth={1.5} />,
         action: () => window.open(CONTACT.linkedin, "_blank", "noopener,noreferrer"),
       },
       {
@@ -99,7 +103,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Links" as Group,
         label: "Email",
         sublabel: CONTACT.email,
-        icon: <Mail size={16} />,
+        icon: <Mail size={15} strokeWidth={1.5} />,
         action: () => {
           window.location.href = `mailto:${CONTACT.email}`;
         },
@@ -108,58 +112,66 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         id: "link-resume",
         group: "Links" as Group,
         label: HERO.ctas.resume.label,
-        sublabel: "Open resume",
-        icon: <FileText size={16} />,
+        sublabel: "Open resume PDF",
+        icon: <FileText size={15} strokeWidth={1.5} />,
         action: () => window.open(HERO.ctas.resume.href, "_blank", "noopener,noreferrer"),
       },
       {
         id: "mode-toggle",
-        group: "Appearance" as Group,
-        label: `Switch to ${nextMode === "story" ? "Story" : "Signal"} mode`,
-        sublabel: nextMode === "story" ? "More narrative, less terse" : "Terse, scannable copy",
-        icon:
-          nextMode === "story" ? (
-            <ToggleRight size={16} className="text-purple-400" />
-          ) : (
-            <ToggleLeft size={16} className="text-cyan-400" />
-          ),
+        group: "Display" as Group,
+        label: `Tone: switch to ${nextMode}`,
+        sublabel: nextMode === "story" ? "Narrative voice" : "Terse, scannable",
+        icon: <span className="font-mono text-[11px] text-hazard">T</span>,
+        keywords: "signal story tone voice",
         action: () => setMode(nextMode),
       },
+      {
+        id: "depth-toggle",
+        group: "Display" as Group,
+        label: `Depth: switch to ${nextDepth}`,
+        sublabel: nextDepth === "plain" ? "Jargon-free explanations" : "Full engineering detail",
+        icon: <span className="font-mono text-[11px] text-hazard">D</span>,
+        keywords: "technical plain depth eli5 baby terms",
+        action: () => setDepth(nextDepth),
+      },
     ];
-  }, [mode, scrollTo, onSelectProject, setMode]);
+  }, [mode, depth, scrollTo, onSelectProject, setMode, setDepth]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return commands;
     return commands.filter((c) =>
-      [c.label, c.sublabel, c.keywords].filter(Boolean).join(" ").toLowerCase().includes(q)
+      [c.label, c.sublabel, c.keywords].filter(Boolean).join(" ").toLowerCase().includes(q),
     );
   }, [commands, query]);
 
-  const grouped = useMemo(() => {
-    return GROUP_ORDER.map((group) => ({
-      group,
-      items: filtered.filter((c) => c.group === group),
-    })).filter((g) => g.items.length > 0);
-  }, [filtered]);
+  const grouped = useMemo(
+    () =>
+      GROUP_ORDER.map((group) => ({
+        group,
+        items: filtered.filter((c) => c.group === group),
+      })).filter((g) => g.items.length > 0),
+    [filtered],
+  );
 
   useEffect(() => {
     setActiveIndex(0);
   }, [query, isOpen]);
 
-  // Global shortcut: opens/closes regardless of mount state elsewhere on the page.
+  // Global shortcut.
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        isOpen ? onClose() : onOpen();
+        if (isOpen) onClose();
+        else onOpen();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen, onOpen, onClose]);
 
-  // In-palette navigation: only active while open.
+  // In-palette navigation.
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -191,70 +203,75 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     }
   }, [isOpen]);
 
+  // Keep the active row in view during arrow nav.
+  useEffect(() => {
+    listRef.current
+      ?.querySelector('[aria-selected="true"]')
+      ?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
   let runningIndex = -1;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-[12vh]"
+          className="fixed inset-0 z-[70] flex items-start justify-center p-4 pt-[12vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.14 }}
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+          <div className="fixed inset-0 bg-ground/85 backdrop-blur-sm" />
 
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
-            className="relative max-w-xl w-full bg-slate-900/95 rounded-2xl border border-slate-800/60 shadow-2xl backdrop-blur-sm overflow-hidden"
-            initial={{ opacity: 0, scale: 0.97, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97, y: -10 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="hud-panel relative w-full max-w-xl overflow-hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500" />
+            <div className="h-px w-full bg-hazard" />
 
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-800/50">
-              <Search className="text-slate-500 flex-shrink-0" size={18} />
+            <div className="flex items-center gap-3 border-b border-hairline px-4 py-3">
+              <Search className="shrink-0 text-phosphor-faint" size={15} strokeWidth={1.5} />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Jump to a section, project, or link..."
-                className="w-full bg-transparent outline-none text-sm text-slate-200 placeholder:text-slate-600"
+                placeholder="Jump to a section, mission, or link..."
+                className="w-full bg-transparent font-mono text-xs text-phosphor outline-none placeholder:text-phosphor-faint"
                 aria-label="Search commands"
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="command-palette-list"
               />
-              <kbd className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-700 text-slate-500 flex-shrink-0">
+              <kbd className="hidden shrink-0 border border-hairline px-1 font-mono text-[10px] text-phosphor-faint sm:inline-block">
                 ESC
               </kbd>
             </div>
 
-            <div id="command-palette-list" role="listbox" className="max-h-[50vh] overflow-y-auto">
+            <div
+              ref={listRef}
+              id="command-palette-list"
+              role="listbox"
+              className="max-h-[52vh] overflow-y-auto"
+            >
               {grouped.length === 0 && (
-                <div className="px-4 py-8 text-center text-sm text-slate-500 font-mono">
+                <div className="px-4 py-8 text-center font-mono text-[11px] uppercase tracking-hud text-phosphor-faint">
                   No matching commands
                 </div>
               )}
 
               {grouped.map(({ group, items }) => (
                 <div key={group}>
-                  <div className="px-4 pt-3 pb-1 text-xs font-mono uppercase tracking-widest text-slate-500">
-                    {group}
-                  </div>
+                  <div className="hud-label border-b border-hairline px-4 py-1.5">// {group}</div>
                   {items.map((command) => {
                     runningIndex += 1;
                     const isActive = runningIndex === activeIndex;
@@ -269,25 +286,23 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                           onClose();
                         }}
                         onMouseEnter={() => setActiveIndex(runningIndex)}
-                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                          isActive
-                            ? "bg-cyan-500/10 text-cyan-200"
-                            : "text-slate-300 hover:bg-slate-800/50"
+                        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+                          isActive ? "bg-hazard/12 text-phosphor" : "text-phosphor-dim hover:bg-white/5"
                         }`}
                       >
-                        <span className="flex-shrink-0 text-slate-500">{command.icon}</span>
-                        <span className="flex-1 min-w-0">
-                          <span className="block text-sm font-medium truncate">
-                            {command.label}
-                          </span>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center text-phosphor-faint">
+                          {command.icon}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[13px] font-medium">{command.label}</span>
                           {command.sublabel && (
-                            <span className="block text-xs text-slate-500 font-mono truncate">
+                            <span className="block truncate font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
                               {command.sublabel}
                             </span>
                           )}
                         </span>
                         {isActive && (
-                          <CornerDownLeft size={14} className="text-cyan-400 flex-shrink-0" />
+                          <CornerDownLeft size={13} strokeWidth={1.5} className="shrink-0 text-hazard" />
                         )}
                       </button>
                     );
@@ -296,11 +311,11 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
               ))}
             </div>
 
-            <div className="flex items-center gap-4 px-4 py-2 border-t border-slate-800/50 text-[11px] text-slate-600 font-mono">
-              <span>&uarr;&darr; Navigate</span>
-              <span>&crarr; Select</span>
+            <div className="flex items-center gap-4 border-t border-hairline px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+              <span>↑↓ Nav</span>
+              <span>↵ Run</span>
               <span>ESC Close</span>
-              <span className="ml-auto">{isMac ? "⌘K" : "Ctrl+K"} to toggle</span>
+              <span className="ml-auto">{isMac ? "⌘K" : "^K"}</span>
             </div>
           </motion.div>
         </motion.div>
