@@ -43,7 +43,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
         <div className="lg:col-span-7">
           <motion.div {...fade(0.05)} className="mb-6 flex flex-wrap items-center gap-3">
             <span className="eyebrow rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
-              AI safety &amp; agent-security engineer
+              ML / AI engineer
             </span>
             <span className="flex items-center gap-1.5 text-xs font-medium text-accent-emerald">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
@@ -58,10 +58,16 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             {isPlain ? (
               headline
             ) : (
-              <>
-                {headline.split(".")[0]}.
-                <span className="gradient-text">{headline.slice(headline.indexOf(".") + 1)}</span>
-              </>
+              (() => {
+                const m = headline.match(/^(.+?[,:])(\s+)(.+)$/);
+                if (!m) return <span className="gradient-text">{headline}</span>;
+                return (
+                  <>
+                    {m[1]}{m[2]}
+                    <span className="gradient-text">{m[3]}</span>
+                  </>
+                );
+              })()
             )}
           </motion.h1>
 

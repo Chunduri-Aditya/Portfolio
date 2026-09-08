@@ -62,37 +62,37 @@ export interface HeroContent {
 }
 
 export const HERO: HeroContent = {
-  statusBadge: "System Status: ONLINE // Agent Shield Build Active",
+  statusBadge: "System Status: ONLINE // Current build: Agent Shield",
   headline: {
-    signal: "Agents are shipping. I build the evals that catch what breaks.",
-    story: "The tools are shipping faster than anyone can check them. That gap is my work.",
+    signal: "I ship ML systems, then measure whether they actually work.",
+    story: "I like the messy middle: a hard problem, a metric, and a system that has to earn the number.",
   },
   subhead:
-    "M.S. Applied Data Science, USC \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing",
+    "M.S. Applied Data Science, USC \u00b7 Evaluation \u00b7 Audio ML \u00b7 Generative AI \u00b7 Computer Vision \u00b7 Full-stack",
   intro: {
     signal:
-      "Agent Shield is an adversarial evaluation framework for LLM agents. It runs prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift against frontier models, scores every run on attack success rate, benign utility, and transparency, and maps each threat to OWASP and MITRE ATLAS. It is built on Inspect AI, so every result is seeded and reproducible. The newest half is a local runtime perimeter that screens MCP tool descriptions before an agent ever reads them.",
+      "I build ML systems end to end and measure whether they hold up: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Different domains, one habit: seeded runs, real metrics, a result you can reproduce. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
     story:
-      "Agents are shipping faster than anyone knows how to test them. I build the systems that catch the failure modes first: reproducible, logged, mapped to a standard. Agent Shield started as an attack framework on Inspect AI and grew a second half, a local perimeter that screens untrusted tool descriptions at runtime instead of only scoring them after the fact.",
+      "The thread across everything I build is the same. Take a domain I do not fully understand yet, find the metric that actually matters, and build a system that has to earn it. That has looked like DJ transitions, retinal masks, generative pipelines, focus tracking, and AutoML search, and right now it looks like agent security. The tools change. The habit does not.",
   },
   plain: {
-    headline: "I find the ways AI assistants can be tricked or broken, before they ship.",
+    headline: "I build software that uses machine learning, across a lot of different areas, and I check that it works.",
     intro:
-      "Companies are handing AI agents real tools and real autonomy, fast. I build the systems that catch how those agents fail, whether that is being manipulated, leaking data, or drifting off task, in a lab where the result can be reproduced instead of discovered in production. The same work ships a small local filter that screens dangerous instructions before an agent reads them.",
+      "My projects run across audio, images, language, computer vision, and web apps. The common thread is that each one is measured, not just built: a real number that says whether it works, and a setup where you can run it again and get the same answer. Right now I am focused on testing AI agents for security holes.",
   },
   chips: {
     signal: [
-      { iconName: "ShieldCheck", text: "Inspect AI harness" },
-      { iconName: "Target", text: "ASR + benign utility" },
-      { iconName: "Gauge", text: "Judge model versioning" },
-      { iconName: "ListChecks", text: "CI ready eval logs" },
-      { iconName: "Wrench", text: "Reproducible pipelines" },
+      { iconName: "Boxes", text: "End to end ML systems" },
+      { iconName: "Gauge", text: "Real metrics, seeded runs" },
+      { iconName: "Wrench", text: "Full-stack: React + FastAPI" },
+      { iconName: "Sparkles", text: "Research grade cores" },
+      { iconName: "CheckCircle2", text: "Reproducible by default" },
     ],
     story: [
-      { iconName: "ShieldCheck", text: "Evals over vibes" },
-      { iconName: "Radar", text: "Adversarial thinking" },
+      { iconName: "Boxes", text: "Systems over scripts" },
+      { iconName: "Radar", text: "Curiosity as method" },
+      { iconName: "Gauge", text: "Measure before you claim" },
       { iconName: "Rocket", text: "Reproducible by default" },
-      { iconName: "Boxes", text: "Systems > scripts" },
       { iconName: "Brain", text: "Attention trained daily" },
     ],
   },
@@ -110,9 +110,9 @@ export interface HudStat {
 }
 
 export const HUD_STATS: HudStat[] = [
-  { label: "SYSTEMS BUILT", value: "9" },
+  { label: "SYSTEMS SHIPPED", value: "9" },
+  { label: "DOMAINS", value: "6" },
   { label: "PAPERS", value: "2" },
-  { label: "PEAK TEST COUNT", value: "520+" },
   { label: "FRONTIER MODELS RED-TEAMED", value: "8" },
   { label: "ATTACK IDS CATALOGUED", value: "28" },
 ];
@@ -122,12 +122,12 @@ export const HUD_STATS: HudStat[] = [
  * ========================================================================= */
 
 export const TICKER_THOUGHTS: string[] = [
-  "Turning evaluation into unit tests...",
-  "Compressing big intent into small prompts...",
   "Finding the smallest change that fixes the whole system...",
-  "Chasing edge cases (that\u2019s where truth hides)...",
-  "Making memory retrieval feel like remembering, not searching...",
-  "Shipping only when behavior is stable...",
+  "Matching two songs on the exact bar where the beat lands...",
+  "Chasing edge cases (that's where truth hides)...",
+  "Throwing the camera pixels away, keeping only the numbers...",
+  "Reading a benchmark that says my own idea did not help...",
+  "Shipping only when the behavior is stable...",
 ];
 
 /* ============================================================================
@@ -259,7 +259,7 @@ export const THINKING: ThinkingContent = {
       iconName: "ArrowUpRight",
       iconClassName: "text-purple-300",
       text: {
-        signal: "Build the eval harness once; every new attack vector becomes a unit test.",
+        signal: "Build the measurement once, and every new case after that is just another row in the table.",
         story: "I hunt the one lever that fixes five things at once.",
       },
     },
@@ -1568,7 +1568,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "tell me about aditya",
     ],
     answer:
-      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025), focused on AI agent security and LLM evaluation. I build reproducible adversarial-testing systems for frontier LLMs, with a current push on Agent Shield: an evaluation framework on UK AISI's Inspect AI harness scored on attack success rate, benign utility, and transparency and mapped to OWASP and MITRE ATLAS, now paired with a local runtime perimeter that screens MCP tool descriptions before an agent reads them.",
+      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025). I build ML systems across a range of domains and measure each one instead of just shipping it: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Same habit everywhere, seeded runs and a reproducible number. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
