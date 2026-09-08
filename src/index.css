@@ -1,7 +1,7 @@
 /* Body / UI */
-@import '@fontsource-variable/plus-jakarta-sans/wght.css';
-/* Heavy display headings */
-@import '@fontsource-variable/archivo/wght.css';
+@import '@fontsource-variable/hanken-grotesk/wght.css';
+/* Display headings — distinctive, characterful */
+@import '@fontsource-variable/bricolage-grotesque/wght.css';
 /* Code / eyebrow chips only */
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
@@ -31,7 +31,7 @@
 /* ─── Base ────────────────────────────────────────────────── */
 body {
   margin: 0;
-  font-family: 'Plus Jakarta Sans Variable', system-ui, -apple-system, sans-serif;
+  font-family: 'Hanken Grotesk Variable', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--ink);
@@ -39,9 +39,10 @@ body {
 }
 
 .font-display {
-  font-family: 'Archivo Variable', system-ui, sans-serif;
-  font-variation-settings: 'wght' 780;
-  letter-spacing: -0.02em;
+  font-family: 'Bricolage Grotesque Variable', 'Hanken Grotesk Variable', system-ui, sans-serif;
+  font-variation-settings: 'wght' 750;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
 }
 
 /* ============================================================================
