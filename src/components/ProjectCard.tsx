@@ -158,7 +158,11 @@ const ProjectCard = memo(function ProjectCard({
             </span>
           ))}
         </div>
-        <dl className="hud-grid grid-cols-2 border-t border-hairline sm:grid-cols-4">
+        <dl
+          className={`hud-grid border-t border-hairline ${
+            project.metrics.length <= 2 ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-4"
+          }`}
+        >
           {project.metrics.map((m) => (
             <div key={m.label} className="px-4 py-2.5">
               <dt className="font-mono text-[9px] uppercase leading-tight tracking-hud text-phosphor-faint">
