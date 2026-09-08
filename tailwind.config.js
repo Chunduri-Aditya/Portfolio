@@ -5,37 +5,63 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    // Tactical Telemetry HUD: 90° corners everywhere.
+    borderRadius: {
+      none: '0',
+      DEFAULT: '0',
+      sm: '0',
+      md: '0',
+      lg: '0',
+      xl: '0',
+      '2xl': '0',
+      '3xl': '0',
+      full: '9999px', // reserved for status dots / pills only
+    },
     extend: {
+      colors: {
+        ground: {
+          DEFAULT: '#0a0a0a',
+          raised: '#121212',
+          deep: '#060606',
+        },
+        phosphor: {
+          DEFAULT: '#eaeaea',
+          dim: '#8a8a8a',
+          faint: '#5a5a5a',
+        },
+        hairline: '#2a2a2a',
+        hazard: {
+          DEFAULT: '#e61919',
+          bright: '#ff2a2a',
+        },
+        online: '#4af626',
+      },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['"Archivo Variable"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Archivo Variable"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', '"Fira Code"', 'monospace'],
+      },
+      letterSpacing: {
+        hud: '0.14em',
+        crush: '-0.04em',
+      },
+      transitionTimingFunction: {
+        spring: 'cubic-bezier(0.32, 0.72, 0, 1)',
+        hud: 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
       animation: {
-        'gradient-shift': 'gradient-shift 8s ease infinite',
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'border-spin': 'border-spin 3s linear infinite',
+        'scan-sweep': 'scan-sweep 7s linear infinite',
+        'blink': 'blink 1.1s steps(1, end) infinite',
       },
       keyframes: {
-        'gradient-shift': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
+        'scan-sweep': {
+          '0%': { transform: 'translateY(-60%)' },
+          '100%': { transform: 'translateY(320%)' },
         },
-        'float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+        'blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
         },
-        'pulse-glow': {
-          '0%, 100%': { opacity: '0.4' },
-          '50%': { opacity: '0.8' },
-        },
-        'border-spin': {
-          '0%': { '--angle': '0deg' },
-          '100%': { '--angle': '360deg' },
-        },
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
     },
   },
