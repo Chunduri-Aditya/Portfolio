@@ -1,79 +1,175 @@
-import React, { memo } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { memo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import type { Mode, Project } from "../data/content";
 import { Icon } from "../lib/iconMap";
+import { useDepth } from "../lib/depth";
+
+const STATUS_STYLE: Record<Project["status"], string> = {
+  SHIPPED: "text-online border-online/40",
+  PREPRINT: "text-phosphor border-hairline",
+  COURSEWORK: "text-phosphor-dim border-hairline",
+};
 
 const ProjectCard = memo(function ProjectCard({
   project,
+  index,
   mode,
   onOpen,
 }: {
   project: Project;
+  index: number;
   mode: Mode;
   onOpen: () => void;
 }) {
-  const isStory = mode === "story";
+  const { depth, setDepth } = useDepth();
+  const reduce = useReducedMotion();
+  const [expanded, setExpanded] = useState(false);
+
+  const mission = String(index + 1).padStart(2, "0");
+  const body =
+    depth === "plain"
+      ? project.plain
+      : mode === "story"
+        ? project.story
+        : project.oneLiner;
 
   return (
-    <motion.button
-      type="button"
+    <article
       id={project.id}
-      onClick={onOpen}
-      className="text-left rounded-2xl glass gradient-border p-6 hover:bg-slate-900/70 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
-      aria-label={`Open project: ${project.title}`}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2 }}
+      className="hud-panel hud-corners scroll-mt-28 transition-colors hover:border-phosphor-faint"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-start gap-4">
-          <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-800/50 group-hover:border-slate-700/50 transition-colors">
-            <Icon
-              name={project.iconName}
-              size={24}
-              className={project.iconClassName}
-            />
+      {/* Header row */}
+      <div className="flex items-start gap-4 border-b border-hairline p-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-phosphor-dim">
+          <Icon name={project.iconName} size={20} className={project.iconClassName} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="font-mono text-[10px] uppercase tracking-hud text-hazard">
+              MISSION {mission}
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+              {project.discipline}
+            </span>
+            <span
+              className={`border px-1.5 font-mono text-[9px] uppercase tracking-hud ${STATUS_STYLE[project.status]}`}
+            >
+              {project.status}
+            </span>
           </div>
-          <div>
-            <h4 className="text-xl font-bold text-slate-100 mb-1 group-hover:text-white transition-colors">
-              {project.title}
-            </h4>
-            <p className="text-sm text-slate-500 font-mono">{project.subtitle}</p>
-          </div>
+          <h4 className="font-display text-lg font-bold leading-tight text-phosphor">
+            {project.title}
+          </h4>
+          <p className="mt-0.5 font-mono text-[11px] text-phosphor-dim">{project.subtitle}</p>
         </div>
-        <motion.div className="mt-1" animate={{ x: 0 }} whileHover={{ x: 4 }}>
-          <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
-        </motion.div>
       </div>
 
-      <p
-        className={`text-sm leading-relaxed mb-4 ${
-          isStory ? "text-slate-300" : "text-slate-400"
-        }`}
-      >
-        {isStory ? project.story : project.oneLiner}
-      </p>
+      {/* Hook — always visible */}
+      <div className="p-5">
+        <p className="text-[15px] leading-relaxed text-phosphor">
+          <span className="mr-1 text-hazard">&ldquo;</span>
+          {project.hook}
+          <span className="ml-0.5 text-hazard">&rdquo;</span>
+        </p>
 
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.tags.map((tag) => (
-          <span
-            key={tag}
-            className="text-xs px-2.5 py-1 bg-slate-900/50 border border-slate-800/50 text-slate-400 rounded-lg font-mono group-hover:border-slate-700/50 transition-colors"
+        {/* Controls */}
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            aria-expanded={expanded}
+            className="flex items-center gap-1.5 border border-hairline px-3 py-1.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
           >
-            {tag}
-          </span>
-        ))}
+            <ChevronDown
+              size={12}
+              strokeWidth={1.5}
+              className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+            />
+            {expanded ? "Collapse" : "Expand"}
+          </button>
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-label={`Open project: ${project.title}`}
+            className="flex items-center gap-1.5 border border-hairline px-3 py-1.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-hazard hover:text-hazard"
+          >
+            Full brief
+            <Icon name="ArrowUpRight" size={12} />
+          </button>
+        </div>
+
+        {/* Expanded body */}
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              initial={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+              animate={reduce ? { opacity: 1 } : { opacity: 1, height: "auto" }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mt-5 border-t border-hairline pt-5">
+                {/* Depth toggle */}
+                <div
+                  className="mb-4 flex w-max items-stretch border border-hairline"
+                  role="radiogroup"
+                  aria-label="Explanation depth"
+                >
+                  {(["plain", "technical"] as const).map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      role="radio"
+                      aria-checked={depth === d}
+                      onClick={() => setDepth(d)}
+                      className={`px-3 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                        depth === d ? "bg-hazard text-white" : "text-phosphor-dim hover:text-phosphor"
+                      }`}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+
+                <p className="text-sm leading-relaxed text-phosphor-dim">{body}</p>
+
+                {/* Evidence peek */}
+                <ul className="mt-4 space-y-1.5">
+                  {project.evidence.slice(0, 3).map((e, i) => (
+                    <li key={i} className="flex gap-2 text-[13px] leading-snug text-phosphor-dim">
+                      <span className="mt-1 shrink-0 text-hazard">+</span>
+                      <span>{e}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-slate-500 font-mono pt-3 border-t border-slate-800/30">
-        {project.metrics.map((m, idx) => (
-          <div key={idx} className="flex items-center gap-1.5">
-            <span className="text-slate-600">{m.label}:</span>
-            <span className="text-slate-400">{m.value}</span>
-          </div>
-        ))}
+      {/* Tags + metrics footer */}
+      <div className="border-t border-hairline">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 px-5 py-2.5">
+          {project.tags.map((tag) => (
+            <span key={tag} className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <dl className="hud-grid grid-cols-2 border-t border-hairline sm:grid-cols-4">
+          {project.metrics.map((m) => (
+            <div key={m.label} className="px-4 py-2.5">
+              <dt className="font-mono text-[9px] uppercase leading-tight tracking-hud text-phosphor-faint">
+                {m.label}
+              </dt>
+              <dd className="hud-readout mt-0.5 text-sm font-bold text-phosphor">{m.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-    </motion.button>
+    </article>
   );
 });
 

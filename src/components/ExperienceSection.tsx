@@ -1,126 +1,129 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { MapPin, Calendar } from "lucide-react";
+import React, { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
-import { EXPERIENCE, type ExperienceAccent, type Mode } from "../data/content";
-import { Icon } from "../lib/iconMap";
-
-const accentMap: Record<ExperienceAccent, { border: string; text: string; bg: string; dot: string }> = {
-  cyan: {
-    border: "border-cyan-500/20",
-    text: "text-cyan-300",
-    bg: "bg-cyan-500/10",
-    dot: "bg-cyan-400",
-  },
-  purple: {
-    border: "border-purple-500/20",
-    text: "text-purple-300",
-    bg: "bg-purple-500/10",
-    dot: "bg-purple-400",
-  },
-  emerald: {
-    border: "border-emerald-500/20",
-    text: "text-emerald-300",
-    bg: "bg-emerald-500/10",
-    dot: "bg-emerald-400",
-  },
-};
+import { EXPERIENCE, type Mode } from "../data/content";
+import { useDepth } from "../lib/depth";
 
 interface ExperienceSectionProps {
   mode: Mode;
 }
 
-const ExperienceSection: React.FC<ExperienceSectionProps> = ({ mode }) => {
-  const isStory = mode === "story";
+const ExperienceRow: React.FC<{
+  exp: (typeof EXPERIENCE.items)[number];
+  mode: Mode;
+}> = ({ exp, mode }) => {
+  const { depth, setDepth } = useDepth();
+  const reduce = useReducedMotion();
+  const [open, setOpen] = useState(false);
+
+  const body =
+    depth === "plain" ? exp.plain : mode === "story" ? exp.story : exp.signal;
 
   return (
-    <AnimatedSection id="experience" className="mt-2">
-      {/* Header */}
-      <div className="flex items-start gap-4 mb-8">
-        <div className="p-3 rounded-xl glass">
-          <Icon name={EXPERIENCE.header.iconName} size={24} className="text-cyan-400" />
-        </div>
+    <div className="hud-panel hud-corners">
+      <div className="flex flex-col gap-2 border-b border-hairline p-5 md:flex-row md:items-start md:justify-between">
         <div>
-          <h3 className="text-3xl font-bold text-slate-100 mb-2">
-            {EXPERIENCE.header.title}
-          </h3>
-          <p className="text-slate-400 text-sm max-w-2xl">
-            {EXPERIENCE.header.subtitle[mode]}
+          <h4 className="font-display text-lg font-bold text-phosphor">{exp.org}</h4>
+          <p className="mt-0.5 font-mono text-[11px] uppercase tracking-hud text-hazard">
+            {exp.role}
           </p>
+        </div>
+        <div className="shrink-0 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint md:text-right">
+          <div>{exp.period}</div>
+          <div>{exp.location}</div>
         </div>
       </div>
 
-      {/* Timeline */}
-      <StaggerContainer className="flex flex-col gap-6">
-        {EXPERIENCE.items.map((exp) => {
-          const a = accentMap[exp.accent];
-          return (
-            <StaggerItem key={`${exp.org}-${exp.period}`}>
-              <motion.div
-                className="relative rounded-2xl glass overflow-hidden hover:border-slate-700/50 transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                {/* Accent bar */}
-                <div className={`h-1 ${a.bg}`} />
+      <div className="p-5">
+        <p className="text-[15px] leading-relaxed text-phosphor">{exp.hook}</p>
 
-                <div className="p-6 md:p-7">
-                  {/* Header row */}
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
-                    <div>
-                      <h4 className="text-xl font-bold text-slate-100 mb-1">
-                        {exp.org}
-                      </h4>
-                      <div className={`text-sm ${a.text} font-medium`}>{exp.role}</div>
-                    </div>
-                    <div className="flex flex-col md:items-end gap-1 text-xs font-mono text-slate-500">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Calendar size={12} /> {exp.period}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5">
-                        <MapPin size={12} /> {exp.location}
-                      </span>
-                    </div>
-                  </div>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          className="mt-4 flex items-center gap-1.5 border border-hairline px-3 py-1.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+        >
+          {open ? "Collapse" : "Expand"}
+        </button>
 
-                  {/* Narrative */}
-                  <p className="text-slate-400 text-sm leading-relaxed mb-5 max-w-3xl">
-                    {isStory ? exp.story : exp.signal}
-                  </p>
-
-                  {/* Bullets */}
-                  <ul className="space-y-2.5 mb-5">
-                    {exp.bullets.map((b, i) => (
-                      <li
-                        key={i}
-                        className="flex gap-3 text-sm text-slate-300 leading-relaxed"
-                      >
-                        <span
-                          className={`shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full ${a.dot}`}
-                        />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {exp.tags.map((t) => (
-                      <span
-                        key={t}
-                        className={`text-xs px-2.5 py-1 rounded-lg border font-mono ${a.border} ${a.bg} ${a.text}`}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              initial={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+              animate={reduce ? { opacity: 1 } : { opacity: 1, height: "auto" }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mt-5 border-t border-hairline pt-5">
+                <div
+                  className="mb-4 flex w-max items-stretch border border-hairline"
+                  role="radiogroup"
+                  aria-label="Explanation depth"
+                >
+                  {(["plain", "technical"] as const).map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      role="radio"
+                      aria-checked={depth === d}
+                      onClick={() => setDepth(d)}
+                      className={`px-3 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                        depth === d ? "bg-hazard text-white" : "text-phosphor-dim hover:text-phosphor"
+                      }`}
+                    >
+                      {d}
+                    </button>
+                  ))}
                 </div>
-              </motion.div>
-            </StaggerItem>
-          );
-        })}
-      </StaggerContainer>
-    </AnimatedSection>
+
+                <p className="text-sm leading-relaxed text-phosphor-dim">{body}</p>
+
+                <ul className="mt-4 space-y-2">
+                  {exp.bullets.map((b, i) => (
+                    <li key={i} className="flex gap-3 text-[13px] leading-snug text-phosphor-dim">
+                      <span className="mt-1 shrink-0 text-hazard">+</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
+                  {exp.tags.map((t) => (
+                    <span key={t} className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
+
+const ExperienceSection: React.FC<ExperienceSectionProps> = ({ mode }) => (
+  <AnimatedSection id="experience">
+    <header className="mb-8">
+      <p className="hud-label mb-2">// SERVICE RECORD</p>
+      <h3 className="font-display text-3xl font-extrabold uppercase tracking-crush text-phosphor sm:text-4xl">
+        {EXPERIENCE.header.title}
+      </h3>
+      <p className="mt-2 max-w-2xl text-sm text-phosphor-dim">
+        {EXPERIENCE.header.subtitle[mode]}
+      </p>
+    </header>
+
+    <StaggerContainer className="flex flex-col gap-5">
+      {EXPERIENCE.items.map((exp) => (
+        <StaggerItem key={`${exp.org}-${exp.period}`}>
+          <ExperienceRow exp={exp} mode={mode} />
+        </StaggerItem>
+      ))}
+    </StaggerContainer>
+  </AnimatedSection>
+);
 
 export default ExperienceSection;

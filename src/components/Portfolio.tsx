@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
 import Navbar from "./Navbar";
 import Hero from "./Hero";
@@ -10,12 +9,16 @@ import ResearchSection from "./ResearchSection";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import FaqBot from "./FaqBot";
+import CommandPalette from "./CommandPalette";
+import { DepthProvider } from "../lib/depth";
 import { TICKER_THOUGHTS, type Mode } from "../data/content";
 
 const Portfolio: React.FC = () => {
   const [mode, setMode] = useState<Mode>("signal");
   const [tickerIndex, setTickerIndex] = useState(0);
   const [activeSection, setActiveSection] = useState("projects");
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -30,115 +33,73 @@ const Portfolio: React.FC = () => {
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
+  const openPalette = useCallback(() => setIsPaletteOpen(true), []);
+  const closePalette = useCallback(() => setIsPaletteOpen(false), []);
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans">
-      {/* Noise overlay */}
-      <div className="noise-overlay" />
+    <DepthProvider>
+      <div className="min-h-[100dvh] bg-ground text-phosphor font-sans antialiased">
+        {/* Fixed analog-degradation layers */}
+        <div className="scanlines" aria-hidden="true" />
+        <div className="noise-overlay" aria-hidden="true" />
 
-      {/* Navbar */}
-      <Navbar
-        mode={mode}
-        setMode={setMode}
-        activeSection={activeSection}
-        scrollTo={scrollTo}
-        thoughts={TICKER_THOUGHTS}
-        tickerIndex={tickerIndex}
-      />
+        <Navbar
+          mode={mode}
+          setMode={setMode}
+          activeSection={activeSection}
+          scrollTo={scrollTo}
+          thoughts={TICKER_THOUGHTS}
+          tickerIndex={tickerIndex}
+          onOpenPalette={openPalette}
+        />
 
-      {/* Main content */}
-      <main className="max-w-6xl mx-auto px-4 pt-24 pb-20">
-        {/* Hero */}
-        <Hero mode={mode} scrollTo={scrollTo} />
+        <main className="mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
+          <Hero mode={mode} scrollTo={scrollTo} />
 
-        {/* Section divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent mb-16" />
+          <hr className="hud-rule my-20" />
 
-        {/* Thinking */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`thinking-${mode}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ThinkingSection mode={mode} />
-          </motion.div>
-        </AnimatePresence>
+          <ThinkingSection mode={mode} />
 
-        {/* Section divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent mb-16" />
+          <hr className="hud-rule my-20" />
 
-        {/* 2-column layout: Projects + Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left: Projects + Research */}
-          <div className="lg:col-span-8 flex flex-col gap-16">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`projects-${mode}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ProjectsSection mode={mode} />
-              </motion.div>
-            </AnimatePresence>
+          <div className="grid grid-cols-1 gap-x-8 gap-y-20 lg:grid-cols-12">
+            <div className="flex flex-col gap-20 lg:col-span-8">
+              <ProjectsSection
+                mode={mode}
+                selectedProjectId={selectedProjectId}
+                onSelectProject={setSelectedProjectId}
+              />
 
-            {/* Section divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent" />
+              <hr className="hud-rule" />
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`experience-${mode}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ExperienceSection mode={mode} />
-              </motion.div>
-            </AnimatePresence>
+              <ExperienceSection mode={mode} />
 
-            {/* Section divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-slate-800/50 to-transparent" />
+              <hr className="hud-rule" />
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`research-${mode}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ResearchSection mode={mode} />
-              </motion.div>
-            </AnimatePresence>
+              <ResearchSection mode={mode} />
+            </div>
+
+            <div className="lg:col-span-4">
+              <Sidebar mode={mode} />
+            </div>
           </div>
+        </main>
 
-          {/* Right: Sidebar */}
-          <div className="lg:col-span-4">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`sidebar-${mode}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Sidebar mode={mode} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </main>
+        <Footer />
 
-      {/* Footer */}
-      <Footer />
+        <FaqBot />
 
-      {/* FAQ Bot */}
-      <FaqBot />
-    </div>
+        <CommandPalette
+          isOpen={isPaletteOpen}
+          onOpen={openPalette}
+          onClose={closePalette}
+          mode={mode}
+          setMode={setMode}
+          scrollTo={scrollTo}
+          onSelectProject={setSelectedProjectId}
+        />
+      </div>
+    </DepthProvider>
   );
 };
 

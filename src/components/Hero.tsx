@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { HERO, type Mode } from "../data/content";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { HERO, HUD_STATS, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
+import { useDepth } from "../lib/depth";
 
 interface HeroProps {
   mode: Mode;
@@ -9,13 +10,17 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
-  const isStory = mode === "story";
+  const { depth } = useDepth();
+  const isPlain = depth === "plain";
   const prefersReducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
-  // Throttle mousemove via rAF + write directly to the DOM so React doesn't
-  // re-render the entire hero on every pixel of cursor movement.
+  // Scroll parallax on the backdrop grid — its own reduced-motion guard.
+  const { scrollY } = useScroll();
+  const gridY = useTransform(scrollY, [0, 600], [0, prefersReducedMotion ? 0 : 120]);
+
+  // rAF-throttled cursor reticle glow, written straight to the DOM.
   useEffect(() => {
     if (prefersReducedMotion) return;
     const section = sectionRef.current;
@@ -25,24 +30,20 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
     let frame = 0;
     let nextX = 0;
     let nextY = 0;
-
     const flush = () => {
       frame = 0;
-      glow.style.transform = `translate3d(${nextX - 200}px, ${nextY - 200}px, 0)`;
+      glow.style.transform = `translate3d(${nextX - 180}px, ${nextY - 180}px, 0)`;
       glow.style.opacity = "1";
     };
-
     const handleMove = (e: MouseEvent) => {
       const rect = section.getBoundingClientRect();
       nextX = e.clientX - rect.left;
       nextY = e.clientY - rect.top;
       if (!frame) frame = requestAnimationFrame(flush);
     };
-
     const handleLeave = () => {
       glow.style.opacity = "0";
     };
-
     section.addEventListener("mousemove", handleMove);
     section.addEventListener("mouseleave", handleLeave);
     return () => {
@@ -52,160 +53,154 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
     };
   }, [prefersReducedMotion]);
 
-  const headlineWords = HERO.headline[mode].split(" ");
-  const intro = HERO.intro[mode];
+  const headline = isPlain ? HERO.plain.headline : HERO.headline[mode];
+  const intro = isPlain ? HERO.plain.intro : HERO.intro[mode];
   const chips = HERO.chips[mode];
+
+  const fade = (delay: number) => ({
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] as const },
+  });
 
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-[85vh] flex items-center mb-20 overflow-hidden"
+      className="relative min-h-[calc(100dvh-7rem)] overflow-hidden"
     >
-      {/* Gradient mesh background */}
-      <div className="absolute inset-0 gradient-mesh pointer-events-none" />
-
-      {/* Cursor glow (positioned via rAF in useEffect; opacity stays 0 until first move) */}
+      {/* Backdrop grid (parallax) */}
+      <motion.div
+        aria-hidden="true"
+        style={{ y: gridY }}
+        className="dot-grid pointer-events-none absolute inset-x-0 -top-24 bottom-0 opacity-50"
+      />
+      {/* Cursor reticle glow */}
       <div
         ref={glowRef}
         aria-hidden="true"
-        className="absolute top-0 left-0 pointer-events-none will-change-transform"
+        className="pointer-events-none absolute left-0 top-0 will-change-transform"
         style={{
-          width: 400,
-          height: 400,
+          width: 360,
+          height: 360,
           opacity: 0,
-          transition: "opacity 0.4s ease-out, background 0.5s ease-out",
-          background: `radial-gradient(circle, ${
-            isStory ? "rgba(139, 92, 246, 0.08)" : "rgba(6, 182, 212, 0.08)"
-          } 0%, transparent 70%)`,
+          transition: "opacity 0.4s ease-out",
+          background:
+            "radial-gradient(circle, rgba(230,25,25,0.10) 0%, transparent 70%)",
         }}
       />
 
-      {/* Dot grid */}
-      <div className="absolute inset-0 dot-grid pointer-events-none opacity-60" />
+      <div className="relative grid grid-cols-1 gap-x-8 gap-y-12 pt-10 lg:grid-cols-12 lg:pt-16">
+        {/* Dossier */}
+        <div className="lg:col-span-8">
+          <motion.div {...fade(0.05)} className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="hud-label">// OPERATOR DOSSIER</span>
+            <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-hud text-online">
+              <span className="h-1.5 w-1.5 rounded-full bg-online animate-blink" />
+              STATUS: ONLINE
+            </span>
+          </motion.div>
 
-      <div className="relative max-w-3xl z-10">
-        {/* Status badge */}
-        <motion.div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-cyan-400 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
-          </span>
-          {HERO.statusBadge}
-        </motion.div>
+          <motion.p
+            {...fade(0.1)}
+            className="mb-5 font-mono text-xs uppercase tracking-hud text-phosphor-dim"
+          >
+            A. CHUNDURI &nbsp;/&nbsp; AI SAFETY &amp; AGENT-SECURITY ENGINEER
+          </motion.p>
 
-        {/* Headline — staggered word animation */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-slate-100 mb-6 tracking-tight leading-[1.1]">
-          {headlineWords.map((word, i) => (
-            <motion.span
-              key={`${mode}-${i}`}
-              className={`inline-block mr-[0.3em] ${
-                isStory ? "text-glow-purple" : "text-glow-cyan"
-              }`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.3 + i * 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+          <motion.h1
+            {...fade(0.16)}
+            className="max-w-3xl text-balance font-display text-4xl font-extrabold leading-[1.03] tracking-crush text-phosphor sm:text-5xl md:text-[3.4rem]"
+          >
+            {headline}
+          </motion.h1>
 
-        {/* Subhead */}
-        <motion.h2
-          className="text-lg md:text-xl text-slate-400 mb-8 font-light leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          {HERO.subhead}
-        </motion.h2>
+          <motion.p
+            {...fade(0.24)}
+            className="mt-6 font-mono text-[11px] uppercase tracking-hud text-phosphor-faint"
+          >
+            {HERO.subhead}
+          </motion.p>
 
-        {/* Intro with accent border */}
-        <motion.p
-          className={`text-base md:text-lg leading-relaxed mb-10 max-w-2xl border-l-4 pl-6 transition-all duration-500 ${
-            isStory
-              ? "border-purple-500 text-slate-200"
-              : "border-cyan-500 text-slate-400"
-          }`}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-        >
-          {intro}
-        </motion.p>
+          <motion.p
+            {...fade(0.3)}
+            className="mt-7 max-w-2xl border-l border-hazard pl-5 text-sm leading-relaxed text-phosphor-dim md:text-base"
+          >
+            {intro}
+          </motion.p>
 
-        {/* Proof chips */}
-        <motion.div
-          className="flex flex-wrap gap-2.5 mb-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          {chips.map((c, i) => (
-            <motion.div
-              key={c.text}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full glass text-sm text-slate-300 hover:text-slate-100 transition-colors"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.9 + i * 0.06 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <Icon name={c.iconName} size={14} />
-              <span>{c.text}</span>
+          {!isPlain && (
+            <motion.div {...fade(0.36)} className="mt-8 flex flex-wrap gap-2">
+              {chips.map((c) => (
+                <span
+                  key={c.text}
+                  className="inline-flex items-center gap-1.5 border border-hairline px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim"
+                >
+                  <Icon name={c.iconName} size={12} />
+                  {c.text}
+                </span>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
+          )}
 
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-wrap gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-        >
-          <motion.button
-            type="button"
-            onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
-            className="px-6 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-cyan-900/30 glow-cyan"
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <Icon name={HERO.ctas.primary.iconName} size={18} />
-            {HERO.ctas.primary.label}
-          </motion.button>
-          <motion.button
-            type="button"
-            onClick={() => scrollTo(HERO.ctas.secondary.targetSection)}
-            className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2"
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <Icon name={HERO.ctas.secondary.iconName} size={18} />
-            {HERO.ctas.secondary.label}
-          </motion.button>
-          <motion.a
-            href={HERO.ctas.resume.href}
-            target="_blank"
-            rel="noreferrer"
-            download
-            className="px-6 py-3.5 glass glass-hover text-slate-200 font-medium rounded-xl transition-all flex items-center gap-2 border border-slate-700/60 hover:border-cyan-500/40 hover:text-cyan-200"
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            aria-label="View resume (PDF)"
-          >
-            <Icon name={HERO.ctas.resume.iconName} size={18} />
-            {HERO.ctas.resume.label}
-          </motion.a>
+          {/* CTAs */}
+          <motion.div {...fade(0.44)} className="mt-10 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
+              className="group flex items-center gap-3 bg-hazard px-5 py-3 font-mono text-xs font-bold uppercase tracking-hud text-white transition-colors hover:bg-hazard-bright active:scale-[0.98]"
+            >
+              {HERO.ctas.primary.label}
+              <span className="flex h-6 w-6 items-center justify-center bg-white/15 transition-transform group-hover:translate-x-0.5">
+                <Icon name="ArrowUpRight" size={13} />
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo(HERO.ctas.secondary.targetSection)}
+              className="flex items-center gap-2 border border-hairline px-5 py-3 font-mono text-xs uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor active:scale-[0.98]"
+            >
+              <Icon name={HERO.ctas.secondary.iconName} size={14} />
+              {HERO.ctas.secondary.label}
+            </button>
+            <a
+              href={HERO.ctas.resume.href}
+              target="_blank"
+              rel="noreferrer"
+              download
+              aria-label="View resume (PDF)"
+              className="flex items-center gap-2 border border-hairline px-5 py-3 font-mono text-xs uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor active:scale-[0.98]"
+            >
+              <Icon name={HERO.ctas.resume.iconName} size={14} />
+              {HERO.ctas.resume.label}
+            </a>
+          </motion.div>
+        </div>
+
+        {/* Telemetry readout */}
+        <motion.div {...fade(0.3)} className="lg:col-span-4">
+          <div className="hud-panel hud-corners">
+            <div className="border-b border-hairline px-4 py-2">
+              <span className="hud-label">// TELEMETRY</span>
+            </div>
+            <dl className="divide-y divide-hairline">
+              {HUD_STATS.map((s) => (
+                <div key={s.label} className="flex items-baseline justify-between gap-3 px-4 py-3">
+                  <dt className="font-mono text-[10px] uppercase leading-tight tracking-hud text-phosphor-dim">
+                    {s.label}
+                  </dt>
+                  <dd className="hud-readout shrink-0 text-lg font-bold text-phosphor">
+                    {s.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <div className="border-t border-hairline px-4 py-2">
+              <span className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                {HERO.statusBadge}
+              </span>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
