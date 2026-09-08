@@ -4,7 +4,6 @@ import { CONTACT, FOOTER } from "../data/content";
 
 const Footer: React.FC = () => {
   const year = new Date().getFullYear();
-
   const links = [
     { href: `mailto:${CONTACT.email}`, icon: Mail, label: "Email" },
     { href: CONTACT.github, icon: Github, label: "GitHub" },
@@ -12,15 +11,11 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="border-t border-hairline bg-ground">
-      <div className="h-px w-full bg-hazard/40" />
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
-          <span className="text-phosphor">{FOOTER.brand}</span>
-          <span aria-hidden="true">/</span>
-          <span>{FOOTER.copyright(year)}</span>
-        </div>
-
+    <footer className="relative z-10 border-t border-white/8">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-4 px-4 py-10 sm:flex-row sm:justify-between sm:px-6">
+        <p className="text-[12px] text-text-faint">
+          <span className="text-text-dim">{FOOTER.brand}</span> · {FOOTER.copyright(year)}
+        </p>
         <div className="flex items-center gap-1">
           {links.map(({ href, icon: I, label }) => (
             <a
@@ -29,16 +24,13 @@ const Footer: React.FC = () => {
               target={href.startsWith("mailto") ? undefined : "_blank"}
               rel={href.startsWith("mailto") ? undefined : "noreferrer"}
               aria-label={label}
-              className="p-2 text-phosphor-dim transition-colors hover:text-hazard"
+              className="p-2 text-text-faint transition-colors hover:text-accent-cyan"
             >
-              <I size={15} strokeWidth={1.5} />
+              <I size={16} strokeWidth={2} />
             </a>
           ))}
         </div>
-
-        <p className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
-          {FOOTER.tagline} &nbsp;// EOF
-        </p>
+        <p className="text-[12px] text-text-faint">{FOOTER.tagline}</p>
       </div>
     </footer>
   );

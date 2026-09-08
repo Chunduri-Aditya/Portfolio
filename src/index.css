@@ -1,9 +1,10 @@
-/* Display / macro headers — heavy neo-grotesk */
+/* Body / UI */
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+/* Heavy display headings */
 @import '@fontsource-variable/archivo/wght.css';
-/* Micro / telemetry / data / code — monospace */
+/* Code / eyebrow chips only */
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
-@import '@fontsource/jetbrains-mono/700.css';
 
 @tailwind base;
 @tailwind components;
@@ -11,197 +12,158 @@
 
 /* ─── Palette tokens (kept in sync with tailwind.config.js) ─────────────── */
 :root {
-  --ground: #0a0a0a;
-  --ground-raised: #121212;
-  --phosphor: #eaeaea;
-  --phosphor-dim: #8a8a8a;
-  --hairline: #2a2a2a;
-  --hazard: #e61919;
-  --online: #4af626;
+  --ink: #0d1017;
+  --ink-2: #12161f;
+  --ink-3: #171c28;
+  --text: #e9ebf2;
+  --text-dim: #aab2c5;
+  --text-faint: #7c8498;
+  --line: rgba(255, 255, 255, 0.09);
+
+  --violet: #8b5cf6;
+  --blue: #3b82f6;
+  --cyan: #22d3ee;
+  --pink: #ec4899;
+  --emerald: #34d399;
+  --amber: #fbbf24;
 }
 
 /* ─── Base ────────────────────────────────────────────────── */
 body {
   margin: 0;
-  font-family: 'Archivo Variable', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans Variable', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--ground);
-  color: var(--phosphor);
+  background: var(--ink);
+  color: var(--text);
 }
 
-/* Push the variable weight axis hard for display headers. */
 .font-display {
-  font-variation-settings: 'wght' 760;
+  font-family: 'Archivo Variable', system-ui, sans-serif;
+  font-variation-settings: 'wght' 780;
+  letter-spacing: -0.02em;
 }
 
 /* ============================================================================
- * TACTICAL TELEMETRY HUD LAYER
+ * AURORA GLASS SYSTEM
  * ========================================================================= */
 
-/* Hairline-boxed panel. 90° corners, faint top emboss, no radius. */
-.hud-panel {
-  background: var(--ground-raised);
-  border: 1px solid var(--hairline);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+/* Frosted panel. */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 50px -28px rgba(0, 0, 0, 0.55);
 }
-.hud-panel--flush {
-  background: transparent;
-}
-
-/* Blueprint grid: children separated by a mathematically perfect 1px rule. */
-.hud-grid {
-  display: grid;
-  gap: 1px;
-  background: var(--hairline);
-  border: 1px solid var(--hairline);
-}
-.hud-grid > * {
-  background: var(--ground);
-}
-
-/* Full-bleed horizontal divider. */
-.hud-rule {
-  border: 0;
-  border-top: 1px solid var(--hairline);
-  margin: 0;
+.glass-strong {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 32px 60px -24px rgba(0, 0, 0, 0.6);
 }
 
-/* Corner registration crosshairs on a container. */
-.hud-corners {
+/* Text painted with a multi-stop gradient. */
+.gradient-text {
+  background-image: linear-gradient(110deg, var(--violet), var(--cyan) 45%, var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Coloured ambient glow on hover / focus. */
+.glow-violet { box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 24px 70px -20px rgba(139, 92, 246, 0.45); }
+.glow-blue   { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), 0 24px 70px -20px rgba(59, 130, 246, 0.45); }
+.glow-cyan   { box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 24px 70px -20px rgba(34, 211, 238, 0.45); }
+.glow-pink   { box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.35), 0 24px 70px -20px rgba(236, 72, 153, 0.45); }
+.glow-emerald{ box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.35), 0 24px 70px -20px rgba(52, 211, 153, 0.45); }
+
+/* Gradient hairline top-edge for cards / modals. */
+.edge-gradient {
   position: relative;
 }
-.hud-corners::before,
-.hud-corners::after {
+.edge-gradient::before {
   content: '';
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border: 1px solid var(--hazard);
-  pointer-events: none;
-}
-.hud-corners::before {
-  top: -1px;
-  left: -1px;
-  border-right: 0;
-  border-bottom: 0;
-}
-.hud-corners::after {
-  bottom: -1px;
-  right: -1px;
-  border-left: 0;
-  border-top: 0;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--violet), var(--cyan), var(--pink), transparent);
+  opacity: 0.7;
 }
 
-/* Eyebrow / unit-ID label. */
-.hud-label {
+/* Eyebrow chip. */
+.eyebrow {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 0.6875rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--phosphor-dim);
+  color: var(--text-faint);
 }
 
-/* Data readout. */
-.hud-readout {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ─── CRT scanline sweep (fixed overlay) ─────────────────── */
-.scanlines {
+/* ─── Aurora background blobs ────────────────────────────── */
+.aurora {
   position: fixed;
-  inset: 0;
-  z-index: 40;
+  inset: -20vh -10vw;
+  z-index: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.16) 3px,
-    rgba(0, 0, 0, 0) 4px
-  );
-  mix-blend-mode: multiply;
+  overflow: hidden;
+  filter: blur(90px) saturate(1.3);
+}
+.aurora__blob {
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
   opacity: 0.5;
+  mix-blend-mode: screen;
+  will-change: transform;
 }
-.scanlines::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(rgba(74, 246, 38, 0) 0%, rgba(74, 246, 38, 0.03) 50%, rgba(74, 246, 38, 0) 100%);
-  height: 40%;
-  animation: scan-sweep 7s linear infinite;
-}
-@keyframes scan-sweep {
-  0% { transform: translateY(-60%); }
-  100% { transform: translateY(320%); }
-}
+.aurora__blob--1 { background: radial-gradient(circle at 30% 30%, var(--violet), transparent 70%); top: -10%; left: -5%; animation: drift-1 26s ease-in-out infinite alternate; }
+.aurora__blob--2 { background: radial-gradient(circle at 60% 40%, var(--cyan), transparent 70%); top: 20%; right: -10%; animation: drift-2 32s ease-in-out infinite alternate; }
+.aurora__blob--3 { background: radial-gradient(circle at 40% 60%, var(--pink), transparent 70%); bottom: -15%; left: 20%; animation: drift-3 30s ease-in-out infinite alternate; }
+.aurora__blob--4 { background: radial-gradient(circle at 50% 50%, var(--blue), transparent 70%); top: 45%; left: 45%; width: 34vw; height: 34vw; opacity: 0.35; animation: drift-1 28s ease-in-out infinite alternate-reverse; }
 
-/* ─── Glitch on hover (RGB split, hazard-tinted) ─────────── */
-.glitch {
-  position: relative;
-}
-.glitch:hover {
-  animation: glitch-shift 320ms steps(2, end) 1;
-}
-@keyframes glitch-shift {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-1px, 1px); }
-  40% { transform: translate(1px, -1px); }
-  60% { transform: translate(-1px, 0); }
-  100% { transform: translate(0, 0); }
-}
+@keyframes drift-1 { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
+@keyframes drift-2 { to { transform: translate3d(-10vw, 8vh, 0) scale(1.1); } }
+@keyframes drift-3 { to { transform: translate3d(6vw, -8vh, 0) scale(1.2); } }
 
-/* Kill all analog motion for users who ask for it. */
-@media (prefers-reduced-motion: reduce) {
-  .scanlines::after { animation: none; display: none; }
-  .glitch:hover { animation: none; }
-}
-
-/* ─── Backdrop dot grid (Hero) ───────────────────────────── */
-.dot-grid {
-  background-image: radial-gradient(circle, rgba(234, 234, 234, 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* ─── ASCII architecture panel (ProjectModal) ────────────── */
+/* ─── Code / diagram raw view ────────────────────────────── */
 .code-block {
-  background: #060606;
-  border: 1px solid var(--hairline);
-  font-family: 'JetBrains Mono', ui-monospace, 'Fira Code', monospace;
-  position: relative;
-}
-.code-block::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--hazard);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* ─── Scrollbar ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--ground); }
-::-webkit-scrollbar-thumb { background: var(--hairline); }
-::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
-
-/* ─── Selection ──────────────────────────────────────────── */
-::selection {
-  background: var(--hazard);
-  color: #ffffff;
+/* ─── Scrollbar / selection ──────────────────────────────── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  border: 2px solid var(--ink);
 }
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
 
-/* ─── Mechanical grain (fixed, pointer-events none) ──────── */
-.noise-overlay {
+::selection { background: rgba(139, 92, 246, 0.4); color: #fff; }
+
+/* ─── Very faint grain (fixed, non-interactive) ──────────── */
+.grain-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 45;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+  z-index: 40;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .aurora__blob { animation: none !important; }
 }

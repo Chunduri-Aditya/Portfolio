@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Mail, Github, Linkedin, Menu, X, Search } from "lucide-react";
+import { Sparkles, Mail, Github, Linkedin, Menu, X, Search } from "lucide-react";
 import { NAV_LINKS, CONTACT, type Mode } from "../data/content";
 import { useDepth } from "../lib/depth";
 
@@ -17,7 +17,7 @@ interface NavbarProps {
   onOpenPalette: () => void;
 }
 
-/** Two-state segmented control, mono, bracketed, 90° corners. */
+/** Pill segmented control with an animated gradient thumb. */
 const SegToggle = memo(function SegToggle<T extends string>({
   label,
   options,
@@ -31,7 +31,7 @@ const SegToggle = memo(function SegToggle<T extends string>({
 }) {
   return (
     <div
-      className="flex items-stretch border border-hairline"
+      className="relative flex rounded-full border border-white/10 bg-white/[0.03] p-0.5"
       role="radiogroup"
       aria-label={label}
     >
@@ -44,13 +44,16 @@ const SegToggle = memo(function SegToggle<T extends string>({
             role="radio"
             aria-checked={active}
             onClick={() => onChange(opt)}
-            className={`px-2.5 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors duration-150 ${
-              active
-                ? "bg-hazard text-white"
-                : "text-phosphor-dim hover:text-phosphor"
-            }`}
+            className="relative z-10 rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors"
           >
-            {opt}
+            <span className={active ? "text-white" : "text-text-faint hover:text-text-dim"}>{opt}</span>
+            {active && (
+              <motion.span
+                layoutId={`seg-${label}`}
+                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan"
+                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+              />
+            )}
           </button>
         );
       })}
@@ -78,39 +81,33 @@ const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-hairline bg-ground/92 backdrop-blur-md">
-        <div className="mx-auto flex h-14 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6">
-          {/* Unit ID */}
+      <nav className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+        <div className="glass mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between gap-4 rounded-full px-3 pl-4 sm:px-5">
+          {/* Brand */}
           <button
             type="button"
             onClick={() => scrollTo("hero")}
-            className="glitch group flex items-center gap-2.5"
+            className="group flex items-center gap-2.5"
             aria-label="Go to top"
           >
-            <span className="flex h-7 w-7 items-center justify-center border border-hazard text-hazard">
-              <Terminal className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-accent-violet to-accent-cyan text-white shadow-lg transition-transform group-hover:scale-105">
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
             </span>
-            <span className="font-mono text-xs font-bold tracking-hud text-phosphor">
-              A.CHUNDURI
-            </span>
-            <span className="hidden font-mono text-[10px] tracking-hud text-phosphor-faint sm:inline">
-              UNIT / AC-01
-            </span>
+            <span className="text-sm font-bold tracking-tight text-text">Aditya Chunduri</span>
           </button>
 
-          {/* Desktop cluster */}
-          <div className="hidden items-center gap-4 xl:flex">
-            {/* Telemetry ticker */}
-            <div className="flex items-center gap-2 border border-hairline px-2.5 py-1">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-online animate-blink" />
-              <div className="h-3 w-56 overflow-hidden">
+          {/* Center: ticker + search + links */}
+          <div className="hidden items-center gap-3 xl:flex">
+            <div className="flex items-center gap-2 rounded-full border border-white/8 px-3 py-1">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+              <div className="h-4 w-52 overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={tickerIndex}
-                    className="block truncate font-mono text-[10px] uppercase tracking-hud text-phosphor-dim"
-                    initial={{ opacity: 0, y: 6 }}
+                    className="block truncate font-mono text-[11px] text-text-faint"
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
+                    exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.25 }}
                   >
                     {thoughts[tickerIndex]}
@@ -119,22 +116,20 @@ const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
 
-            {/* Search */}
             <button
               type="button"
               onClick={onOpenPalette}
-              className="flex items-center gap-2 border border-hairline px-2.5 py-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+              className="flex items-center gap-2 rounded-full border border-white/8 px-3 py-1.5 text-[11px] font-medium text-text-faint transition-colors hover:border-white/20 hover:text-text"
               aria-label="Open command palette"
             >
-              <Search size={12} strokeWidth={1.5} />
-              <span>Search</span>
-              <kbd className="border border-hairline px-1 text-phosphor-faint">
+              <Search size={13} strokeWidth={2} />
+              Search
+              <kbd className="rounded border border-white/10 px-1 font-mono text-[10px]">
                 {isMac ? "⌘K" : "^K"}
               </kbd>
             </button>
 
-            {/* Nav links */}
-            <div className="flex items-center">
+            <div className="flex items-center gap-0.5">
               {NAV_LINKS.map((link) => {
                 const active = activeSection === link.id;
                 return (
@@ -143,13 +138,12 @@ const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     onClick={() => scrollTo(link.id)}
                     aria-current={active ? "true" : undefined}
-                    className={`relative px-2.5 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
                       active
-                        ? "text-hazard"
-                        : "text-phosphor-dim hover:text-phosphor"
+                        ? "bg-white/10 text-text"
+                        : "text-text-faint hover:text-text"
                     }`}
                   >
-                    {active && <span className="mr-1 text-hazard">&gt;</span>}
                     {link.label}
                   </button>
                 );
@@ -157,17 +151,17 @@ const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Right: toggles + social + mobile trigger */}
+          {/* Right */}
           <div className="flex items-center gap-2">
             <div className="hidden items-center gap-2 sm:flex">
               <SegToggle
-                label="Tone"
+                label="tone"
                 options={["signal", "story"] as const}
                 value={mode}
                 onChange={(v) => setMode(v as Mode)}
               />
               <SegToggle
-                label="Depth"
+                label="depth"
                 options={["tech", "plain"] as const}
                 value={depth === "technical" ? "tech" : "plain"}
                 onChange={(v) => setDepth(v === "tech" ? "technical" : "plain")}
@@ -179,12 +173,12 @@ const Navbar: React.FC<NavbarProps> = ({
                 <a
                   key={label}
                   href={href}
-                  className="p-2 text-phosphor-dim transition-colors hover:text-hazard"
+                  className="p-2 text-text-faint transition-colors hover:text-accent-cyan"
                   aria-label={label}
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel={href.startsWith("mailto") ? undefined : "noreferrer"}
                 >
-                  <I size={15} strokeWidth={1.5} />
+                  <I size={16} strokeWidth={2} />
                 </a>
               ))}
             </div>
@@ -192,11 +186,11 @@ const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => setMobileOpen((o) => !o)}
-              className="border border-hairline p-2 text-phosphor-dim transition-colors hover:text-phosphor xl:hidden"
+              className="rounded-full border border-white/10 p-2 text-text-dim transition-colors hover:text-text xl:hidden"
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X size={16} strokeWidth={1.5} /> : <Menu size={16} strokeWidth={1.5} />}
+              {mobileOpen ? <X size={16} strokeWidth={2} /> : <Menu size={16} strokeWidth={2} />}
             </button>
           </div>
         </div>
@@ -207,30 +201,30 @@ const Navbar: React.FC<NavbarProps> = ({
         {mobileOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-40 bg-ground/80 backdrop-blur-sm xl:hidden"
+              className="fixed inset-0 z-40 bg-ink/70 backdrop-blur-sm xl:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
-              className="fixed inset-x-0 top-14 z-40 border-b border-hairline bg-ground p-5 xl:hidden"
-              initial={{ y: "-100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-100%" }}
-              transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="glass fixed inset-x-3 top-20 z-40 rounded-3xl p-5 xl:hidden"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             >
-              <p className="hud-label mb-3">// NAVIGATION</p>
-              <div className="hud-grid grid-cols-1">
+              <p className="eyebrow mb-3">Navigate</p>
+              <div className="flex flex-col gap-1">
                 <button
                   type="button"
                   onClick={() => {
                     setMobileOpen(false);
                     onOpenPalette();
                   }}
-                  className="flex items-center gap-2 px-4 py-3 text-left font-mono text-xs uppercase tracking-hud text-phosphor-dim hover:text-phosphor"
+                  className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-text-dim hover:bg-white/5 hover:text-text"
                 >
-                  <Search size={14} strokeWidth={1.5} />
+                  <Search size={15} strokeWidth={2} />
                   Search
                 </button>
                 {NAV_LINKS.map((link) => {
@@ -243,43 +237,42 @@ const Navbar: React.FC<NavbarProps> = ({
                         scrollTo(link.id);
                         setMobileOpen(false);
                       }}
-                      className={`px-4 py-3 text-left font-mono text-xs uppercase tracking-hud transition-colors ${
-                        active ? "text-hazard" : "text-phosphor-dim hover:text-phosphor"
+                      className={`rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
+                        active ? "bg-white/10 text-text" : "text-text-dim hover:bg-white/5 hover:text-text"
                       }`}
                     >
-                      {active ? "> " : ""}
                       {link.label}
                     </button>
                   );
                 })}
               </div>
 
-              <div className="mt-4 flex items-center gap-3 sm:hidden">
+              <div className="mt-4 flex items-center gap-2 sm:hidden">
                 <SegToggle
-                  label="Tone"
+                  label="tone"
                   options={["signal", "story"] as const}
                   value={mode}
                   onChange={(v) => setMode(v as Mode)}
                 />
                 <SegToggle
-                  label="Depth"
+                  label="depth"
                   options={["tech", "plain"] as const}
                   value={depth === "technical" ? "tech" : "plain"}
                   onChange={(v) => setDepth(v === "tech" ? "technical" : "plain")}
                 />
               </div>
 
-              <div className="mt-4 flex items-center gap-1 border-t border-hairline pt-4">
+              <div className="mt-4 flex items-center gap-1 border-t border-white/10 pt-4">
                 {SOCIAL.map(({ href, icon: I, label }) => (
                   <a
                     key={label}
                     href={href}
-                    className="p-2.5 text-phosphor-dim transition-colors hover:text-hazard"
+                    className="p-2.5 text-text-faint transition-colors hover:text-accent-cyan"
                     aria-label={label}
                     target={href.startsWith("mailto") ? undefined : "_blank"}
                     rel={href.startsWith("mailto") ? undefined : "noreferrer"}
                   >
-                    <I size={17} strokeWidth={1.5} />
+                    <I size={18} strokeWidth={2} />
                   </a>
                 ))}
               </div>

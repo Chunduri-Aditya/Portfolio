@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "gradient-text",
+        "createdAt": "2026-09-08T04:58:37.215Z",
+        "reason": "user confirmed: picked 'Vibrant gradient / aurora' direction, preview showed gradient headline text; used sparingly on hero accent + eyebrows, not on metrics/body"
+      }
+    ]
+  }
+}
