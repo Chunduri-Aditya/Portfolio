@@ -26,7 +26,6 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, []);
 
-  // Keep a stable mission number per project regardless of filtering.
   const indexById = useMemo(() => {
     const m = new Map<string, number>();
     PROJECTS.projects.forEach((p, i) => m.set(p.id, i));
@@ -42,8 +41,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           .join(" ")
           .toLowerCase()
           .includes(q);
-      const matchesTags =
-        activeTags.size === 0 || p.tags.some((t) => activeTags.has(t));
+      const matchesTags = activeTags.size === 0 || p.tags.some((t) => activeTags.has(t));
       return matchesQuery && matchesTags;
     });
   }, [query, activeTags]);
@@ -67,48 +65,40 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   return (
     <>
       <AnimatedSection id="projects">
-        {/* Header */}
         <header className="mb-8">
-          <p className="hud-label mb-2">// {PROJECTS.header.eyebrow}</p>
+          <p className="eyebrow mb-2">{PROJECTS.header.eyebrow}</p>
           <div className="flex items-end justify-between gap-4">
-            <h3 className="font-display text-3xl font-extrabold uppercase tracking-crush text-phosphor sm:text-4xl">
-              {PROJECTS.header.title}
+            <h3 className="font-display text-3xl text-text sm:text-4xl">
+              <span className="gradient-text">{PROJECTS.header.title}</span>
             </h3>
-            <span className="hud-readout shrink-0 pb-1 text-xs text-phosphor-dim">
-              {String(filteredProjects.length).padStart(2, "0")} /{" "}
-              {String(PROJECTS.projects.length).padStart(2, "0")}
+            <span className="shrink-0 pb-1 font-mono text-sm text-text-faint">
+              {String(filteredProjects.length).padStart(2, "0")} / {String(PROJECTS.projects.length).padStart(2, "0")}
             </span>
           </div>
-          <p className="mt-2 max-w-2xl text-sm text-phosphor-dim">
-            {PROJECTS.header.subtitle[mode]}
-          </p>
+          <p className="mt-2 max-w-2xl text-sm text-text-dim">{PROJECTS.header.subtitle[mode]}</p>
         </header>
 
-        {/* Search + filters */}
-        <div className="mb-6 border border-hairline">
-          <div className="flex items-center gap-2 border-b border-hairline px-3 py-2.5">
-            <Search size={14} strokeWidth={1.5} className="text-phosphor-faint" />
+        <div className="glass mb-6 rounded-3xl p-2">
+          <div className="flex items-center gap-2 rounded-2xl bg-white/[0.03] px-3.5 py-2.5">
+            <Search size={15} strokeWidth={2} className="text-text-faint" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={PROJECTS.searchPlaceholder}
-              className="w-full bg-transparent font-mono text-xs text-phosphor outline-none placeholder:text-phosphor-faint"
+              className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint"
               aria-label="Search projects"
             />
             {!!query && (
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="shrink-0 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim hover:text-phosphor"
+                className="shrink-0 text-xs font-semibold text-text-faint hover:text-text"
               >
                 Clear
               </button>
             )}
           </div>
-          <div className="flex flex-wrap items-center gap-1.5 p-3">
-            <span className="mr-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
-              Filter:
-            </span>
+          <div className="flex flex-wrap items-center gap-1.5 px-2 pb-1 pt-3">
             {allTags.map((tag) => {
               const on = activeTags.has(tag);
               return (
@@ -117,10 +107,10 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   type="button"
                   onClick={() => toggleTag(tag)}
                   aria-pressed={on}
-                  className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                  className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
                     on
-                      ? "border-hazard bg-hazard text-white"
-                      : "border-hairline text-phosphor-dim hover:border-phosphor-faint hover:text-phosphor"
+                      ? "bg-gradient-to-r from-accent-violet to-accent-cyan text-white"
+                      : "border border-white/10 text-text-faint hover:border-white/20 hover:text-text-dim"
                   }`}
                 >
                   {tag}
@@ -131,7 +121,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               <button
                 type="button"
                 onClick={clearTags}
-                className="ml-1 font-mono text-[10px] uppercase tracking-hud text-hazard hover:text-hazard-bright"
+                className="ml-1 text-[11px] font-semibold text-accent-pink hover:opacity-80"
               >
                 Reset
               </button>
@@ -139,8 +129,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
         </div>
 
-        {/* Grid */}
-        <StaggerContainer className="flex flex-col gap-5">
+        <StaggerContainer className="flex flex-col gap-6">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <StaggerItem key={project.id}>
@@ -154,8 +143,8 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             ))}
           </AnimatePresence>
           {filteredProjects.length === 0 && (
-            <p className="border border-hairline px-4 py-8 text-center font-mono text-xs uppercase tracking-hud text-phosphor-faint">
-              No missions match the current filter.
+            <p className="glass rounded-3xl px-4 py-10 text-center text-sm text-text-faint">
+              No projects match the current filter.
             </p>
           )}
         </StaggerContainer>

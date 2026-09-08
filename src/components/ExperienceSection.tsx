@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
-import { EXPERIENCE, type Mode } from "../data/content";
+import { EXPERIENCE, type ExperienceAccent, type Mode } from "../data/content";
 import { useDepth } from "../lib/depth";
 
-interface ExperienceSectionProps {
-  mode: Mode;
-}
+const HUE: Record<ExperienceAccent, string> = {
+  cyan: "#22d3ee",
+  purple: "#8b5cf6",
+  emerald: "#34d399",
+};
 
 const ExperienceRow: React.FC<{
   exp: (typeof EXPERIENCE.items)[number];
@@ -15,35 +17,36 @@ const ExperienceRow: React.FC<{
   const { depth, setDepth } = useDepth();
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
+  const hue = HUE[exp.accent];
 
-  const body =
-    depth === "plain" ? exp.plain : mode === "story" ? exp.story : exp.signal;
+  const body = depth === "plain" ? exp.plain : mode === "story" ? exp.story : exp.signal;
 
   return (
-    <div className="hud-panel hud-corners">
-      <div className="flex flex-col gap-2 border-b border-hairline p-5 md:flex-row md:items-start md:justify-between">
-        <div>
-          <h4 className="font-display text-lg font-bold text-phosphor">{exp.org}</h4>
-          <p className="mt-0.5 font-mono text-[11px] uppercase tracking-hud text-hazard">
-            {exp.role}
-          </p>
+    <div className="glass overflow-hidden rounded-4xl">
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${hue}, transparent)` }} />
+      <div className="p-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h4 className="font-display text-lg text-text">{exp.org}</h4>
+            <p className="mt-0.5 text-[13px] font-semibold" style={{ color: hue }}>
+              {exp.role}
+            </p>
+          </div>
+          <div className="shrink-0 font-mono text-[11px] text-text-faint sm:text-right">
+            <div>{exp.period}</div>
+            <div>{exp.location}</div>
+          </div>
         </div>
-        <div className="shrink-0 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint md:text-right">
-          <div>{exp.period}</div>
-          <div>{exp.location}</div>
-        </div>
-      </div>
 
-      <div className="p-5">
-        <p className="text-[15px] leading-relaxed text-phosphor">{exp.hook}</p>
+        <p className="mt-4 text-[15px] leading-relaxed text-text">{exp.hook}</p>
 
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          className="mt-4 flex items-center gap-1.5 border border-hairline px-3 py-1.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+          className="mt-4 rounded-full border border-white/12 px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
         >
-          {open ? "Collapse" : "Expand"}
+          {open ? "Less" : "Expand"}
         </button>
 
         <AnimatePresence initial={false}>
@@ -52,15 +55,11 @@ const ExperienceRow: React.FC<{
               initial={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
               animate={reduce ? { opacity: 1 } : { opacity: 1, height: "auto" }}
               exit={reduce ? { opacity: 0 } : { opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="overflow-hidden"
             >
-              <div className="mt-5 border-t border-hairline pt-5">
-                <div
-                  className="mb-4 flex w-max items-stretch border border-hairline"
-                  role="radiogroup"
-                  aria-label="Explanation depth"
-                >
+              <div className="mt-5 border-t border-white/10 pt-5">
+                <div className="mb-4 inline-flex rounded-full border border-white/10 bg-white/[0.03] p-0.5" role="radiogroup" aria-label="Explanation depth">
                   {(["plain", "technical"] as const).map((d) => (
                     <button
                       key={d}
@@ -68,29 +67,26 @@ const ExperienceRow: React.FC<{
                       role="radio"
                       aria-checked={depth === d}
                       onClick={() => setDepth(d)}
-                      className={`px-3 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors ${
-                        depth === d ? "bg-hazard text-white" : "text-phosphor-dim hover:text-phosphor"
+                      className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
+                        depth === d ? "bg-white/12 text-text" : "text-text-faint hover:text-text-dim"
                       }`}
                     >
                       {d}
                     </button>
                   ))}
                 </div>
-
-                <p className="text-sm leading-relaxed text-phosphor-dim">{body}</p>
-
+                <p className="text-sm leading-relaxed text-text-dim">{body}</p>
                 <ul className="mt-4 space-y-2">
                   {exp.bullets.map((b, i) => (
-                    <li key={i} className="flex gap-3 text-[13px] leading-snug text-phosphor-dim">
-                      <span className="mt-1 shrink-0 text-hazard">+</span>
+                    <li key={i} className="flex gap-3 text-[13px] leading-snug text-text-dim">
+                      <span className="mt-1 shrink-0" style={{ color: hue }}>▹</span>
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
-
-                <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {exp.tags.map((t) => (
-                    <span key={t} className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                    <span key={t} className="rounded-full border border-white/10 px-2.5 py-0.5 text-[11px] text-text-faint">
                       {t}
                     </span>
                   ))}
@@ -104,19 +100,17 @@ const ExperienceRow: React.FC<{
   );
 };
 
-const ExperienceSection: React.FC<ExperienceSectionProps> = ({ mode }) => (
+const ExperienceSection: React.FC<{ mode: Mode }> = ({ mode }) => (
   <AnimatedSection id="experience">
     <header className="mb-8">
-      <p className="hud-label mb-2">// SERVICE RECORD</p>
-      <h3 className="font-display text-3xl font-extrabold uppercase tracking-crush text-phosphor sm:text-4xl">
-        {EXPERIENCE.header.title}
+      <p className="eyebrow mb-2">Field work</p>
+      <h3 className="font-display text-3xl text-text sm:text-4xl">
+        <span className="gradient-text">{EXPERIENCE.header.title}</span>
       </h3>
-      <p className="mt-2 max-w-2xl text-sm text-phosphor-dim">
-        {EXPERIENCE.header.subtitle[mode]}
-      </p>
+      <p className="mt-2 max-w-2xl text-sm text-text-dim">{EXPERIENCE.header.subtitle[mode]}</p>
     </header>
 
-    <StaggerContainer className="flex flex-col gap-5">
+    <StaggerContainer className="flex flex-col gap-6">
       {EXPERIENCE.items.map((exp) => (
         <StaggerItem key={`${exp.org}-${exp.period}`}>
           <ExperienceRow exp={exp} mode={mode} />

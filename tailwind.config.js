@@ -1,69 +1,62 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    // Tactical Telemetry HUD: 90° corners everywhere.
-    borderRadius: {
-      none: '0',
-      DEFAULT: '0',
-      sm: '0',
-      md: '0',
-      lg: '0',
-      xl: '0',
-      '2xl': '0',
-      '3xl': '0',
-      full: '9999px', // reserved for status dots / pills only
-    },
     extend: {
       colors: {
-        ground: {
-          DEFAULT: '#0a0a0a',
-          raised: '#121212',
-          deep: '#060606',
+        ink: {
+          DEFAULT: "#0d1017",
+          2: "#12161f",
+          3: "#171c28",
         },
-        phosphor: {
-          DEFAULT: '#eaeaea',
-          dim: '#8a8a8a',
-          faint: '#5a5a5a',
+        text: {
+          DEFAULT: "#e9ebf2",
+          dim: "#aab2c5",
+          faint: "#7c8498",
         },
-        hairline: '#2a2a2a',
-        hazard: {
-          DEFAULT: '#e61919',
-          bright: '#ff2a2a',
+        accent: {
+          violet: "#8b5cf6",
+          blue: "#3b82f6",
+          cyan: "#22d3ee",
+          pink: "#ec4899",
+          emerald: "#34d399",
+          amber: "#fbbf24",
         },
-        online: '#4af626',
       },
       fontFamily: {
-        sans: ['"Archivo Variable"', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Archivo Variable"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', '"Fira Code"', 'monospace'],
+        sans: ['"Plus Jakarta Sans Variable"', "system-ui", "-apple-system", "sans-serif"],
+        display: ['"Archivo Variable"', "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
-      letterSpacing: {
-        hud: '0.14em',
-        crush: '-0.04em',
+      borderRadius: {
+        "4xl": "2rem",
+        "5xl": "2.75rem",
+      },
+      boxShadow: {
+        soft: "0 24px 50px -28px rgba(0,0,0,0.55)",
+        lift: "0 40px 80px -32px rgba(0,0,0,0.65)",
       },
       transitionTimingFunction: {
-        spring: 'cubic-bezier(0.32, 0.72, 0, 1)',
-        hud: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        spring: "cubic-bezier(0.32, 0.72, 0, 1)",
+        smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
-      animation: {
-        'scan-sweep': 'scan-sweep 7s linear infinite',
-        'blink': 'blink 1.1s steps(1, end) infinite',
+      backgroundImage: {
+        "mesh-hero":
+          "radial-gradient(60% 60% at 20% 20%, rgba(139,92,246,0.25), transparent 60%), radial-gradient(50% 50% at 85% 30%, rgba(34,211,238,0.20), transparent 60%), radial-gradient(55% 55% at 50% 90%, rgba(236,72,153,0.18), transparent 60%)",
       },
       keyframes: {
-        'scan-sweep': {
-          '0%': { transform: 'translateY(-60%)' },
-          '100%': { transform: 'translateY(320%)' },
+        "count-pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.6" },
         },
-        'blink': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0' },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
         },
+      },
+      animation: {
+        shimmer: "shimmer 2.5s infinite",
       },
     },
   },
   plugins: [],
-}
+};

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Send, MessageCircle } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
 import { FAQ_INTENTS, FAQ_BOT_UI } from "../data/content";
 import { matchIntent } from "../lib/matchIntent";
 
@@ -26,9 +26,7 @@ const FaqBot: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (isOpen && inputRef.current) setTimeout(() => inputRef.current?.focus(), 100);
   }, [isOpen]);
 
   useEffect(() => {
@@ -40,9 +38,9 @@ const FaqBot: React.FC = () => {
 
   const handleScrollToSection = (sectionId?: string) => {
     if (sectionId) {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
         setTimeout(() => setIsOpen(false), 300);
       }
     }
@@ -61,29 +59,21 @@ const FaqBot: React.FC = () => {
   const handleSend = (query?: string) => {
     const queryText = query || inputValue.trim();
     if (!queryText) return;
-
-    setMessages((prev) => [...prev, { id: `user-${Date.now()}`, text: queryText, isBot: false }]);
+    setMessages((p) => [...p, { id: `user-${Date.now()}`, text: queryText, isBot: false }]);
     setInputValue("");
     setShowSuggestions(false);
-
-    const matchedIntent = matchIntent(queryText, FAQ_INTENTS);
-
+    const matched = matchIntent(queryText, FAQ_INTENTS);
     setTimeout(() => {
-      if (matchedIntent) {
-        logIntent(matchedIntent.id, queryText);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `bot-${Date.now()}`,
-            text: matchedIntent.answer,
-            isBot: true,
-            links: matchedIntent.links,
-          },
+      if (matched) {
+        logIntent(matched.id, queryText);
+        setMessages((p) => [
+          ...p,
+          { id: `bot-${Date.now()}`, text: matched.answer, isBot: true, links: matched.links },
         ]);
       } else {
-        setMessages((prev) => [
-          ...prev,
-          { id: `bot-fallback-${Date.now()}`, text: FAQ_BOT_UI.fallbackMessage, isBot: true, links: [] },
+        setMessages((p) => [
+          ...p,
+          { id: `bot-fb-${Date.now()}`, text: FAQ_BOT_UI.fallbackMessage, isBot: true, links: [] },
         ]);
         setShowSuggestions(true);
       }
@@ -111,28 +101,27 @@ const FaqBot: React.FC = () => {
         <button
           ref={launcherRef}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 border border-hazard bg-hazard px-4 py-2.5 font-mono text-[10px] font-bold uppercase tracking-hud text-white transition-colors hover:bg-hazard-bright focus:outline-none focus:ring-1 focus:ring-hazard"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan px-4 py-3 text-xs font-bold text-white shadow-[0_20px_50px_-18px_rgba(139,92,246,0.7)] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-violet/60"
           aria-label="Open FAQ bot"
         >
-          <MessageCircle size={16} strokeWidth={1.5} />
+          <Sparkles size={15} strokeWidth={2} />
           <span className="hidden sm:inline">{FAQ_BOT_UI.launcherLabel}</span>
         </button>
       )}
 
       {isOpen && (
-        <div className="hud-panel fixed bottom-5 right-5 z-50 flex h-[70vh] max-h-[600px] w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden">
-          <div className="h-px w-full bg-hazard" />
-          <div className="flex items-center justify-between border-b border-hairline bg-ground-raised p-3">
-            <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-hud text-phosphor">
-              <MessageCircle size={14} strokeWidth={1.5} className="text-hazard" />
-              // COMMS CHANNEL
+        <div className="glass-strong fixed bottom-5 right-5 z-50 flex h-[70vh] max-h-[600px] w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-4xl">
+          <div className="edge-gradient flex items-center justify-between border-b border-white/10 bg-white/[0.02] p-3">
+            <span className="flex items-center gap-2 text-sm font-bold text-text">
+              <Sparkles size={14} strokeWidth={2} className="text-accent-cyan" />
+              Ask about my work
             </span>
             <button
               onClick={handleClose}
-              className="border border-hairline p-1.5 text-phosphor-dim transition-colors hover:border-hazard hover:text-hazard focus:outline-none focus:ring-1 focus:ring-hazard"
+              className="rounded-full border border-white/12 p-1.5 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink"
               aria-label="Close chat"
             >
-              <X size={14} strokeWidth={1.5} />
+              <X size={14} strokeWidth={2} />
             </button>
           </div>
 
@@ -141,20 +130,20 @@ const FaqBot: React.FC = () => {
             role="log"
             aria-live="polite"
             aria-relevant="additions"
-            className="flex-1 space-y-3 overflow-y-auto bg-ground p-4"
+            className="flex-1 space-y-3 overflow-y-auto p-4"
           >
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.isBot ? "justify-start" : "justify-end"}`}>
                 <div
-                  className={`max-w-[85%] border p-2.5 text-[13px] leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl p-3 text-[13px] leading-relaxed ${
                     msg.isBot
-                      ? "border-hairline bg-ground-raised text-phosphor-dim"
-                      : "border-hazard bg-hazard text-white"
+                      ? "border border-white/10 bg-white/[0.04] text-text-dim"
+                      : "bg-gradient-to-r from-accent-violet to-accent-cyan text-white"
                   }`}
                 >
                   <div>{msg.text}</div>
                   {msg.links && msg.links.length > 0 && (
-                    <div className="mt-2.5 flex flex-wrap gap-1.5 border-t border-hairline pt-2.5">
+                    <div className="mt-2.5 flex flex-wrap gap-1.5 border-t border-white/15 pt-2.5">
                       {msg.links.map((link, idx) => (
                         <a
                           key={idx}
@@ -167,7 +156,7 @@ const FaqBot: React.FC = () => {
                           }}
                           target={link.href.startsWith("http") ? "_blank" : undefined}
                           rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                          className="border border-hairline px-2 py-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-hazard hover:text-hazard"
+                          className="rounded-full border border-white/15 px-2.5 py-1 text-[11px] font-semibold text-text-dim transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
                         >
                           {link.label}
                         </a>
@@ -180,9 +169,7 @@ const FaqBot: React.FC = () => {
 
             {showSuggestions && (
               <div>
-                <p className="mb-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
-                  Quick queries:
-                </p>
+                <p className="eyebrow mb-2">Quick questions</p>
                 <div className="flex flex-wrap gap-1.5">
                   {FAQ_BOT_UI.quickChips.map((chip) => {
                     const intent = FAQ_INTENTS.find((i) => i.id === chip.id);
@@ -190,7 +177,7 @@ const FaqBot: React.FC = () => {
                       <button
                         key={chip.id}
                         onClick={() => intent && handleSend(intent.title)}
-                        className="border border-hairline px-2 py-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+                        className="rounded-full border border-white/12 px-2.5 py-1 text-[11px] font-medium text-text-dim transition-colors hover:border-white/25 hover:text-text"
                       >
                         {chip.label}
                       </button>
@@ -201,7 +188,7 @@ const FaqBot: React.FC = () => {
             )}
           </div>
 
-          <div className="border-t border-hairline bg-ground-raised p-3">
+          <div className="border-t border-white/10 bg-white/[0.02] p-3">
             <div className="flex items-center gap-2">
               <input
                 ref={inputRef}
@@ -210,16 +197,16 @@ const FaqBot: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={FAQ_BOT_UI.inputPlaceholder}
-                className="flex-1 border border-hairline bg-ground px-3 py-2 font-mono text-xs text-phosphor placeholder:text-phosphor-faint focus:border-phosphor-faint focus:outline-none"
+                className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-text placeholder:text-text-faint focus:border-white/25 focus:outline-none"
                 aria-label="Ask a question"
               />
               <button
                 onClick={() => handleSend()}
                 disabled={!inputValue.trim()}
-                className="border border-hazard bg-hazard p-2 text-white transition-colors hover:bg-hazard-bright disabled:cursor-not-allowed disabled:border-hairline disabled:bg-transparent disabled:text-phosphor-faint"
+                className="rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan p-2.5 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Send message"
               >
-                <Send size={15} strokeWidth={1.5} />
+                <Send size={14} strokeWidth={2} />
               </button>
             </div>
           </div>

@@ -10,6 +10,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import FaqBot from "./FaqBot";
 import CommandPalette from "./CommandPalette";
+import Aurora from "./Aurora";
 import { DepthProvider } from "../lib/depth";
 import { TICKER_THOUGHTS, type Mode } from "../data/content";
 
@@ -38,10 +39,9 @@ const Portfolio: React.FC = () => {
 
   return (
     <DepthProvider>
-      <div className="min-h-[100dvh] bg-ground text-phosphor font-sans antialiased">
-        {/* Fixed analog-degradation layers */}
-        <div className="scanlines" aria-hidden="true" />
-        <div className="noise-overlay" aria-hidden="true" />
+      <div className="relative min-h-[100dvh] font-sans text-text antialiased">
+        <Aurora />
+        <div className="grain-overlay" aria-hidden="true" />
 
         <Navbar
           mode={mode}
@@ -53,29 +53,21 @@ const Portfolio: React.FC = () => {
           onOpenPalette={openPalette}
         />
 
-        <main className="mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
+        <main className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
           <Hero mode={mode} scrollTo={scrollTo} />
 
-          <hr className="hud-rule my-20" />
+          <div className="mt-28">
+            <ThinkingSection mode={mode} />
+          </div>
 
-          <ThinkingSection mode={mode} />
-
-          <hr className="hud-rule my-20" />
-
-          <div className="grid grid-cols-1 gap-x-8 gap-y-20 lg:grid-cols-12">
-            <div className="flex flex-col gap-20 lg:col-span-8">
+          <div className="mt-28 grid grid-cols-1 gap-x-8 gap-y-28 lg:grid-cols-12">
+            <div className="flex flex-col gap-28 lg:col-span-8">
               <ProjectsSection
                 mode={mode}
                 selectedProjectId={selectedProjectId}
                 onSelectProject={setSelectedProjectId}
               />
-
-              <hr className="hud-rule" />
-
               <ExperienceSection mode={mode} />
-
-              <hr className="hud-rule" />
-
               <ResearchSection mode={mode} />
             </div>
 

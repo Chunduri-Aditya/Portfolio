@@ -10,20 +10,14 @@ interface AnimatedSectionProps {
 }
 
 const directionOffsets = {
-  up: { y: 24, x: 0 },
-  down: { y: -24, x: 0 },
-  left: { x: 24, y: 0 },
-  right: { x: -24, y: 0 },
+  up: { y: 28, x: 0 },
+  down: { y: -28, x: 0 },
+  left: { x: 28, y: 0 },
+  right: { x: -28, y: 0 },
 };
 
-const HUD_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-/**
- * Reveal-on-scroll wrapper. Content is visible by default (opacity 1 via CSS);
- * Framer's `whileInView` only nudges it in. If the viewport observer never
- * fires, or JS is slow, the section is still readable — motion is enhancement,
- * never a gate.
- */
 export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   children,
   className = "",
@@ -37,11 +31,11 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   return (
     <motion.div
       id={id}
-      className={`scroll-mt-24 ${className}`}
-      initial={{ opacity: 0, ...offset }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      className={`scroll-mt-28 ${className}`}
+      initial={{ opacity: 0, filter: "blur(6px)", ...offset }}
+      whileInView={{ opacity: 1, filter: "blur(0px)", x: 0, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: reduce ? 0 : 0.55, delay: reduce ? 0 : delay, ease: HUD_EASE }}
+      transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : delay, ease: EASE }}
     >
       {children}
     </motion.div>
@@ -58,7 +52,7 @@ interface StaggerContainerProps {
 export const StaggerContainer: React.FC<StaggerContainerProps> = ({
   children,
   className = "",
-  stagger = 0.06,
+  stagger = 0.07,
   id,
 }) => (
   <motion.div
@@ -86,11 +80,12 @@ export const StaggerItem = React.forwardRef<
       ref={ref}
       className={className}
       variants={{
-        hidden: { opacity: 0, y: reduce ? 0 : 12 },
+        hidden: { opacity: 0, y: reduce ? 0 : 16, scale: reduce ? 1 : 0.98 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { duration: reduce ? 0 : 0.45, ease: HUD_EASE },
+          scale: 1,
+          transition: { duration: reduce ? 0 : 0.5, ease: EASE },
         },
       }}
     >

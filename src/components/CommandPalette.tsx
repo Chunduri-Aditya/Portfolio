@@ -225,34 +225,32 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          <div className="fixed inset-0 bg-ground/85 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-ink/80 backdrop-blur-md" />
 
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
-            className="hud-panel relative w-full max-w-xl overflow-hidden"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
+            className="glass-strong edge-gradient relative w-full max-w-xl overflow-hidden rounded-4xl"
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="h-px w-full bg-hazard" />
-
-            <div className="flex items-center gap-3 border-b border-hairline px-4 py-3">
-              <Search className="shrink-0 text-phosphor-faint" size={15} strokeWidth={1.5} />
+            <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3.5">
+              <Search className="shrink-0 text-text-faint" size={16} strokeWidth={2} />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Jump to a section, mission, or link..."
-                className="w-full bg-transparent font-mono text-xs text-phosphor outline-none placeholder:text-phosphor-faint"
+                placeholder="Jump to a section, project, or link..."
+                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint"
                 aria-label="Search commands"
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="command-palette-list"
               />
-              <kbd className="hidden shrink-0 border border-hairline px-1 font-mono text-[10px] text-phosphor-faint sm:inline-block">
+              <kbd className="hidden shrink-0 rounded border border-white/12 px-1.5 font-mono text-[10px] text-text-faint sm:inline-block">
                 ESC
               </kbd>
             </div>
@@ -261,17 +259,17 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
               ref={listRef}
               id="command-palette-list"
               role="listbox"
-              className="max-h-[52vh] overflow-y-auto"
+              className="max-h-[52vh] overflow-y-auto p-1.5"
             >
               {grouped.length === 0 && (
-                <div className="px-4 py-8 text-center font-mono text-[11px] uppercase tracking-hud text-phosphor-faint">
+                <div className="px-4 py-8 text-center text-[13px] text-text-faint">
                   No matching commands
                 </div>
               )}
 
               {grouped.map(({ group, items }) => (
-                <div key={group}>
-                  <div className="hud-label border-b border-hairline px-4 py-1.5">// {group}</div>
+                <div key={group} className="mb-1">
+                  <div className="eyebrow px-3 py-1.5">{group}</div>
                   {items.map((command) => {
                     runningIndex += 1;
                     const isActive = runningIndex === activeIndex;
@@ -286,23 +284,25 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                           onClose();
                         }}
                         onMouseEnter={() => setActiveIndex(runningIndex)}
-                        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                          isActive ? "bg-hazard/12 text-phosphor" : "text-phosphor-dim hover:bg-white/5"
+                        className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors ${
+                          isActive
+                            ? "bg-gradient-to-r from-accent-violet/25 to-accent-cyan/15 text-text"
+                            : "text-text-dim hover:bg-white/5"
                         }`}
                       >
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center text-phosphor-faint">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center text-text-faint">
                           {command.icon}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-[13px] font-medium">{command.label}</span>
+                          <span className="block truncate text-[13px] font-semibold">{command.label}</span>
                           {command.sublabel && (
-                            <span className="block truncate font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                            <span className="block truncate text-[11px] text-text-faint">
                               {command.sublabel}
                             </span>
                           )}
                         </span>
                         {isActive && (
-                          <CornerDownLeft size={13} strokeWidth={1.5} className="shrink-0 text-hazard" />
+                          <CornerDownLeft size={13} strokeWidth={2} className="shrink-0 text-accent-cyan" />
                         )}
                       </button>
                     );
@@ -311,11 +311,11 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
               ))}
             </div>
 
-            <div className="flex items-center gap-4 border-t border-hairline px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+            <div className="flex items-center gap-4 border-t border-white/10 px-4 py-2.5 text-[11px] text-text-faint">
               <span>↑↓ Nav</span>
               <span>↵ Run</span>
               <span>ESC Close</span>
-              <span className="ml-auto">{isMac ? "⌘K" : "^K"}</span>
+              <span className="ml-auto font-mono">{isMac ? "⌘K" : "^K"}</span>
             </div>
           </motion.div>
         </motion.div>
