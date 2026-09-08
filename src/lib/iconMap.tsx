@@ -74,13 +74,17 @@ interface IconProps {
   name: IconName;
   size?: number;
   className?: string;
+  strokeWidth?: number;
 }
 
 /**
  * Render any icon by string name. Use this in components instead of importing
  * Lucide icons directly when the icon choice is driven by content.ts data.
+ *
+ * Default stroke is 1.5 — crisp, telemetry-instrument weight, not the chunky
+ * Lucide default of 2.
  */
-export const Icon: React.FC<IconProps> = ({ name, size = 16, className }) => {
+export const Icon: React.FC<IconProps> = ({ name, size = 16, className, strokeWidth = 1.5 }) => {
   const Component = ICONS[name];
   if (!Component) {
     if (typeof console !== "undefined") {
@@ -88,5 +92,5 @@ export const Icon: React.FC<IconProps> = ({ name, size = 16, className }) => {
     }
     return null;
   }
-  return <Component size={size} className={className} />;
+  return <Component size={size} strokeWidth={strokeWidth} className={className} />;
 };
