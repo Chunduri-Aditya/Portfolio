@@ -157,56 +157,15 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .scanlines::after { animation: none; display: none; }
   .glitch:hover { animation: none; }
-  .gradient-mesh { animation: none; }
 }
 
-/* ============================================================================
- * LEGACY CLASSES — still consumed by not-yet-rebuilt components.
- * Removed at the end of the component rebuild once grep for these is clean.
- * ========================================================================= */
-
-.gradient-mesh {
-  background:
-    radial-gradient(ellipse at 20% 50%, rgba(230, 25, 25, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(234, 234, 234, 0.03) 0%, transparent 50%);
-  animation: mesh-shift 12s ease-in-out infinite alternate;
-}
-@keyframes mesh-shift {
-  0% {
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(230, 25, 25, 0.05) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(234, 234, 234, 0.03) 0%, transparent 50%);
-  }
-  100% {
-    background:
-      radial-gradient(ellipse at 40% 30%, rgba(230, 25, 25, 0.07) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 70%, rgba(234, 234, 234, 0.04) 0%, transparent 50%);
-  }
-}
-
+/* ─── Backdrop dot grid (Hero) ───────────────────────────── */
 .dot-grid {
   background-image: radial-gradient(circle, rgba(234, 234, 234, 0.06) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
-.glass {
-  background: rgba(18, 18, 18, 0.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--hairline);
-}
-.glass-hover:hover {
-  background: rgba(18, 18, 18, 0.85);
-  border-color: #3a3a3a;
-}
-
-.glow-cyan { box-shadow: 0 0 0 1px rgba(230, 25, 25, 0.4); }
-.glow-purple { box-shadow: 0 0 0 1px rgba(234, 234, 234, 0.25); }
-.text-glow-cyan { text-shadow: none; }
-.text-glow-purple { text-shadow: none; }
-
-.gradient-border { position: relative; }
-
+/* ─── ASCII architecture panel (ProjectModal) ────────────── */
 .code-block {
   background: #060606;
   border: 1px solid var(--hairline);
