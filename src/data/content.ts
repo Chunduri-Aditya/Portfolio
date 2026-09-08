@@ -65,27 +65,27 @@ export const HERO: HeroContent = {
   statusBadge: "System Status: ONLINE // Agent Shield Build Active",
   headline: {
     signal: "Agents are shipping. I build the evals that catch what breaks.",
-    story: "I turn noise into signal.",
+    story: "The tools are shipping faster than anyone can check them. That gap is my work.",
   },
   subhead:
     "M.S. Applied Data Science, USC \u00b7 AI Safety & Agent Security \u00b7 LLM Evaluation \u00b7 Adversarial Testing",
   intro: {
     signal:
-      "Building reproducible evaluation systems for LLM agents. Current focus: Agent Shield, adversarial evals for prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift across frontier models, scored on attack success rate, benign utility, and transparency, mapped to OWASP and MITRE ATLAS, all on Inspect AI. Now paired with a local runtime perimeter that screens MCP tool descriptions before an agent ever reads them.",
+      "Agent Shield is an adversarial evaluation framework for LLM agents. It runs prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift against frontier models, scores every run on attack success rate, benign utility, and transparency, and maps each threat to OWASP and MITRE ATLAS. It is built on Inspect AI, so every result is seeded and reproducible. The newest half is a local runtime perimeter that screens MCP tool descriptions before an agent ever reads them.",
     story:
-      "Agents are shipping faster than we know how to test them. I\u2019m building adversarial evaluation systems that catch failure modes before deployment: reproducible, logged, standard aligned. Current obsession: Agent Shield, an attack framework on the Inspect AI harness that grew a second half, a local perimeter that screens untrusted tool descriptions at runtime instead of only scoring them afterward.",
+      "Agents are shipping faster than anyone knows how to test them. I build the systems that catch the failure modes first: reproducible, logged, mapped to a standard. Agent Shield started as an attack framework on Inspect AI and grew a second half, a local perimeter that screens untrusted tool descriptions at runtime instead of only scoring them after the fact.",
   },
   plain: {
-    headline: "I test AI assistants for the ways they can be tricked or broken, before they ship.",
+    headline: "I find the ways AI assistants can be tricked or broken, before they ship.",
     intro:
-      "Companies are handing AI agents real tools and real autonomy, fast. I build the systems that catch how those agents fail \u2014 being manipulated, leaking data, drifting off task \u2014 in a lab, with results anyone can reproduce, instead of finding out in production. The same work also ships a small local filter that screens dangerous instructions before an agent reads them.",
+      "Companies are handing AI agents real tools and real autonomy, fast. I build the systems that catch how those agents fail, whether that is being manipulated, leaking data, or drifting off task, in a lab where the result can be reproduced instead of discovered in production. The same work ships a small local filter that screens dangerous instructions before an agent reads them.",
   },
   chips: {
     signal: [
       { iconName: "ShieldCheck", text: "Inspect AI harness" },
       { iconName: "Target", text: "ASR + benign utility" },
-      { iconName: "Gauge", text: "Judge-model versioning" },
-      { iconName: "ListChecks", text: "CI-ready eval logs" },
+      { iconName: "Gauge", text: "Judge model versioning" },
+      { iconName: "ListChecks", text: "CI ready eval logs" },
       { iconName: "Wrench", text: "Reproducible pipelines" },
     ],
     story: [
@@ -197,7 +197,7 @@ export const THINKING: ThinkingContent = {
       iconName: "Boxes",
       iconClassName: "text-purple-300",
       text: {
-        signal: "Propose an approach with explicit tradeoffs, risks, and interfaces.",
+        signal: "Sketch an approach with the tradeoffs, risks, and interfaces named up front.",
         story:
           "I sketch a model and try to break it. If it survives, it becomes architecture.",
       },
@@ -209,7 +209,7 @@ export const THINKING: ThinkingContent = {
       text: {
         signal: "Measure early: evals, traces, structured logs, reproducible configs.",
         story:
-          "I add gauges: tests, logs, metrics\u2014anything that turns \u2018maybe\u2019 into \u2018we know\u2019.",
+          "I add gauges: tests, logs, metrics, anything that turns 'maybe' into 'we know'.",
       },
     },
     {
@@ -269,8 +269,8 @@ export const THINKING: ThinkingContent = {
       iconClassName: "text-slate-200",
       text: {
         signal:
-          "Regressions caught by instrumentation, not by vibes or late-night debugging.",
-        story: "I don\u2019t chase perfection. I chase stable behavior.",
+          "Regressions caught by instrumentation, not by vibes or a late night in the debugger.",
+        story: "I don't chase perfection. I chase stable behavior.",
       },
     },
   ],
@@ -278,9 +278,9 @@ export const THINKING: ThinkingContent = {
     label: "The human part",
     text: {
       signal:
-        "Wide-angle attention and laser focus, running at the same time. Structure\u2014lists, tests, logs, decision trails\u2014keeps both aimed at signal, not noise.",
+        "Wide angle attention and laser focus, running at the same time. Structure, meaning lists, tests, logs, and decision trails, keeps both aimed at signal instead of noise.",
       story:
-        "My attention runs wide-angle and laser at the same time. The way I keep it useful is structure: lists, tests, logs, and clean interfaces\u2014so intensity becomes progress, not noise.",
+        "My attention runs wide angle and laser at once. Structure is how I keep it useful: lists, tests, logs, and clean interfaces, so intensity turns into progress instead of noise.",
     },
   },
 };
@@ -380,13 +380,13 @@ export const PROJECTS: ProjectsSectionContent = {
       discipline: "AI-SAFETY / EVAL",
       status: "SHIPPED",
       hook:
-        "I break AI agents on purpose, so they fail in my lab instead of in production.",
+        "I break AI agents on purpose so they fail in my lab, not in production.",
       plain:
-        "Companies are wiring AI assistants into real tools faster than anyone can check whether they're safe. I built the test rig that attacks these assistants the way a bad actor would — hidden instructions, poisoned tools, slow manipulation — and scores how often they fall for it, whether they warn their owner, and whether they still do their normal job. The same project also ships a small local filter that screens sketchy tool descriptions before the AI ever reads them.",
+        "Companies are wiring AI assistants into real tools faster than anyone can check whether they are safe. Agent Shield is the test rig that attacks these assistants the way a bad actor would, with hidden instructions, poisoned tools, and slow manipulation, then scores how often they fall for it, whether they warn their owner, and whether they still do their normal job. It also ships a small local filter that screens sketchy tool descriptions before the AI ever reads them.",
       oneLiner:
-        "An adversarial evaluation framework that stress-tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift, built on UK AISI\u2019s Inspect AI harness and mapped to OWASP and MITRE ATLAS. Now with a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
+        "Agent Shield stress tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift. It runs on UK AISI's Inspect AI harness, maps every threat to OWASP and MITRE ATLAS, and now carries a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
       story:
-        "Agents are being deployed faster than they\u2019re being measured. I built a reproducible attack surface first: one harness, one scoring schema, seeded tasks, so failures show up as scored diffs and not vibes. Then the results made the second half obvious. If no model flags a poisoned tool description, scoring that after the fact isn\u2019t enough, so the same repo now ships a local perimeter that screens tool descriptions before the agent ever reads them.",
+        "Agents get deployed faster than they get measured. So I built a reproducible attack surface first: one harness, one scoring schema, seeded tasks, so failures show up as scored diffs, not vibes. The results made the second half obvious. If no model flags a poisoned tool description, scoring that after the fact is not enough, so the same repo now ships a local perimeter that screens tool descriptions before the agent ever reads them.",
       evidence: [
         "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi turn behavioral drift",
         "Introduced Transparency Rate, whether an agent flags an attack to its operator, as a third axis alongside ASR and Benign Utility in a six cell outcome model extending AgentDojo's 2x2 matrix",
@@ -478,11 +478,11 @@ export const PROJECTS: ProjectsSectionContent = {
       hook:
         "A DJ engine that mixes two songs into one clean transition, with 520+ tests proving it.",
       plain:
-        "Blending two tracks so the switch sounds seamless is real engineering: you have to match the key, the tempo, and the exact bar where the beat lands, then fade the bass out without a thud. This is a full app that does all of that automatically — pick two songs, get a mixed track — with a research-grade audio core and a web interface that streams job progress live.",
+        "Blending two tracks so the switch sounds seamless is real engineering. You have to match the key, the tempo, and the exact bar where the beat lands, then fade the bass out without a thud. This is a full app that does all of it automatically: pick two songs, get a mixed track, backed by a research grade audio core and a web interface that streams job progress live.",
       oneLiner:
-        "A full-stack DJ engine: React/TypeScript frontend with SSE live streaming, FastAPI async job queue, and a research-grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search) with 520+ tests and -14 LUFS mastering.",
+        "AI RemixMate is a full stack DJ engine: a React/TypeScript frontend with SSE live streaming, a FastAPI async job queue, and a research grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search), with 520+ tests and mastering to -14 LUFS.",
       story:
-        "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread\u2014replacing librosa beat detection with Beat This! (ISMIR 2024) for proper downbeats, swapping IIR bass shelving for a true cosine-taper stem ramp, adding TIV harmonic scoring from the MIR literature, and building CLAP 512-D semantic search so DJs can find tracks by sound, not just by name. Then wrapped it in a React frontend with real-time SSE job streaming so it actually behaves like a product.",
+        "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread: librosa beat detection out, Beat This! (ISMIR 2024) in for proper downbeats; IIR bass shelving out, a true cosine taper stem ramp in; TIV harmonic scoring from the MIR literature added; CLAP 512-D semantic search added so DJs can find tracks by sound and not just by name. Then I wrapped it in a React frontend with live SSE job streaming so it behaves like a product.",
       evidence: [
         "FastAPI async job queue (SQLite write-through persistence) + React/TypeScript frontend, 8 pages, SSE live job streaming, Zustand state management",
         "TIV harmonic scoring (Bernardes et al. 2016 Tonal Interval Space) replacing psychoacoustic consonance approximation",
@@ -578,11 +578,11 @@ export const PROJECTS: ProjectsSectionContent = {
       hook:
         "One short brief in; a matching script, image, and voiceover out. Swap any model, no rewrites.",
       plain:
-        "Most tools that generate media lock you into one company's model for text, another for images, another for voice. This pipeline takes a single prompt and produces all three, and lets you swap the underlying model at any stage — cheap local models while you experiment, better cloud ones for the final run — without touching the rest of the code.",
+        "Most tools that generate media lock you into one company's model for text, another for images, another for voice. This pipeline takes a single prompt and produces all three, and it lets you swap the underlying model at any stage, cheap local models while you experiment and better cloud ones for the final run, without touching the rest of the code.",
       oneLiner:
-        "An agentic, model-agnostic GenAI media pipeline that turns a single brief into text, image, and audio\u2014coordinating local Ollama inference, Diffusers / FLUX.1, and ElevenLabs voice through one modular workflow.",
+        "AkashicTree is an agentic, model agnostic GenAI media pipeline that turns a single brief into text, image, and audio, coordinating local Ollama inference, Diffusers / FLUX.1, and ElevenLabs voice through one modular workflow.",
       story:
-        "Generative pipelines usually lock you into one provider per modality. I wanted a brief to fan out into text, image, and audio with whichever backend makes sense that day\u2014local Ollama for development, cloud for quality runs\u2014without changing a line of the orchestration layer.",
+        "Generative pipelines usually lock you into one provider per modality. I wanted a brief to fan out into text, image, and audio with whichever backend makes sense that day, local Ollama for development and cloud for quality runs, without changing a line of the orchestration layer.",
       evidence: [
         "Single-brief \u2192 text + image + audio via one orchestration layer",
         "Local Ollama inference for text generation",
@@ -653,13 +653,13 @@ export const PROJECTS: ProjectsSectionContent = {
       discipline: "RAG / SAFETY",
       status: "SHIPPED",
       hook:
-        "A private journaling AI where the two claims that matter — recall and crisis safety — are measured, not promised.",
+        "A private journaling AI where the two claims that matter, recall and crisis safety, are measured, not promised.",
       plain:
-        "A journaling assistant that runs entirely on your own computer, so nothing you write ever leaves the machine. The point is honesty about its own quality: it measures whether it actually pulls up the right past entry (an average score was hiding one category that was quietly failing), and it has a plain, deterministic safety check for crisis language that was tested by deliberately breaking it.",
+        "A journaling assistant that runs entirely on your own computer, so nothing you write ever leaves the machine. The point is honesty about its own quality. It measures whether it actually pulls up the right past entry, because an average score was hiding one category that had quietly failed, and it has a plain deterministic safety check for crisis language that was tested by deliberately breaking it.",
       oneLiner:
-        "A local first journaling assistant where the two claims that actually matter, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline instead of asserted.",
+        "AI Health Journal is a local first journaling assistant whose two load bearing claims, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline rather than asserted.",
       story:
-        "Aggregate recall said 0.875 and looked healthy. Broken out by category, one bucket sat at 0.667: entries about a good day were retrieving the user\u2019s worst entries, because the embedder encoded topic and not emotional valence. In a journaling app the retrieved entries become the grounding context the person reads back, so on a good day the system was quietly reflecting their hardest writing at them. That is the bug that convinced me the aggregate number is the enemy, and that everything here needs a per category breakdown and an eval I have personally broken on purpose.",
+        "Aggregate recall said 0.875 and looked healthy. Broken out by category, one bucket sat at 0.667: entries about a good day were pulling back the user's worst entries, because the embedder encoded topic and not emotional valence. In a journaling app the retrieved entries become the grounding context the person reads back, so on a good day the system was quietly reflecting their hardest writing at them. That bug convinced me the aggregate number is the enemy, and that everything here needs a per category breakdown and an eval I have broken on purpose myself.",
       evidence: [
         "Retrieval ablation across 4 strategies (dense MiniLM, BM25, hybrid RRF, dense nomic-embed-text) on a corpus where every query is tagged with the confusion it was built to induce",
         "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted Recall@3 to 0.979 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
@@ -745,11 +745,11 @@ export const PROJECTS: ProjectsSectionContent = {
       hook:
         "Stop arguing about which model is 'better'. Score it with a repeatable test suite instead.",
       plain:
-        "A local tool for comparing language models on concrete tasks — reasoning, making things up, emotional tone, writing correct code — with runs you can repeat and charts to line them up. It's the measurement habit that later grew into Agent Shield.",
+        "A local tool for comparing language models on concrete tasks, reasoning, making things up, emotional tone, and writing correct code, with runs you can repeat and charts to line them up. It is the measurement habit that later grew into Agent Shield.",
       oneLiner:
-        "A local, Ollama-based LLM evaluation platform that benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and dashboards\u2014the methodology that became the base for Agent Shield.",
+        "Model Behavior Lab is a local Ollama based evaluation platform that benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and dashboards. It is the methodology that became the base for Agent Shield.",
       story:
-        "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: JSON test suites, scored outputs, repeatable runs. If a new model lands, the numbers are already waiting. This became the groundwork for Agent Shield.",
+        "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: JSON test suites, scored outputs, repeatable runs. When a new model lands, the numbers are already waiting. This became the groundwork for Agent Shield.",
       evidence: [
         "Local Ollama-based evaluation \u2014 no external API dependency",
         "Benchmarks reasoning, hallucination, emotion alignment, and code correctness",
@@ -813,9 +813,9 @@ export const PROJECTS: ProjectsSectionContent = {
       hook:
         "A webcam focus tracker that never records video. Only the numbers it computes touch the disk.",
       plain:
-        "A tool that watches, through your webcam, whether you're focused, drifting, or away during deep work, and nudges you after five seconds of drift. Every tool like this wants your camera feed in someone's cloud; this one throws the pixels away immediately and keeps only derived numbers, so the privacy claim is a property of the data on disk, not a promise.",
+        "A tool that watches, through your webcam, whether you are focused, drifting, or away during deep work, and nudges you after five seconds of drift. Every tool like this wants your camera feed in someone's cloud. This one throws the pixels away immediately and keeps only derived numbers, so the privacy claim is a property of the data on disk, not a promise.",
       oneLiner:
-        "A webcam tool that classifies focus, drift, and absence in real time from head pose and iris gaze, nudges you after five continuous seconds of drift, and writes a session report. No video is ever recorded: only derived angles and labels reach disk.",
+        "Attention Drift Detector classifies focus, drift, and absence in real time from head pose and iris gaze, nudges you after five continuous seconds of drift, and writes a session report. No video is ever recorded: only derived angles and labels reach disk.",
       story:
         "I wanted to know what my attention actually did during deep work, and every tool that offered to tell me wanted the camera feed in someone else's cloud. The interesting constraint was throwing the pixels away: if only derived numbers persist, the privacy claim stops being a policy promise and becomes a property of the data on disk.",
       evidence: [
@@ -892,11 +892,11 @@ export const PROJECTS: ProjectsSectionContent = {
       hook:
         "A chatbot that helps you build n8n workflows, and only exposes what's actually safe to expose.",
       plain:
-        "Two projects had grown up side by side: one that searches n8n's docs, one that runs a locked-down multi-agent build pipeline behind signed approvals. I merged them and put a web layer on top. The disciplined call was scoping that web layer to grounded search and live status only, because wiring a chatbox straight into the build pipeline would mean rebuilding or bypassing its approval controls.",
+        "Two projects had grown up side by side: one that searches n8n's docs, one that runs a locked down multi agent build pipeline behind signed approvals. I merged them and put a web layer on top. The disciplined call was scoping that web layer to grounded search and live status only, because wiring a chatbox straight into the build pipeline would mean rebuilding or bypassing its approval controls.",
       oneLiner:
-        "A merged retrieval and multi-agent orchestration system for building n8n workflows, wrapped in a read-only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
+        "Sourcewarden merges a retrieval index and a multi agent orchestration system for building n8n workflows behind a read only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
       story:
-        "Two repos had grown side by side: one doing retrieval over n8n's docs and community examples, the other running a six-role agent pipeline behind an Ed25519-signed approval ledger. I merged them into a single system, then wanted a web layer on top. The obvious move was a chatbox that drives the whole pipeline end to end. The correct move was to check what was actually callable first. The orchestration lives entirely in prompt files a human runs through an AI coding agent, gated on purpose so nothing mutates a live workflow without a signed approval. Wiring a chatbox straight into that would mean rebuilding the approval flow in a browser or quietly bypassing it. I scoped the web layer to what was real and safe to expose: grounded retrieval and live status, not execution.",
+        "Two repos had grown side by side: one doing retrieval over n8n's docs and community examples, the other running a six role agent pipeline behind an Ed25519 signed approval ledger. I merged them into one system, then went to add a web layer. The obvious move was a chatbox that drives the whole pipeline end to end. The correct move was to check what was actually callable first. The orchestration lives entirely in prompt files a human runs through an AI coding agent, gated on purpose so nothing mutates a live workflow without a signed approval. Wiring a chatbox straight into that would mean rebuilding the approval flow in a browser or quietly bypassing it. So I scoped the web layer to what was real and safe to expose: grounded retrieval and live status, not execution.",
       evidence: [
         "2,256-row retrieval index across official n8n docs and community workflow examples, with an explicit evidence precedence: live instance schema, then official docs, then community examples, then untrusted references",
         "Six-role agent orchestration (supervisor, security firewall, skeleton architect, module builder, deviation monitor, eval tuner) gated by an Ed25519-signed run ledger, one-time nonces, and a 15-minute authorization window",
@@ -933,9 +933,9 @@ export const PROJECTS: ProjectsSectionContent = {
         |  Cited evidence     |
         +-------------------+`,
         tradeoffs: [
-          "Read-only dashboard vs a live agent driver — a driver would demo better, but it either duplicates the approval ledger in the browser or bypasses it, so read-only won",
-          "Recomputing every security hash on each dashboard load vs trusting a cache — slower page load, but a cached match can go stale and lie",
-          "Single Docker image with no baked-in index vs bundling one — keeps the image small and the index out of version control, at the cost of an empty-state chat until it's mounted",
+          "Read only dashboard vs a live agent driver. A driver would demo better, but it either duplicates the approval ledger in the browser or bypasses it, so read only won",
+          "Recomputing every security hash on each dashboard load vs trusting a cache. Slower page load, but a cached match can go stale and lie",
+          "Single Docker image with no baked in index vs bundling one. Keeps the image small and the index out of version control, at the cost of an empty state chat until it is mounted",
         ],
       },
       decisions: [
@@ -981,13 +981,13 @@ export const PROJECTS: ProjectsSectionContent = {
       discipline: "AUTOML / BENCHMARK",
       status: "SHIPPED",
       hook:
-        "I built an AutoML ranker, then a benchmark that proved it doesn't save time, and kept that result.",
+        "I built an AutoML ranker, then the benchmark that proved it does not save time, and I kept that result.",
       plain:
-        "AutoML tools promise to reach a good model faster by predicting which candidates are worth trying. I built one, then built a careful 15-dataset benchmark to check the promise. It ranks candidates better than random guessing, but it did not measurably cut the work needed to reach a good model, and the project keeps that negative result written down rather than quietly dropping it.",
+        "AutoML tools promise to reach a good model faster by predicting which candidates are worth trying. I built one, then a careful benchmark over 15 datasets to check the promise. It ranks candidates better than random guessing, but it did not measurably cut the work needed to reach a good model, and the project keeps that negative result written down instead of quietly dropping it.",
       oneLiner:
-        "A tabular AutoML engine that ranks preprocessing×model candidates with a meta-learner trained on past runs, plus a 15-dataset benchmark built to measure whether that learned ranking actually beats proxy and random baselines. On end-to-end evaluation savings it does not, and the repo records that.",
+        "MetaLearnML is a tabular AutoML engine that ranks preprocessing by model candidates with a meta learner trained on past runs, next to a benchmark over 15 datasets built to measure whether that learned ranking actually beats proxy and random baselines. On end to end evaluation savings it does not, and the repo records that.",
       story:
-        "The pitch for meta-learned model selection is that it saves you evaluations. I built the engine and then built the benchmark that would catch me if it didn’t. On ranking quality the meta-learner is clearly better than random (median Spearman 0.57 vs 0.02). On the thing that matters, evaluations saved to reach a good model, the measured reduction was 0.0% with a 95% CI of 0 to 50%. The benchmark report marks the resume-impact criterion as not met. Keeping that result visible is the point of the project.",
+        "The pitch for meta learned model selection is that it saves you evaluations. I built the engine and then the benchmark that would catch me if it did not. On ranking quality the meta learner is clearly better than random (median Spearman 0.57 vs 0.02). On the thing that matters, evaluations saved to reach a good model, the measured reduction was 0.0% with a 95% CI of 0 to 50%. The benchmark report marks the resume impact criterion as not met. Keeping that result visible is the point of the project.",
       evidence: [
         "Candidate universe: up to 12 preprocessing strategies × 7 (classification) or 9 (regression) models, ranked by fast proxy evaluation plus an optional RandomForest meta-learner over prior-run meta-features",
         "Leakage controls: outer dev/test split before any encoder is fit, fold-local preprocessing, a single scored touch of the test partition, deterministic splits, SHA-256 content-addressed candidate identity, and a versioned meta-feature schema that refuses to load on drift",
@@ -1053,7 +1053,7 @@ export const PROJECTS: ProjectsSectionContent = {
       },
       metrics: [
         { label: "Ranking (meta vs random)", value: "0.57 vs 0.02 ρ" },
-        { label: "Measured speedup", value: "0.0% (CI 0–50%)" },
+        { label: "Measured speedup", value: "0.0% (CI 0 to 50)" },
       ],
     },
     {
@@ -1066,13 +1066,13 @@ export const PROJECTS: ProjectsSectionContent = {
       discipline: "DEV-TOOL / SQL",
       status: "COURSEWORK",
       hook:
-        "Plain-English questions into SQL with five regex rules and zero machine learning.",
+        "Plain English questions into SQL with five regex rules and zero machine learning.",
       plain:
-        "A command-line tool from a database course: load a spreadsheet, ask something like 'total sales grouped by region' in plain English, get the SQL back. It uses five hand-written pattern rules rather than any AI, and if it doesn't recognize your question it says so instead of guessing.",
+        "A command line tool from a database course: load a spreadsheet, ask something like 'total sales grouped by region' in plain English, get the SQL back. It uses five hand written pattern rules rather than any AI, and if it does not recognize your question it says so instead of guessing.",
       oneLiner:
-        "A rule-based command-line tool that loads a CSV into SQLite and turns a fixed grammar of plain-English aggregate questions into SQL using regex pattern matching, not a model.",
+        "ChatDB loads a CSV into SQLite and turns a fixed grammar of plain English aggregate questions into SQL with regex pattern matching, not a model.",
       story:
-        "Built for a USC database course. The constraint I set was natural-language-to-SQL with zero ML: five hand-written regex patterns, exact column matching, and a sample-query generator that teaches the grammar it actually supports. It is honest about its edges, an unrecognized query returns an error string rather than guessing.",
+        "Built for a USC database course. The constraint I set was natural language to SQL with zero ML: five hand written regex patterns, exact column matching, and a sample query generator that teaches the grammar it actually supports. It is honest about its edges. An unrecognized query returns an error string rather than a guess.",
       evidence: [
         "CSV ingestion with pandas: column-name normalization, then dtype-based classification into datetime / measure / attribute columns to drive query planning",
         "Five named regex intent patterns (sum / average / min / max / count, each grouped-by) mapped to SQL GROUP BY templates",
@@ -1167,7 +1167,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
     title: "Field Work",
     iconName: "Briefcase",
     subtitle: {
-      signal: "Research roles. What I shipped, measured, and handed off.",
+      signal: "Research and engineering roles. What I shipped, measured, and handed off.",
       story: "Places where the problem pushed back and forced me to build better tools.",
     },
   },
@@ -1179,9 +1179,9 @@ export const EXPERIENCE: ExperienceSectionContent = {
       period: "Aug 2026 \u2013 Oct 2026",
       accent: "emerald",
       hook:
-        "Built the tool a video team uses to check whether a camera-to-field mapping is trustworthy before they accept it.",
+        "Built the tool a video team relies on to decide whether a camera to field mapping is trustworthy before they accept it.",
       plain:
-        "For a studio turning NFL Blitz gameplay video into tracking data, I built the review tool that decides whether a computed field alignment is good enough to keep, then chased down why one class of alignments kept failing and proved which cause was real.",
+        "For a studio turning NFL Blitz gameplay video into tracking data, I built the review tool that decides whether a computed field alignment is good enough to keep. Then I chased down why one class of alignments kept failing and proved which cause was real.",
       story:
         "The brief was computer vision for tracking NFL Blitz gameplay. What it needed first was a way to trust a homography before accepting it, so I built the reviewer tool and the schema gates around it. Then I spent the diagnosis time proving which failure mechanism was real and which coordinate bug was a red herring.",
       signal:
@@ -1203,7 +1203,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       period: "Aug 2024 \u2013 Dec 2024",
       accent: "cyan",
       hook:
-        "Made clean artery-vs-vein training masks for a team's retinal-scan segmentation model.",
+        "Made the clean artery versus vein training masks a team's retinal scan segmentation model learned from.",
       plain:
         "On a research team building a model that traces blood vessels in eye scans, my job was the data side: separating arteries from veins in the training images cleanly enough that the model had something honest to learn from.",
       story:
@@ -1416,9 +1416,9 @@ export const SIDEBAR: SidebarContent = {
       label: "Collaboration style",
       text: {
         signal:
-          "Define outcome + constraints. I\u2019ll propose an approach, document tradeoffs, and ship with tests and artifacts.",
+          "Give me the outcome and the constraints. I come back with an approach, the tradeoffs written down, and a shipped result with tests and artifacts.",
         story:
-          "Give me a messy problem and a success metric. I\u2019ll turn it into a pipeline, instrument it, and iterate until the system behaves.",
+          "Give me a messy problem and a success metric. I turn it into a pipeline, instrument it, and iterate until the system behaves.",
       },
     },
     performanceHabits: {
@@ -1432,7 +1432,7 @@ export const SIDEBAR: SidebarContent = {
   offKeyboard: {
     title: "Off-Keyboard Training",
     iconName: "Activity",
-    subtitle: "High-bandwidth attention channeled into structure",
+    subtitle: "High bandwidth attention, channeled into structure",
     items: [
       {
         title: "Meditation",
