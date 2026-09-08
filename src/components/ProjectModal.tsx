@@ -1,19 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { XCircle, CheckCircle2, Github, ExternalLink, Play } from "lucide-react";
+import { X, Github, ExternalLink, Play } from "lucide-react";
 import type { Mode, Project } from "../data/content";
 import { Icon } from "../lib/iconMap";
-
-function useLockBodyScroll(locked: boolean) {
-  useEffect(() => {
-    if (!locked) return;
-    const orig = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = orig;
-    };
-  }, [locked]);
-}
+import { useLockBodyScroll } from "../lib/useLockBodyScroll";
+import { useDepth } from "../lib/depth";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -21,16 +12,20 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
+const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <p className="mb-3 font-mono text-[10px] uppercase tracking-hud text-hazard">
+    [ {children} ]
+  </p>
+);
+
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) => {
-  const isStory = mode === "story";
+  const { depth, setDepth } = useDepth();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   useLockBodyScroll(!!project);
 
   useEffect(() => {
-    if (project) {
-      requestAnimationFrame(() => closeBtnRef.current?.focus());
-    }
+    if (project) requestAnimationFrame(() => closeBtnRef.current?.focus());
   }, [project]);
 
   useEffect(() => {
@@ -41,209 +36,191 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  const overview =
+    !project
+      ? ""
+      : depth === "plain"
+        ? project.plain
+        : mode === "story"
+          ? project.story
+          : project.oneLiner;
+
   return (
     <AnimatePresence>
       {project && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-3 sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.18 }}
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          {/* Backdrop */}
-          <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+          <div className="fixed inset-0 bg-ground/85 backdrop-blur-sm" />
 
-          {/* Modal */}
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-labelledby={`modal-title-${project.id}`}
-            className="relative max-w-4xl w-full bg-slate-900/95 rounded-2xl border border-slate-800/60 shadow-2xl my-8 max-h-[90vh] overflow-y-auto backdrop-blur-sm"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="hud-panel relative my-4 max-h-[92vh] w-full max-w-3xl overflow-y-auto"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Gradient top bar */}
-            <div className="h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 rounded-t-2xl" />
+            <div className="h-px w-full bg-hazard" />
 
             {/* Header */}
-            <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800/50 p-6 flex items-start justify-between z-10">
-              <div className="flex items-start gap-4 flex-1">
-                <div className="p-3 rounded-xl glass">
-                  <Icon
-                    name={project.iconName}
-                    size={24}
-                    className={project.iconClassName}
-                  />
-                </div>
-                <div className="flex-1">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-hairline bg-ground-raised p-5">
+              <div className="flex items-start gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-hairline text-phosphor-dim">
+                  <Icon name={project.iconName} size={20} className={project.iconClassName} />
+                </span>
+                <div>
+                  <p className="mb-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                    MISSION BRIEF &nbsp;/&nbsp; {project.discipline} &nbsp;/&nbsp; {project.status}
+                  </p>
                   <h3
                     id={`modal-title-${project.id}`}
-                    className="text-2xl font-bold text-slate-100 mb-1"
+                    className="font-display text-xl font-extrabold uppercase tracking-crush text-phosphor"
                   >
                     {project.title}
                   </h3>
-                  <p className="text-sm text-slate-400 font-mono">{project.subtitle}</p>
+                  <p className="mt-0.5 font-mono text-[11px] text-phosphor-dim">{project.subtitle}</p>
                 </div>
               </div>
               <button
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+                className="border border-hairline p-2 text-phosphor-dim transition-colors hover:border-hazard hover:text-hazard focus:outline-none focus:ring-1 focus:ring-hazard"
                 aria-label="Close modal"
               >
-                <XCircle className="w-5 h-5 text-slate-400" />
+                <X className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
 
-            {/* Content */}
-            <div className="p-6 space-y-8">
-              {/* Overview */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <h4 className="text-xs font-mono text-slate-500 mb-2 uppercase tracking-widest">
-                  {isStory ? "The Story" : "Overview"}
-                </h4>
-                <p
-                  className={`text-base leading-relaxed ${
-                    isStory ? "text-slate-200" : "text-slate-300"
-                  }`}
-                >
-                  {isStory ? project.story : project.oneLiner}
-                </p>
-              </motion.div>
+            <div className="space-y-8 p-5">
+              {/* Overview + depth toggle */}
+              <section>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <SectionLabel>OVERVIEW</SectionLabel>
+                  <div
+                    className="flex items-stretch border border-hairline"
+                    role="radiogroup"
+                    aria-label="Explanation depth"
+                  >
+                    {(["plain", "technical"] as const).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        role="radio"
+                        aria-checked={depth === d}
+                        onClick={() => setDepth(d)}
+                        className={`px-3 py-1 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                          depth === d ? "bg-hazard text-white" : "text-phosphor-dim hover:text-phosphor"
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-[15px] leading-relaxed text-phosphor-dim">{overview}</p>
+              </section>
 
               {/* Evidence */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <h4 className="text-xs font-mono text-slate-500 mb-3 uppercase tracking-widest">
-                  Evidence
-                </h4>
+              <section>
+                <SectionLabel>EVIDENCE</SectionLabel>
                 <ul className="space-y-2">
                   {project.evidence.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-3 text-sm text-slate-300"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                    <li key={idx} className="flex gap-3 text-sm leading-snug text-phosphor-dim">
+                      <span className="mt-1 shrink-0 text-hazard">+</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </section>
 
               {/* Architecture */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <h4 className="text-xs font-mono text-slate-500 mb-3 uppercase tracking-widest">
-                  Architecture
-                </h4>
-                <div className="code-block p-4 mb-3">
-                  <p className="text-sm text-slate-300 mb-3 font-mono">
+              <section>
+                <SectionLabel>ARCHITECTURE</SectionLabel>
+                <div className="code-block p-4">
+                  <p className="mb-3 font-mono text-[13px] text-phosphor-dim">
                     {project.architecture.overview}
                   </p>
-                  <pre className="text-xs text-cyan-300/70 font-mono overflow-x-auto whitespace-pre leading-relaxed">
+                  <pre className="overflow-x-auto whitespace-pre font-mono text-[11px] leading-relaxed text-online/80">
                     {project.architecture.diagram}
                   </pre>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-xs font-mono text-slate-500 mb-2">Tradeoffs:</p>
-                  {project.architecture.tradeoffs.map((tradeoff, idx) => (
-                    <div
-                      key={idx}
-                      className="text-sm text-slate-400 flex items-start gap-2"
-                    >
-                      <span className="text-cyan-500/50" aria-hidden="true">•</span>
-                      <span>{tradeoff}</span>
-                    </div>
+                <p className="mb-2 mt-4 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+                  Tradeoffs
+                </p>
+                <ul className="space-y-1.5">
+                  {project.architecture.tradeoffs.map((t, idx) => (
+                    <li key={idx} className="flex gap-2 text-[13px] leading-snug text-phosphor-dim">
+                      <span className="mt-1 shrink-0 text-hazard">/</span>
+                      <span>{t}</span>
+                    </li>
                   ))}
-                </div>
-              </motion.div>
+                </ul>
+              </section>
 
               {/* Decisions */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <h4 className="text-xs font-mono text-slate-500 mb-3 uppercase tracking-widest">
-                  Key Decisions
-                </h4>
-                <div className="space-y-3">
-                  {project.decisions.map((decision, idx) => (
-                    <div key={idx} className="glass rounded-xl p-4">
-                      <div className="text-sm font-semibold text-slate-200 mb-1">
-                        {decision.title}
-                      </div>
-                      <div className="text-xs text-slate-400 italic">
-                        {decision.why}
-                      </div>
+              <section>
+                <SectionLabel>KEY DECISIONS</SectionLabel>
+                <div className="hud-grid grid-cols-1">
+                  {project.decisions.map((d, idx) => (
+                    <div key={idx} className="p-4">
+                      <p className="mb-1 text-sm font-bold text-phosphor">{d.title}</p>
+                      <p className="text-[13px] leading-snug text-phosphor-dim">{d.why}</p>
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </section>
 
               {/* Links */}
-              <motion.div
-                className="flex items-center gap-3 pt-6 border-t border-slate-800/50"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                {project.links.github && (
-                  <a
-                    href={project.links.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2.5 glass glass-hover rounded-xl text-sm text-slate-200 transition-all hover:text-white"
-                  >
-                    <Github size={16} />
-                    GitHub
-                  </a>
-                )}
-                {project.links.live && project.links.live !== "#" && (
-                  <a
-                    href={project.links.live}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2.5 glass glass-hover rounded-xl text-sm text-slate-200 transition-all hover:text-white"
-                  >
-                    <ExternalLink size={16} />
-                    Live Demo
-                  </a>
-                )}
-                {project.links.demo && project.links.demo !== "#" && (
-                  <a
-                    href={project.links.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl text-sm text-white transition-all"
-                  >
-                    <Play size={16} />
-                    Demo
-                  </a>
-                )}
-              </motion.div>
+              {(project.links.github ||
+                (project.links.live && project.links.live !== "#") ||
+                (project.links.demo && project.links.demo !== "#")) && (
+                <section className="flex flex-wrap items-center gap-2 border-t border-hairline pt-6">
+                  {project.links.github && (
+                    <a
+                      href={project.links.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 border border-hairline px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+                    >
+                      <Github size={13} strokeWidth={1.5} />
+                      GitHub
+                    </a>
+                  )}
+                  {project.links.live && project.links.live !== "#" && (
+                    <a
+                      href={project.links.live}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 border border-hazard bg-hazard px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-white transition-colors hover:bg-hazard-bright"
+                    >
+                      <ExternalLink size={13} strokeWidth={1.5} />
+                      Live / DOI
+                    </a>
+                  )}
+                  {project.links.demo && project.links.demo !== "#" && (
+                    <a
+                      href={project.links.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 border border-hairline px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
+                    >
+                      <Play size={13} strokeWidth={1.5} />
+                      Demo
+                    </a>
+                  )}
+                </section>
+              )}
             </div>
           </motion.div>
         </motion.div>

@@ -27,13 +27,12 @@ class ResizeObserverStub {
   disconnect() {}
 }
 
+const g = globalThis as unknown as Record<string, unknown>;
 if (!('IntersectionObserver' in globalThis)) {
-  // @ts-expect-error - test-only stub
-  globalThis.IntersectionObserver = IntersectionObserverStub;
+  g.IntersectionObserver = IntersectionObserverStub;
 }
 if (!('ResizeObserver' in globalThis)) {
-  // @ts-expect-error - test-only stub
-  globalThis.ResizeObserver = ResizeObserverStub;
+  g.ResizeObserver = ResizeObserverStub;
 }
 if (!globalThis.matchMedia) {
   globalThis.matchMedia = (query: string) =>

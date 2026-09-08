@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import { SIDEBAR, CONTACT, type Mode } from "../data/content";
@@ -9,77 +8,69 @@ interface SidebarProps {
   mode: Mode;
 }
 
+const PanelHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="border-b border-hairline px-4 py-2">
+    <span className="hud-label">{children}</span>
+  </div>
+);
+
 const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
   const { userManual, offKeyboard, skills, cta } = SIDEBAR;
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-6 lg:sticky lg:top-20">
       {/* User Manual */}
       <AnimatedSection direction="right">
-        <div className="glass rounded-2xl p-6">
-          <h4 className="text-lg font-bold text-slate-100 mb-5 flex items-center gap-2">
-            <Icon name={userManual.iconName} size={18} className="text-emerald-400" />
-            {userManual.title}
-          </h4>
-          <ul className="space-y-4 text-sm text-slate-400">
+        <div className="hud-panel hud-corners">
+          <PanelHead>// {userManual.title}</PanelHead>
+          <ul className="hud-grid grid-cols-1">
             {userManual.items.map((item) => (
-              <li key={item.num} className="flex gap-3">
-                <span className="text-emerald-400 font-mono">{item.num}.</span>
+              <li key={item.num} className="flex gap-3 p-4 text-[13px] leading-relaxed text-phosphor-dim">
+                <span className="hud-readout shrink-0 text-hazard">{item.num}</span>
                 <span>
-                  <strong className="text-slate-200">{item.strong}</strong>{" "}
-                  {item.text}
+                  <strong className="text-phosphor">{item.strong}</strong> {item.text}
                 </span>
               </li>
             ))}
           </ul>
-
-          <div className="mt-6 rounded-xl glass p-4">
-            <div className="text-xs font-mono text-slate-500 mb-2">
-              {userManual.collaborationStyle.label}
-            </div>
-            <div className="text-sm text-slate-300 leading-relaxed">
+          <div className="border-t border-hairline p-4">
+            <p className="hud-label mb-1">{userManual.collaborationStyle.label}</p>
+            <p className="text-[13px] leading-relaxed text-phosphor-dim">
               {userManual.collaborationStyle.text[mode]}
-            </div>
+            </p>
           </div>
-
-          <div className="mt-4 rounded-xl glass p-4">
-            <div className="text-xs font-mono text-slate-500 mb-2">
-              {userManual.performanceHabits.label}
-            </div>
-            <div className="text-sm text-slate-300 leading-relaxed">
+          <div className="border-t border-hairline p-4">
+            <p className="hud-label mb-1">{userManual.performanceHabits.label}</p>
+            <p className="text-[13px] leading-relaxed text-phosphor-dim">
               {userManual.performanceHabits.text[mode]}
-            </div>
+            </p>
           </div>
         </div>
       </AnimatedSection>
 
-      {/* Off-Keyboard Training */}
-      <AnimatedSection direction="right" delay={0.1}>
-        <div className="glass rounded-2xl p-6">
-          <h4 className="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
-            <Icon name={offKeyboard.iconName} size={18} className="text-purple-400" />
-            {offKeyboard.title}
-          </h4>
-          <p className="text-xs text-slate-500 font-mono mb-4">{offKeyboard.subtitle}</p>
-
-          <StaggerContainer className="space-y-3">
+      {/* Off-keyboard */}
+      <AnimatedSection direction="right" delay={0.08}>
+        <div className="hud-panel hud-corners">
+          <PanelHead>// {offKeyboard.title}</PanelHead>
+          <p className="border-b border-hairline px-4 py-2 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+            {offKeyboard.subtitle}
+          </p>
+          <StaggerContainer className="hud-grid grid-cols-1">
             {offKeyboard.items.map((item) => (
               <StaggerItem key={item.title}>
-                <div className="rounded-xl border border-slate-800/40 bg-slate-950/30 p-4 hover:border-slate-700/40 transition-colors">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon name={item.iconName} size={16} className={item.iconClassName} />
-                    <span className="text-sm font-semibold text-slate-200">
+                <div className="p-4">
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <Icon name={item.iconName} size={14} className={item.iconClassName} />
+                    <span className="font-mono text-xs font-bold uppercase tracking-hud text-phosphor">
                       {item.title}
                     </span>
                     {item.extra && (
-                      <span className="text-xs text-slate-500 font-mono ml-auto">
+                      <span className="ml-auto font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
                         {item.extra}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {item.text[mode]}
-                  </p>
+                  <p className="text-[12px] leading-relaxed text-phosphor-dim">{item.text[mode]}</p>
                 </div>
               </StaggerItem>
             ))}
@@ -88,82 +79,68 @@ const Sidebar: React.FC<SidebarProps> = ({ mode }) => {
       </AnimatedSection>
 
       {/* Skills */}
-      <AnimatedSection id="skills" direction="right" delay={0.2}>
-        <h4 className="text-lg font-bold text-slate-100 mb-5 flex items-center gap-2">
-          <Icon name={skills.iconName} size={18} className="text-cyan-400" />
-          {skills.title}
-        </h4>
-        <StaggerContainer className="grid gap-3">
-          {skills.items.map((skill) => (
-            <StaggerItem key={skill.category}>
-              <div className="glass rounded-xl p-4 hover:border-slate-700/50 transition-colors">
-                <div className="flex items-center gap-2 mb-3 text-slate-200 font-medium text-sm">
-                  <Icon name={skill.iconName} size={16} />
-                  {skill.category}
+      <AnimatedSection id="skills" direction="right" delay={0.16}>
+        <div className="hud-panel hud-corners">
+          <PanelHead>// {skills.title}</PanelHead>
+          <StaggerContainer className="hud-grid grid-cols-1">
+            {skills.items.map((skill) => (
+              <StaggerItem key={skill.category}>
+                <div className="p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <Icon name={skill.iconName} size={14} />
+                    <span className="font-mono text-xs font-bold uppercase tracking-hud text-phosphor">
+                      {skill.category}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1">
+                    {skill.tools.map((tool) => (
+                      <span
+                        key={tool}
+                        className="font-mono text-[10px] uppercase tracking-hud text-phosphor-faint"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {skill.tools.map((tool) => (
-                    <motion.span
-                      key={tool}
-                      className="text-xs px-2.5 py-1 bg-slate-900/50 text-slate-400 rounded-lg border border-slate-800/40 font-mono hover:text-slate-200 hover:border-slate-700/50 transition-colors cursor-default"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      {tool}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
       </AnimatedSection>
 
       {/* CTA */}
-      <AnimatedSection direction="right" delay={0.3}>
-        <div className="p-6 rounded-2xl glass relative overflow-hidden text-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 pointer-events-none" />
-          <div className="relative z-10">
-            <h5 className="text-slate-200 font-bold mb-2 text-lg">{cta.title}</h5>
-            <p className="text-xs text-slate-500 mb-5">{cta.subtitle}</p>
-            <div className="grid gap-2">
-              <motion.a
+      <AnimatedSection direction="right" delay={0.24}>
+        <div className="hud-panel hud-corners">
+          <PanelHead>// {cta.title}</PanelHead>
+          <div className="p-4">
+            <p className="mb-4 text-[13px] text-phosphor-dim">{cta.subtitle}</p>
+            <div className="flex flex-col gap-2">
+              <a
                 href={cta.resumeHref}
                 target="_blank"
                 rel="noreferrer"
                 download
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-200 transition-colors border border-cyan-500/30 hover:border-cyan-500/50"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
                 aria-label="Open resume PDF"
+                className="flex items-center justify-center gap-2 border border-hazard bg-hazard px-4 py-2.5 font-mono text-[10px] uppercase tracking-hud text-white transition-colors hover:bg-hazard-bright"
               >
-                <Icon name="FileText" size={16} className="text-cyan-300" />
-                <span>{cta.resumeLabel}</span>
-              </motion.a>
-              <motion.a
-                href={cta.emailHref}
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 glass glass-hover rounded-xl text-sm font-medium text-slate-300 transition-colors"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Mail size={16} /> {cta.emailLabel}
-              </motion.a>
-            </div>
-            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-slate-500">
+                <Icon name="FileText" size={13} />
+                {cta.resumeLabel}
+              </a>
               <a
-                className="hover:text-cyan-400 transition-colors"
-                href={CONTACT.linkedin}
-                target="_blank"
-                rel="noreferrer"
+                href={cta.emailHref}
+                className="flex items-center justify-center gap-2 border border-hairline px-4 py-2.5 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim transition-colors hover:border-phosphor-faint hover:text-phosphor"
               >
+                <Mail size={13} strokeWidth={1.5} />
+                {cta.emailLabel}
+              </a>
+            </div>
+            <div className="mt-3 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+              <a className="hover:text-hazard" href={CONTACT.linkedin} target="_blank" rel="noreferrer">
                 LinkedIn
               </a>
-              <span className="text-slate-700" aria-hidden="true">·</span>
-              <a
-                className="hover:text-cyan-400 transition-colors"
-                href={CONTACT.github}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <span aria-hidden="true">/</span>
+              <a className="hover:text-hazard" href={CONTACT.github} target="_blank" rel="noreferrer">
                 GitHub
               </a>
             </div>

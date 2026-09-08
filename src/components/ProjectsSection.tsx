@@ -1,20 +1,24 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter } from "lucide-react";
+import React, { useCallback, useMemo, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { Search } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import { PROJECTS, type Mode } from "../data/content";
-import { Icon } from "../lib/iconMap";
 
 interface ProjectsSectionProps {
   mode: Mode;
+  selectedProjectId: string | null;
+  onSelectProject: (id: string | null) => void;
 }
 
-const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
+const ProjectsSection: React.FC<ProjectsSectionProps> = ({
+  mode,
+  selectedProjectId,
+  onSelectProject,
+}) => {
   const [query, setQuery] = useState("");
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
@@ -22,12 +26,19 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, []);
 
+  // Keep a stable mission number per project regardless of filtering.
+  const indexById = useMemo(() => {
+    const m = new Map<string, number>();
+    PROJECTS.projects.forEach((p, i) => m.set(p.id, i));
+    return m;
+  }, []);
+
   const filteredProjects = useMemo(() => {
     const q = query.trim().toLowerCase();
     return PROJECTS.projects.filter((p) => {
       const matchesQuery =
         !q ||
-        [p.title, p.subtitle, p.oneLiner, p.story, ...p.tags]
+        [p.title, p.subtitle, p.hook, p.plain, p.oneLiner, p.story, p.discipline, ...p.tags]
           .join(" ")
           .toLowerCase()
           .includes(q);
@@ -39,13 +50,14 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
 
   const selectedProject = useMemo(
     () => PROJECTS.projects.find((p) => p.id === selectedProjectId) || null,
-    [selectedProjectId]
+    [selectedProjectId],
   );
 
   const toggleTag = useCallback((tag: string) => {
     setActiveTags((prev) => {
       const next = new Set(prev);
-      next.has(tag) ? next.delete(tag) : next.add(tag);
+      if (next.has(tag)) next.delete(tag);
+      else next.add(tag);
       return next;
     });
   }, []);
@@ -56,112 +68,100 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
     <>
       <AnimatedSection id="projects">
         {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl glass">
-              <Icon
-                name={PROJECTS.header.iconName}
-                size={24}
-                className="text-cyan-400"
-              />
-            </div>
-            <div>
-              <h3 className="text-3xl font-bold text-slate-100 mb-2">
-                {PROJECTS.header.title}
-              </h3>
-              <p className="text-slate-400 text-sm max-w-2xl">
-                {PROJECTS.header.subtitle[mode]}
-              </p>
-            </div>
+        <header className="mb-8">
+          <p className="hud-label mb-2">// {PROJECTS.header.eyebrow}</p>
+          <div className="flex items-end justify-between gap-4">
+            <h3 className="font-display text-3xl font-extrabold uppercase tracking-crush text-phosphor sm:text-4xl">
+              {PROJECTS.header.title}
+            </h3>
+            <span className="hud-readout shrink-0 pb-1 text-xs text-phosphor-dim">
+              {String(filteredProjects.length).padStart(2, "0")} /{" "}
+              {String(PROJECTS.projects.length).padStart(2, "0")}
+            </span>
           </div>
-          <span className="text-xs font-mono text-slate-500 uppercase tracking-widest hidden sm:block mt-2">
-            {PROJECTS.header.eyebrow}
-          </span>
-        </div>
+          <p className="mt-2 max-w-2xl text-sm text-phosphor-dim">
+            {PROJECTS.header.subtitle[mode]}
+          </p>
+        </header>
 
-        {/* Search & filters */}
-        <div className="flex flex-col gap-3 mb-6">
-          <div className="flex items-center gap-2 glass rounded-xl px-4 py-3">
-            <Search className="text-slate-500" size={16} />
+        {/* Search + filters */}
+        <div className="mb-6 border border-hairline">
+          <div className="flex items-center gap-2 border-b border-hairline px-3 py-2.5">
+            <Search size={14} strokeWidth={1.5} className="text-phosphor-faint" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={PROJECTS.searchPlaceholder}
-              className="w-full bg-transparent outline-none text-sm text-slate-200 placeholder:text-slate-600"
+              className="w-full bg-transparent font-mono text-xs text-phosphor outline-none placeholder:text-phosphor-faint"
               aria-label="Search projects"
             />
             {!!query && (
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="text-xs text-slate-400 hover:text-slate-200 whitespace-nowrap"
+                className="shrink-0 font-mono text-[10px] uppercase tracking-hud text-phosphor-dim hover:text-phosphor"
               >
                 Clear
               </button>
             )}
           </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 mr-1">
-              <Filter size={14} /> Tags:
+          <div className="flex flex-wrap items-center gap-1.5 p-3">
+            <span className="mr-1 font-mono text-[10px] uppercase tracking-hud text-phosphor-faint">
+              Filter:
             </span>
             {allTags.map((tag) => {
               const on = activeTags.has(tag);
               return (
-                <motion.button
+                <button
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`text-xs px-2.5 py-1 rounded-lg border font-mono transition-all ${
-                    on
-                      ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-200 glow-cyan"
-                      : "bg-slate-900/30 border-slate-800/50 text-slate-400 hover:border-slate-700/50"
-                  }`}
                   aria-pressed={on}
-                  whileTap={{ scale: 0.95 }}
+                  className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-hud transition-colors ${
+                    on
+                      ? "border-hazard bg-hazard text-white"
+                      : "border-hairline text-phosphor-dim hover:border-phosphor-faint hover:text-phosphor"
+                  }`}
                 >
                   {tag}
-                </motion.button>
+                </button>
               );
             })}
             {activeTags.size > 0 && (
               <button
                 type="button"
                 onClick={clearTags}
-                className="text-xs font-mono text-slate-400 hover:text-slate-200 ml-1"
+                className="ml-1 font-mono text-[10px] uppercase tracking-hud text-hazard hover:text-hazard-bright"
               >
                 Reset
               </button>
             )}
           </div>
-
-          <div className="text-xs text-slate-600 font-mono">
-            Showing {filteredProjects.length} / {PROJECTS.projects.length}
-          </div>
         </div>
 
-        {/* Project grid */}
-        <StaggerContainer className="flex flex-col gap-6">
+        {/* Grid */}
+        <StaggerContainer className="flex flex-col gap-5">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <StaggerItem key={project.id}>
                 <ProjectCard
                   project={project}
+                  index={indexById.get(project.id) ?? 0}
                   mode={mode}
-                  onOpen={() => setSelectedProjectId(project.id)}
+                  onOpen={() => onSelectProject(project.id)}
                 />
               </StaggerItem>
             ))}
           </AnimatePresence>
+          {filteredProjects.length === 0 && (
+            <p className="border border-hairline px-4 py-8 text-center font-mono text-xs uppercase tracking-hud text-phosphor-faint">
+              No missions match the current filter.
+            </p>
+          )}
         </StaggerContainer>
       </AnimatedSection>
 
-      {/* Modal */}
-      <ProjectModal
-        project={selectedProject}
-        mode={mode}
-        onClose={() => setSelectedProjectId(null)}
-      />
+      <ProjectModal project={selectedProject} mode={mode} onClose={() => onSelectProject(null)} />
     </>
   );
 };
