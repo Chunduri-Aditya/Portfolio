@@ -1200,7 +1200,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       org: "USC \u2014 Viterbi School of Engineering",
       role: "Research Assistant \u00b7 Computer Vision & Medical Imaging",
       location: "Los Angeles, CA",
-      period: "Aug 2024 \u2013 Dec 2024",
+      period: "Jun 2024 \u2013 Dec 2024",
       accent: "cyan",
       hook:
         "Made the clean artery versus vein training masks a team's retinal scan segmentation model learned from.",
@@ -1821,7 +1821,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "work experience",
     ],
     answer:
-      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Aug\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset and trained a YOLOv5 model for small object detection.",
+      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset and trained a YOLOv5 model for small object detection.",
     links: [
       { label: "Experience section", href: "#experience", sectionId: "experience" },
     ],
