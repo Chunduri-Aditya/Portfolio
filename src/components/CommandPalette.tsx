@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO, PROJECTS, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
+import { useFocusTrap } from "../lib/useFocusTrap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
 import { useDepth } from "../lib/depth";
 
@@ -47,8 +48,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useLockBodyScroll(isOpen);
+  useFocusTrap(panelRef, isOpen);
 
   const commands = useMemo<PaletteCommand[]>(() => {
     const nextMode = mode === "signal" ? "story" : "signal";
@@ -121,7 +124,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Display" as Group,
         label: `Tone: switch to ${nextMode}`,
         sublabel: nextMode === "story" ? "Narrative voice" : "Terse, scannable",
-        icon: <span className="font-mono text-[11px] text-hazard">T</span>,
+        icon: <span className="font-mono text-[11px] text-accent-amber">T</span>,
         keywords: "signal story tone voice",
         action: () => setMode(nextMode),
       },
@@ -130,7 +133,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Display" as Group,
         label: `Depth: switch to ${nextDepth}`,
         sublabel: nextDepth === "plain" ? "Jargon-free explanations" : "Full engineering detail",
-        icon: <span className="font-mono text-[11px] text-hazard">D</span>,
+        icon: <span className="font-mono text-[11px] text-accent-amber">D</span>,
         keywords: "technical plain depth eli5 baby terms",
         action: () => setDepth(nextDepth),
       },
@@ -228,6 +231,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
           <div className="fixed inset-0 bg-ink/80 backdrop-blur-md" />
 
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
@@ -244,13 +248,13 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Jump to a section, project, or link..."
-                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint"
+                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
                 aria-label="Search commands"
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="command-palette-list"
               />
-              <kbd className="hidden shrink-0 rounded border border-white/12 px-1.5 font-mono text-[10px] text-text-faint sm:inline-block">
+              <kbd className="hidden shrink-0 rounded border border-white/[0.12] px-1.5 font-mono text-[10px] text-text-faint sm:inline-block">
                 ESC
               </kbd>
             </div>

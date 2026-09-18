@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export interface Bar {
   label: string;
@@ -16,6 +16,7 @@ const DEFAULT_HUE = "#8b5cf6";
  * Bars grow via scaleX on scroll into view. Used for per-project metric snapshots.
  */
 const MiniViz: React.FC<{ title?: string; bars: Bar[] }> = ({ title, bars }) => {
+  const reduce = useReducedMotion();
   const max = Math.max(...bars.map((b) => b.max ?? b.value), 0.0001);
 
   return (
@@ -41,10 +42,10 @@ const MiniViz: React.FC<{ title?: string; bars: Bar[] }> = ({ title, bars }) => 
                     boxShadow: `0 0 12px ${hue}80`,
                     transformOrigin: "left",
                   }}
-                  initial={{ scaleX: 0 }}
+                  initial={reduce ? false : { scaleX: 0 }}
                   whileInView={{ scaleX: pct / 100 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: reduce ? 0 : 0.9, delay: reduce ? 0 : i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
             </div>

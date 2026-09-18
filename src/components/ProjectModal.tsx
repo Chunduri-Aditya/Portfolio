@@ -5,6 +5,7 @@ import type { Mode, Project } from "../data/content";
 import { CONTACT } from "../data/content";
 import { Icon } from "../lib/iconMap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
+import { useFocusTrap } from "../lib/useFocusTrap";
 import { useDepth } from "../lib/depth";
 import { PROJECT_VIZ } from "../lib/projectViz";
 import FlowDiagram from "./FlowDiagram";
@@ -31,6 +32,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
   const { depth, setDepth } = useDepth();
   const [rawDiagram, setRawDiagram] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap(panelRef, !!project);
 
   useLockBodyScroll(!!project);
 
@@ -71,6 +75,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
           <div className="fixed inset-0 bg-ink/80 backdrop-blur-md" />
 
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={`modal-title-${project.id}`}
@@ -97,7 +102,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                className="rounded-full border border-white/12 p-2 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink focus:outline-none focus:ring-2 focus:ring-accent-violet/50"
+                className="rounded-full border border-white/[0.12] p-2 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink focus:outline-none focus:ring-2 focus:ring-accent-violet/50"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" strokeWidth={2} />
@@ -117,7 +122,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                         aria-checked={depth === d}
                         onClick={() => setDepth(d)}
                         className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                          depth === d ? "bg-white/12 text-text" : "text-text-faint hover:text-text-dim"
+                          depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
                         }`}
                       >
                         {d}
@@ -143,7 +148,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
               {viz && (
                 <section>
                   <Label>Results</Label>
-                  <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                  <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                     <MiniViz title={viz.title} bars={viz.bars} />
                   </div>
                 </section>
@@ -185,7 +190,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 <Label>Key decisions</Label>
                 <div className="grid gap-3">
                   {project.decisions.map((d, idx) => (
-                    <div key={idx} className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                    <div key={idx} className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                       <p className="mb-1 text-sm font-bold text-text">{d.title}</p>
                       <p className="text-[13px] leading-snug text-text-dim">{d.why}</p>
                     </div>
@@ -212,7 +217,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       href={project.links.github}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+                      className="flex items-center gap-2 rounded-full border border-white/[0.12] px-4 py-2 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
                     >
                       <Github size={14} strokeWidth={2} />
                       GitHub
@@ -234,7 +239,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       href={project.links.demo}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+                      className="flex items-center gap-2 rounded-full border border-white/[0.12] px-4 py-2 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
                     >
                       <Play size={14} strokeWidth={2} />
                       Demo

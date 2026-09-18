@@ -7,6 +7,12 @@ interface AnimatedSectionProps {
   delay?: number;
   direction?: "up" | "down" | "left" | "right";
   id?: string;
+  /**
+   * Render as a landmark `<section>` rather than a plain div, labelled by the
+   * element with this id. Without it the nav links point at anonymous divs and
+   * a screen reader sees no sections at all.
+   */
+  labelledBy?: string;
 }
 
 const directionOffsets = {
@@ -24,13 +30,16 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   delay = 0,
   direction = "up",
   id,
+  labelledBy,
 }) => {
   const reduce = useReducedMotion();
   const offset = reduce ? { x: 0, y: 0 } : directionOffsets[direction];
+  const Tag = labelledBy ? motion.section : motion.div;
 
   return (
-    <motion.div
+    <Tag
       id={id}
+      aria-labelledby={labelledBy}
       className={`scroll-mt-28 ${className}`}
       initial={{ opacity: 0, filter: "blur(6px)", ...offset }}
       whileInView={{ opacity: 1, filter: "blur(0px)", x: 0, y: 0 }}
@@ -38,7 +47,7 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       transition={{ duration: reduce ? 0 : 0.7, delay: reduce ? 0 : delay, ease: EASE }}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 };
 

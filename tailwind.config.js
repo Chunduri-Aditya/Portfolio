@@ -23,9 +23,14 @@ export default {
           amber: "#fbbf24",
         },
       },
+      // These must match the families actually imported in src/index.css.
+      // They did not: `sans` pointed at "Plus Jakarta Sans Variable", which is
+      // not installed, and `font-sans` on the app root then overrode body's
+      // Hanken Grotesk for every descendant. The whole site rendered in
+      // system-ui while a 34 KB webfont downloaded unused.
       fontFamily: {
-        sans: ['"Plus Jakarta Sans Variable"', "system-ui", "-apple-system", "sans-serif"],
-        display: ['"Archivo Variable"', "system-ui", "sans-serif"],
+        sans: ['"Hanken Grotesk Variable"', "system-ui", "-apple-system", "sans-serif"],
+        display: ['"Bricolage Grotesque Variable"', '"Hanken Grotesk Variable"', "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
       borderRadius: {

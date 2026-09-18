@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="relative z-10 border-t border-white/8">
+    <footer className="relative z-10 border-t border-white/[0.08]">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-4 px-4 py-10 sm:flex-row sm:justify-between sm:px-6">
         <p className="text-[12px] text-text-faint">
           <span className="text-text-dim">{FOOTER.brand}</span> · {FOOTER.copyright(year)}

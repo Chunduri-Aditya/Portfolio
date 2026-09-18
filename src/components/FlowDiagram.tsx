@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * Turns an architecture "overview" string (mostly of the form
@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 const HUES = ["#8b5cf6", "#3b82f6", "#22d3ee", "#ec4899", "#34d399", "#fbbf24"];
 
 const FlowDiagram: React.FC<{ overview: string }> = ({ overview }) => {
+  const reduce = useReducedMotion();
   const parts = overview
     .split(/\s*(?:->|→|→|–>|=>)\s*/)
     .map((s) => s.trim())
@@ -25,10 +26,10 @@ const FlowDiagram: React.FC<{ overview: string }> = ({ overview }) => {
         return (
           <React.Fragment key={i}>
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={reduce ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: reduce ? 0 : i * 0.08, duration: reduce ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="relative flex min-w-[7rem] flex-1 items-center rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2.5"
               style={{ boxShadow: `inset 0 0 0 1px ${hue}22, 0 0 24px -12px ${hue}` }}
             >

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 
 import Navbar from "./Navbar";
 import Hero from "./Hero";
@@ -21,12 +22,16 @@ const Portfolio: React.FC = () => {
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
+  // Honour prefers-reduced-motion: hold on the first thought rather than
+  // rotating. Auto-advancing text is the clearest case the preference covers.
+  const reduceMotion = useReducedMotion();
   useEffect(() => {
+    if (reduceMotion) return;
     const interval = window.setInterval(() => {
       setTickerIndex((prev) => (prev + 1) % TICKER_THOUGHTS.length);
     }, 3800);
     return () => window.clearInterval(interval);
-  }, []);
+  }, [reduceMotion]);
 
   const scrollTo = useCallback((id: string) => {
     setActiveSection(id);
@@ -40,6 +45,9 @@ const Portfolio: React.FC = () => {
   return (
     <DepthProvider>
       <div className="relative min-h-[100dvh] font-sans text-text antialiased">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <Aurora />
         <div className="grain-overlay" aria-hidden="true" />
 
@@ -53,7 +61,7 @@ const Portfolio: React.FC = () => {
           onOpenPalette={openPalette}
         />
 
-        <main className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
+        <main id="main" className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
           <Hero mode={mode} scrollTo={scrollTo} />
 
           <div className="mt-28">

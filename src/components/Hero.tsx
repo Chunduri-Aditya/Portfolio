@@ -110,7 +110,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <button
               type="button"
               onClick={() => scrollTo(HERO.ctas.secondary.targetSection)}
-              className="flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+              className="flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3 text-sm font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
             >
               <Icon name={HERO.ctas.secondary.iconName} size={15} />
               {HERO.ctas.secondary.label}
@@ -121,7 +121,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
               rel="noreferrer"
               download
               aria-label="View resume (PDF)"
-              className="flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+              className="flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3 text-sm font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
             >
               <Icon name={HERO.ctas.resume.iconName} size={15} />
               {HERO.ctas.resume.label}

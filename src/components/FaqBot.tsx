@@ -118,7 +118,7 @@ const FaqBot: React.FC = () => {
             </span>
             <button
               onClick={handleClose}
-              className="rounded-full border border-white/12 p-1.5 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink"
+              className="rounded-full border border-white/[0.12] p-1.5 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink"
               aria-label="Close chat"
             >
               <X size={14} strokeWidth={2} />
@@ -177,7 +177,7 @@ const FaqBot: React.FC = () => {
                       <button
                         key={chip.id}
                         onClick={() => intent && handleSend(intent.title)}
-                        className="rounded-full border border-white/12 px-2.5 py-1 text-[11px] font-medium text-text-dim transition-colors hover:border-white/25 hover:text-text"
+                        className="rounded-full border border-white/[0.12] px-2.5 py-1 text-[11px] font-medium text-text-dim transition-colors hover:border-white/25 hover:text-text"
                       >
                         {chip.label}
                       </button>
@@ -197,7 +197,7 @@ const FaqBot: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={FAQ_BOT_UI.inputPlaceholder}
-                className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-text placeholder:text-text-faint focus:border-white/25 focus:outline-none"
+                className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-text placeholder:text-text-faint focus:border-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
                 aria-label="Ask a question"
               />
               <button

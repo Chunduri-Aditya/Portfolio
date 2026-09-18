@@ -22,11 +22,11 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               </li>
             ))}
           </ul>
-          <div className="mt-4 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+          <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
             <p className="eyebrow mb-1">{userManual.collaborationStyle.label}</p>
             <p className="text-[13px] leading-relaxed text-text-dim">{userManual.collaborationStyle.text[mode]}</p>
           </div>
-          <div className="mt-3 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+          <div className="mt-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
             <p className="eyebrow mb-1">{userManual.performanceHabits.label}</p>
             <p className="text-[13px] leading-relaxed text-text-dim">{userManual.performanceHabits.text[mode]}</p>
           </div>
@@ -40,7 +40,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
           <StaggerContainer className="flex flex-col gap-3">
             {offKeyboard.items.map((item) => (
               <StaggerItem key={item.title}>
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                   <div className="mb-1.5 flex items-center gap-2">
                     <Icon name={item.iconName} size={14} className="text-accent-emerald" />
                     <span className="text-sm font-bold text-text">{item.title}</span>
@@ -62,7 +62,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
           <StaggerContainer className="flex flex-col gap-3">
             {skills.items.map((skill) => (
               <StaggerItem key={skill.category}>
-                <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                   <div className="mb-2 flex items-center gap-2">
                     <Icon name={skill.iconName} size={14} className="text-accent-violet" />
                     <span className="text-sm font-bold text-text">{skill.category}</span>
@@ -124,7 +124,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
             </a>
             <a
               href={cta.emailHref}
-              className="flex items-center justify-center gap-2 rounded-full border border-white/12 px-4 py-2.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+              className="flex items-center justify-center gap-2 rounded-full border border-white/[0.12] px-4 py-2.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
             >
               <Mail size={13} strokeWidth={2} />
               {cta.emailLabel}

@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
           {/* Center: ticker + search + links */}
           <div className="hidden items-center gap-3 xl:flex">
-            <div className="flex items-center gap-2 rounded-full border border-white/8 px-3 py-1">
+            <div className="flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
               <div className="h-4 w-52 overflow-hidden">
                 <AnimatePresence mode="wait">
@@ -119,7 +119,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={onOpenPalette}
-              className="flex items-center gap-2 rounded-full border border-white/8 px-3 py-1.5 text-[11px] font-medium text-text-faint transition-colors hover:border-white/20 hover:text-text"
+              className="flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1.5 text-[11px] font-medium text-text-faint transition-colors hover:border-white/20 hover:text-text"
               aria-label="Open command palette"
             >
               <Search size={13} strokeWidth={2} />
@@ -137,7 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     key={link.id}
                     type="button"
                     onClick={() => scrollTo(link.id)}
-                    aria-current={active ? "true" : undefined}
+                    aria-current={active ? "page" : undefined}
                     className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
                       active
                         ? "bg-white/10 text-text"

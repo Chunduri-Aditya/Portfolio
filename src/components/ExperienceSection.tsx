@@ -27,7 +27,7 @@ const ExperienceRow: React.FC<{
       <div className="p-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h4 className="font-display text-lg text-text">{exp.org}</h4>
+            <h3 className="font-display text-lg text-text">{exp.org}</h3>
             <p className="mt-0.5 text-[13px] font-semibold" style={{ color: hue }}>
               {exp.role}
             </p>
@@ -44,7 +44,7 @@ const ExperienceRow: React.FC<{
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          className="mt-4 rounded-full border border-white/12 px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+          className="mt-4 rounded-full border border-white/[0.12] px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
         >
           {open ? "Less" : "Expand"}
         </button>
@@ -68,7 +68,7 @@ const ExperienceRow: React.FC<{
                       aria-checked={depth === d}
                       onClick={() => setDepth(d)}
                       className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/12 text-text" : "text-text-faint hover:text-text-dim"
+                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
                       }`}
                     >
                       {d}
@@ -101,12 +101,12 @@ const ExperienceRow: React.FC<{
 };
 
 const ExperienceSection: React.FC<{ mode: Mode }> = ({ mode }) => (
-  <AnimatedSection id="experience">
+  <AnimatedSection id="experience" labelledBy="experience-heading">
     <header className="mb-8">
       <p className="eyebrow mb-2">Field work</p>
-      <h3 className="font-display text-3xl text-text sm:text-4xl">
+      <h2 id="experience-heading" className="font-display text-3xl text-text sm:text-4xl">
         <span className="gradient-text">{EXPERIENCE.header.title}</span>
-      </h3>
+      </h2>
       <p className="mt-2 max-w-2xl text-sm text-text-dim">{EXPERIENCE.header.subtitle[mode]}</p>
     </header>
 

@@ -64,13 +64,13 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   return (
     <>
-      <AnimatedSection id="projects">
+      <AnimatedSection id="projects" labelledBy="projects-heading">
         <header className="mb-8">
           <p className="eyebrow mb-2">{PROJECTS.header.eyebrow}</p>
           <div className="flex items-end justify-between gap-4">
-            <h3 className="font-display text-3xl text-text sm:text-4xl">
+            <h2 id="projects-heading" className="font-display text-3xl text-text sm:text-4xl">
               <span className="gradient-text">{PROJECTS.header.title}</span>
-            </h3>
+            </h2>
             <span className="shrink-0 pb-1 font-mono text-sm text-text-faint">
               {String(filteredProjects.length).padStart(2, "0")} / {String(PROJECTS.projects.length).padStart(2, "0")}
             </span>
@@ -85,7 +85,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={PROJECTS.searchPlaceholder}
-              className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint"
+              className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
               aria-label="Search projects"
             />
             {!!query && (

@@ -38,6 +38,38 @@ body {
   color: var(--text);
 }
 
+/* ─── Focus ───────────────────────────────────────────────
+ * One rule so every interactive element has a visible keyboard ring on a dark
+ * background. :focus-visible, not :focus, so a mouse click does not light it up.
+ * Elements that strip the ring with outline-none must supply their own; the
+ * two search inputs that did not are handled at their own call sites.
+ */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Keyboard-only skip link: off screen until focused, then pinned top left. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  border-radius: 9999px;
+  background: var(--ink-2);
+  border: 1px solid var(--cyan);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.18s ease;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 .font-display {
   font-family: 'Bricolage Grotesque Variable', 'Hanken Grotesk Variable', system-ui, sans-serif;
   font-variation-settings: 'wght' 750;

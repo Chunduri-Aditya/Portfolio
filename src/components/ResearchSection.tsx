@@ -27,14 +27,14 @@ const PubFile: React.FC<{
       </div>
 
       <div className="p-6 pt-3">
-        <h4 className="font-display text-lg leading-snug text-text">{pub.title}</h4>
+        <h3 className="font-display text-lg leading-snug text-text">{pub.title}</h3>
         <p className="mt-3 text-[15px] leading-relaxed text-text">{pub.hook}</p>
 
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          className="mt-4 rounded-full border border-white/12 px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+          className="mt-4 rounded-full border border-white/[0.12] px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
         >
           {open ? "Less" : "Expand"}
         </button>
@@ -58,7 +58,7 @@ const PubFile: React.FC<{
                       aria-checked={depth === d}
                       onClick={() => setDepth(d)}
                       className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/12 text-text" : "text-text-faint hover:text-text-dim"
+                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
                       }`}
                     >
                       {d}
@@ -66,11 +66,11 @@ const PubFile: React.FC<{
                   ))}
                 </div>
                 <p className="text-sm leading-relaxed text-text-dim">{body}</p>
-                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {pub.metrics.map((m) => (
                     <div
                       key={m.label}
-                      className="rounded-2xl border border-white/8 bg-white/[0.02] p-3"
+                      className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-3"
                       style={{ boxShadow: `inset 0 0 0 1px ${ACCENT[m.accent]}22` }}
                     >
                       <dt className="text-[10px] leading-tight text-text-faint">{m.label}</dt>
@@ -79,7 +79,7 @@ const PubFile: React.FC<{
                       </dd>
                     </div>
                   ))}
-                </div>
+                </dl>
               </div>
             </motion.div>
           )}
@@ -92,7 +92,7 @@ const PubFile: React.FC<{
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
+              className="flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
             >
               {link.label}
               <ExternalLink size={12} strokeWidth={2} />
@@ -105,12 +105,12 @@ const PubFile: React.FC<{
 };
 
 const ResearchSection: React.FC<{ mode: Mode }> = ({ mode }) => (
-  <AnimatedSection id="research">
+  <AnimatedSection id="research" labelledBy="research-heading">
     <header className="mb-8">
       <p className="eyebrow mb-2">Publications</p>
-      <h3 className="font-display text-3xl text-text sm:text-4xl">
+      <h2 id="research-heading" className="font-display text-3xl text-text sm:text-4xl">
         <span className="gradient-text">{RESEARCH.header.title}</span>
-      </h3>
+      </h2>
       <p className="mt-2 max-w-2xl text-sm text-text-dim">{RESEARCH.header.subtitle[mode]}</p>
     </header>
 

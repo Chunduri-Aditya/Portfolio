@@ -83,7 +83,7 @@ const ProjectCard = memo(function ProjectCard({
                 {project.status}
               </span>
             </div>
-            <h4 className="font-display text-xl text-text">{project.title}</h4>
+            <h3 className="font-display text-xl text-text">{project.title}</h3>
             <p className="mt-0.5 text-[13px] text-text-faint">{project.subtitle}</p>
           </div>
         </div>
@@ -99,7 +99,7 @@ const ProjectCard = memo(function ProjectCard({
             type="button"
             onClick={() => setExpanded((e) => !e)}
             aria-expanded={expanded}
-            className="flex items-center gap-1.5 rounded-full border border-white/12 px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+            className="flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3.5 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
           >
             <ChevronDown size={13} strokeWidth={2} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
             {expanded ? "Less" : "Expand"}
@@ -139,7 +139,7 @@ const ProjectCard = memo(function ProjectCard({
                       aria-checked={depth === d}
                       onClick={() => setDepth(d)}
                       className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/12 text-text" : "text-text-faint hover:text-text-dim"
+                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
                       }`}
                     >
                       {d}
@@ -155,7 +155,7 @@ const ProjectCard = memo(function ProjectCard({
                 </div>
 
                 {viz && (
-                  <div className="mt-5 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                  <div className="mt-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                     <MiniViz title={viz.title} bars={viz.bars} />
                   </div>
                 )}
@@ -174,7 +174,7 @@ const ProjectCard = memo(function ProjectCard({
         </AnimatePresence>
       </div>
 
-      <div className="relative border-t border-white/8 bg-white/[0.015]">
+      <div className="relative border-t border-white/[0.08] bg-white/[0.015]">
         <div className="flex flex-wrap gap-x-2 gap-y-1 px-6 py-3">
           {project.tags.map((tag) => (
             <span key={tag} className="text-[11px] text-text-faint">
@@ -182,14 +182,14 @@ const ProjectCard = memo(function ProjectCard({
             </span>
           ))}
         </div>
-        <div className="grid grid-cols-2 border-t border-white/8">
+        <dl className="grid grid-cols-2 border-t border-white/[0.08]">
           {project.metrics.map((m) => (
-            <div key={m.label} className="border-white/8 px-6 py-3 [&:nth-child(odd)]:border-r">
+            <div key={m.label} className="border-white/[0.08] px-6 py-3 [&:nth-child(odd)]:border-r">
               <dt className="text-[11px] text-text-faint">{m.label}</dt>
               <dd className="mt-0.5 font-mono text-sm font-bold text-text">{m.value}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </motion.article>
   );
