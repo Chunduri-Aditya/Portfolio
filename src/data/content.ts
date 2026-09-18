@@ -109,13 +109,11 @@ export interface HudStat {
   value: string;
 }
 
-export const HUD_STATS: HudStat[] = [
-  { label: "SYSTEMS SHIPPED", value: "9" },
-  { label: "DOMAINS", value: "6" },
-  { label: "PAPERS", value: "2" },
-  { label: "FRONTIER MODELS RED-TEAMED", value: "8" },
-  { label: "ATTACK IDS CATALOGUED", value: "28" },
-];
+/**
+ * HUD_STATS is defined after PROJECTS, near the end of the projects section,
+ * because two of its values are derived from that array rather than hand
+ * maintained. See the comment on the export itself.
+ */
 
 /* ============================================================================
  * SECTION 2 — TICKER THOUGHTS  (rotates in the navbar pill)
@@ -481,15 +479,15 @@ export const PROJECTS: ProjectsSectionContent = {
       discipline: "AUDIO-ML",
       status: "SHIPPED",
       hook:
-        "A DJ engine that mixes two songs into one clean transition, with 520+ tests proving it.",
+        "A DJ engine that mixes two songs into one clean transition, with 904 tests proving it.",
       plain:
         "Blending two tracks so the switch sounds seamless is real engineering. You have to match the key, the tempo, and the exact bar where the beat lands, then fade the bass out without a thud. This is a full app that does all of it automatically: pick two songs, get a mixed track, backed by a research grade audio core and a web interface that streams job progress live.",
       oneLiner:
-        "AI RemixMate is a full stack DJ engine: a React/TypeScript frontend with SSE live streaming, a FastAPI async job queue, and a research grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search), with 520+ tests and mastering to -14 LUFS.",
+        "AI RemixMate is a full stack DJ engine: a React/TypeScript frontend with SSE live streaming, a FastAPI async job queue, and a research grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search), with 904 tests and mastering to -14 LUFS.",
       story:
         "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread: librosa beat detection out, Beat This! (ISMIR 2024) in for proper downbeats; IIR bass shelving out, a true cosine taper stem ramp in; TIV harmonic scoring from the MIR literature added; CLAP 512-D semantic search added so DJs can find tracks by sound and not just by name. Then I wrapped it in a React frontend with live SSE job streaming so it behaves like a product.",
       evidence: [
-        "FastAPI async job queue (SQLite write-through persistence) + React/TypeScript frontend, 8 pages, SSE live job streaming, Zustand state management",
+        "FastAPI async job queue (SQLite write-through persistence) + React/TypeScript frontend, 10 pages, SSE live job streaming, Zustand state management",
         "TIV harmonic scoring (Bernardes et al. 2016 Tonal Interval Space) replacing psychoacoustic consonance approximation",
         "Beat This! (ISMIR 2024) downbeat detection with 8/16/32-bar grid snapping, replacing librosa beat_track",
         "Cosine-taper stem bass ramp (no IIR bleed) + FxNorm per-stem-type LUFS normalization using corpus-derived targets",
@@ -500,7 +498,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "Masking aware multiband EQ (Hafezi & Reiss 2015) behind a defensive import, so a missing dependency degrades to no EQ instead of breaking the render",
         "Two mixing engines selectable per job: a frozen byte faithful vendor of the April 2026 algorithm alongside the current pipeline, with every result recording which engine produced it",
         "Live-testing passes against the running app kept catching what the shape-only test suite couldn't: a compatibility scorer marking key-clashing pairs ‘compatible,’ a library-count undercount from a partial indexing write, a duplicate song-naming policy causing request floods, and a job executor that never emitted terminal SSE frames so job cards froze at their last progress percentage forever. Each one has a regression test now",
-        "520+ tests across unit, behavioral, and integration suites; GitHub Actions CI; 18 organic GitHub stars",
+        "904 tests across unit, behavioral, and integration suites; GitHub Actions CI",
       ],
       architecture: {
         overview:
@@ -565,7 +563,7 @@ export const PROJECTS: ProjectsSectionContent = {
         requestAccess: "ai-remixmate",
       },
       metrics: [
-        { label: "Tests", value: "520+" },
+        { label: "Tests", value: "904" },
         { label: "Mastering", value: "\u221214 LUFS" },
       ],
     },
@@ -663,7 +661,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "Aggregate recall said 0.875 and looked healthy. Broken out by category, one bucket sat at 0.667: entries about a good day were pulling back the user's worst entries, because the embedder encoded topic and not emotional valence. In a journaling app the retrieved entries become the grounding context the person reads back, so on a good day the system was quietly reflecting their hardest writing at them. That bug convinced me the aggregate number is the enemy, and that everything here needs a per category breakdown and an eval I have broken on purpose myself.",
       evidence: [
         "Retrieval ablation across 4 strategies (dense MiniLM, BM25, hybrid RRF, dense nomic-embed-text) on a corpus where every query is tagged with the confusion it was built to induce",
-        "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted Recall@3 to 0.979 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
+        "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted full corpus Recall@3 to 0.968 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
         "Two alternative fixes built, measured, and rejected: a score threshold (relevant and irrelevant distributions overlap completely) and a valence aware reranker (helped the weak embedder, actively hurt the strong one). Both kept documented rather than deleted, so they do not get re proposed",
         "Crisis safety floor at sensitivity 1.000 and specificity 0.971, deterministic and LLM free, so it still holds on an offline machine or a failed verifier call",
         "That eval was verified by breaking the thing it measures: deleting one euphemistic crisis pattern drops sensitivity to 0.909, names both missed entries, and exits non zero",
@@ -728,7 +726,7 @@ export const PROJECTS: ProjectsSectionContent = {
         github: "https://github.com/Chunduri-Aditya/journal-agent",
       },
       metrics: [
-        { label: "Retrieval", value: "0.979 Recall@3" },
+        { label: "Retrieval", value: "0.968 Recall@3" },
         { label: "Crisis floor", value: "1.000 sensitivity" },
       ],
     },
@@ -820,7 +818,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "Three states (focused, drifting, absent) with an OS notification firing after 5 continuous seconds of drift",
         "No video recorded and nothing leaves the machine: only derived numbers (head angles, gaze vectors) and session labels persist, in local SQLite",
         "HTML session report generated automatically on quit, plus a live OpenCV overlay showing state, focus ratio, and drift count",
-        "50 tests across 5 modules, running in under a second with no webcam and no network required, and a --dummy mode that exercises the full pipeline on synthetic frames",
+        "52 tests across 5 modules, running in under a second with no webcam and no network required, and a --dummy mode that exercises the full pipeline on synthetic frames",
       ],
       architecture: {
         overview:
@@ -873,7 +871,7 @@ export const PROJECTS: ProjectsSectionContent = {
       },
       metrics: [
         { label: "Pipeline", value: "478 landmarks" },
-        { label: "Tests", value: "50 · under 1s" },
+        { label: "Tests", value: "52 · under 1s" },
       ],
     },
     {
@@ -954,7 +952,7 @@ export const PROJECTS: ProjectsSectionContent = {
       metrics: [
         { label: "Retrieval Index", value: "2,256 rows" },
         { label: "Security Hashes", value: "Verified live" },
-        { label: "Tests", value: "20/20 passing" },
+        { label: "Tests", value: "71 passing" },
       ],
     },
     {
@@ -988,7 +986,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "Benchmark: 15 OpenML datasets (8 classification, 7 regression), outer seeds [13, 42, 97], 5 inner folds, 20 seeded candidate orderings, methods {exhaustive, proxy, meta, proxy+meta, random}",
         "Ranking quality, meta vs random: median Spearman 0.57 vs 0.02, Recall@5 0.40 vs 0.20",
         "End-to-end: proxy+meta held 100% median quality retention at a budget of 10 candidates with 0.0 median normalized regret, but the median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%)",
-        "60 test functions (~82 cases with parametrization), 74.18% line coverage against a 70% gate, Ruff-clean, GitHub Actions CI",
+        "86 tests, Ruff-clean, GitHub Actions CI",
         "Optional FastAPI read API and Neo4j experiment-graph logging, kept as optional infrastructure rather than load-bearing claims",
       ],
       architecture: {
@@ -1124,6 +1122,35 @@ export const PROJECTS: ProjectsSectionContent = {
     },
   ],
 };
+
+/**
+ * Hero telemetry counters.
+ *
+ * Two rules, both learned the hard way on 2026-09-18:
+ *   1. Anything countable is derived from PROJECTS, never typed by hand. The
+ *      old hardcoded "SYSTEMS SHIPPED: 9" counted a COURSEWORK entry, and
+ *      "DOMAINS: 6" matched nothing in the data at all.
+ *   2. Anything not derivable carries a row in METRICS.md naming the command
+ *      that produced it.
+ *
+ * Dropped here: "FRONTIER MODELS RED-TEAMED: 8". RESULTS.md logs 6 model IDs,
+ * 2 of them frontier tier, and the site's own Agent Shield evidence already
+ * read "4 of the 8 target" models. Neither number was supportable, so the stat
+ * is gone rather than swapped for a different wrong one.
+ */
+export const HUD_STATS: HudStat[] = [
+  {
+    label: "SYSTEMS SHIPPED",
+    value: String(PROJECTS.projects.filter((p) => p.status === "SHIPPED").length),
+  },
+  {
+    label: "DISCIPLINES",
+    value: String(new Set(PROJECTS.projects.map((p) => p.discipline)).size),
+  },
+  { label: "PAPERS", value: "2" },
+  // 6 in-house modules: IN 5, PS 6, MM 1, DR 6, EX 5, TL 5. See METRICS.md.
+  { label: "ATTACK IDS CATALOGUED", value: "28" },
+];
 
 /* ============================================================================
  * SECTION 6 — EXPERIENCE ("Field Work")
@@ -1637,7 +1664,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "list your projects",
     ],
     answer:
-      "Nine builds. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 520+ tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.979 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored. Sourcewarden: security gated retrieval + multi agent orchestration for n8n, exposed read only. MetaLearnML: a meta learned AutoML ranker plus the 15 dataset benchmark that measured it produced no end to end speedup, and kept that result. ChatDB: a rule based natural language to SQL CLI from a database course, five regex patterns, no ML.",
+      "Nine builds. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 904 tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.968 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored. Sourcewarden: security gated retrieval + multi agent orchestration for n8n, exposed read only. MetaLearnML: a meta learned AutoML ranker plus the 15 dataset benchmark that measured it produced no end to end speedup, and kept that result. ChatDB: a rule based natural language to SQL CLI from a database course, five regex patterns, no ML.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
     ],
@@ -1676,7 +1703,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "dpo",
     ],
     answer:
-      "AI Health Journal is a local first journaling assistant built around a multi model Draft, Verify, Revise pipeline over Ollama, with Chroma and nomic-embed-text for retrieval. The point is that its two load bearing claims are measured, not asserted: a 4 way retrieval ablation (0.979 Recall@3, and a valence_flip category that went 0.667 to 1.000 after the embedder swap) and a deterministic crisis safety floor at 1.000 sensitivity, verified by deliberately breaking it. PRIVACY_MODE=strict scrubs PII before storage; Pinecone and Anthropic are opt in gates that ship off.",
+      "AI Health Journal is a local first journaling assistant built around a multi model Draft, Verify, Revise pipeline over Ollama, with Chroma and nomic-embed-text for retrieval. The point is that its two load bearing claims are measured, not asserted: a 4 way retrieval ablation (0.968 Recall@3 across the full corpus, and a valence_flip category that went 0.667 to 1.000 after the embedder swap) and a deterministic crisis safety floor at 1.000 sensitivity, verified by deliberately breaking it. PRIVACY_MODE=strict scrubs PII before storage; Pinecone and Anthropic are opt in gates that ship off.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-health-journal" },
     ],
@@ -1697,7 +1724,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "librosa",
     ],
     answer:
-      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (8 pages, SSE live streaming), and a research-grade MIR core. TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, masking aware multiband EQ (Hafezi & Reiss 2015), and rekordbox XML + Serato GEOB cue export. Newest layer is a learned spectral pipeline: mel band trajectory matching picks track B's entry phrase with drop aware scoring, and per band weights update online from thumbs up/down verdicts. 520+ tests, GitHub Actions CI, 18 organic GitHub stars.",
+      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (10 pages, SSE live streaming), and a research-grade MIR core. TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, masking aware multiband EQ (Hafezi & Reiss 2015), and rekordbox XML + Serato GEOB cue export. Newest layer is a learned spectral pipeline: mel band trajectory matching picks track B's entry phrase with drop aware scoring, and per band weights update online from thumbs up/down verdicts. 904 tests, GitHub Actions CI.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
     ],
@@ -1737,7 +1764,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "deep work tool",
     ],
     answer:
-      "Attention Drift Detector is an on device webcam tool that classifies focus, drift, and absence in real time: MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second window. It nudges you after 5 continuous seconds of drift and writes an HTML session report. No video is ever recorded, only derived angles and session labels reach local SQLite. 50 tests run in under a second with no webcam or network needed.",
+      "Attention Drift Detector is an on device webcam tool that classifies focus, drift, and absence in real time: MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second window. It nudges you after 5 continuous seconds of drift and writes an HTML session report. No video is ever recorded, only derived angles and session labels reach local SQLite. 52 tests run in under a second with no webcam or network needed.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "attention-drift-detector" },
     ],
@@ -1756,7 +1783,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "ed25519",
     ],
     answer:
-      "Sourcewarden merges a retrieval system over n8n's docs and community examples with a six-role, Ed25519-gated agent orchestration pipeline, behind a read-only FastAPI layer. Every chat answer is grounded in cited evidence, and the monitoring dashboard recomputes all security-control hashes live against a signed manifest instead of trusting a cache. The deliberate call was scoping the web layer to retrieval and status only, never execution, so it can't rebuild or bypass the pipeline's signed approval flow. 2,256-row retrieval index, 20/20 tests including a byte-flip mutation test, ships as one Docker image.",
+      "Sourcewarden merges a retrieval system over n8n's docs and community examples with a six-role, Ed25519-gated agent orchestration pipeline, behind a read-only FastAPI layer. Every chat answer is grounded in cited evidence, and the monitoring dashboard recomputes all security-control hashes live against a signed manifest instead of trusting a cache. The deliberate call was scoping the web layer to retrieval and status only, never execution, so it can't rebuild or bypass the pipeline's signed approval flow. 2,256-row retrieval index, 71 tests including a byte-flip mutation test, ships as one Docker image.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "sourcewarden" },
     ],
@@ -1776,7 +1803,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "automl benchmark",
     ],
     answer:
-      "MetaLearnML is a tabular AutoML engine that ranks preprocessing-by-model candidates with a RandomForest meta-learner over prior runs, plus a 15-dataset OpenML benchmark built to test whether that ranking actually saves work. It does not: median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%), and the benchmark report marks the resume-impact criterion as not met. What it does do is rank better than random (median Spearman 0.57 vs 0.02). Leakage controls throughout: outer dev/test split before any encoder fit, fold-local preprocessing, one scored test touch, content-addressed candidate identity. 60 test functions, 74.18% coverage, GitHub Actions CI.",
+      "MetaLearnML is a tabular AutoML engine that ranks preprocessing-by-model candidates with a RandomForest meta-learner over prior runs, plus a 15-dataset OpenML benchmark built to test whether that ranking actually saves work. It does not: median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%), and the benchmark report marks the resume-impact criterion as not met. What it does do is rank better than random (median Spearman 0.57 vs 0.02). Leakage controls throughout: outer dev/test split before any encoder fit, fold-local preprocessing, one scored test touch, content-addressed candidate identity. 86 tests, GitHub Actions CI.",
     links: [
       { label: "View Project", href: "#projects", sectionId: "metalearnml" },
       { label: "GitHub", href: "https://github.com/Chunduri-Aditya/MetaLearnML" },
