@@ -298,6 +298,12 @@ interface ProjectLinks {
   github?: string;
   live?: string;
   demo?: string;
+  /**
+   * Repo name for work that stays private. Renders a "Request access" mailto
+   * instead of a GitHub link, so a private repo never shows a URL that 404s.
+   * Mutually exclusive with `github`.
+   */
+  requestAccess?: string;
 }
 
 interface ProjectDecision {
@@ -459,7 +465,6 @@ export const PROJECTS: ProjectsSectionContent = {
       links: {
         github: "https://github.com/Chunduri-Aditya/agent-shield",
         live: "https://doi.org/10.5281/zenodo.20789431",
-        demo: "#",
       },
       metrics: [
         { label: "Attack IDs", value: "6 modules · 28" },
@@ -557,9 +562,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/ai-remixmate",
-        live: "#",
-        demo: "#",
+        requestAccess: "ai-remixmate",
       },
       metrics: [
         { label: "Tests", value: "520+" },
@@ -634,9 +637,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/AkashicTree",
-        live: "#",
-        demo: "#",
+        requestAccess: "AkashicTree",
       },
       metrics: [
         { label: "Modalities", value: "Text \u00b7 Image \u00b7 Audio" },
@@ -724,9 +725,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/ai-health-journal",
-        live: "#",
-        demo: "#",
+        github: "https://github.com/Chunduri-Aditya/journal-agent",
       },
       metrics: [
         { label: "Retrieval", value: "0.979 Recall@3" },
@@ -793,8 +792,6 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
       links: {
         github: "https://github.com/Chunduri-Aditya/Model-Behavior-Lab",
-        live: "#",
-        demo: "#",
       },
       metrics: [
         { label: "Categories", value: "4 eval axes" },
@@ -872,8 +869,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        live: "#",
-        demo: "#",
+        github: "https://github.com/Chunduri-Aditya/attention-drift-detector",
       },
       metrics: [
         { label: "Pipeline", value: "478 landmarks" },
@@ -954,8 +950,6 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
       links: {
         github: "https://github.com/Chunduri-Aditya/sourcewarden",
-        live: "#",
-        demo: "#",
       },
       metrics: [
         { label: "Retrieval Index", value: "2,256 rows" },
@@ -1120,7 +1114,9 @@ export const PROJECTS: ProjectsSectionContent = {
           why: "Classifying columns as dates / measures / attributes once, up front, is what lets a short regex decide what can be summed and what can be grouped.",
         },
       ],
-      links: {},
+      links: {
+        github: "https://github.com/Chunduri-Aditya/ChatDB",
+      },
       metrics: [
         { label: "Translation", value: "5 regex patterns" },
         { label: "Stack", value: "pandas · SQLAlchemy" },
@@ -1521,12 +1517,15 @@ export const SIDEBAR: SidebarContent = {
 export interface FooterContent {
   brand: string;
   tagline: string;
+  /** This site's own repo. The tagline links to it: the source is the evidence. */
+  sourceUrl: string;
   copyright: (year: number) => string;
 }
 
 export const FOOTER: FooterContent = {
   brand: "~/aditya",
   tagline: "Built with React + Tailwind + Framer Motion",
+  sourceUrl: "https://github.com/Chunduri-Aditya/Portfolio",
   copyright: (year) => `\u00a9 ${year} Aditya Chunduri. All rights reserved.`,
 };
 

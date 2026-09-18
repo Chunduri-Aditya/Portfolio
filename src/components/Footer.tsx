@@ -30,7 +30,16 @@ const Footer: React.FC = () => {
             </a>
           ))}
         </div>
-        <p className="text-[12px] text-text-faint">{FOOTER.tagline}</p>
+        <p className="text-[12px] text-text-faint">
+          <a
+            href={FOOTER.sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent-cyan hover:decoration-accent-cyan"
+          >
+            {FOOTER.tagline}
+          </a>
+        </p>
       </div>
     </footer>
   );

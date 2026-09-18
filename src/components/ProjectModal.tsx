@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Github, ExternalLink, Play } from "lucide-react";
+import { X, Github, ExternalLink, Play, Lock } from "lucide-react";
 import type { Mode, Project } from "../data/content";
+import { CONTACT } from "../data/content";
 import { Icon } from "../lib/iconMap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
 import { useDepth } from "../lib/depth";
@@ -18,6 +19,13 @@ interface ProjectModalProps {
 const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p className="eyebrow mb-3">{children}</p>
 );
+
+/** Prefilled mail link for a private repo, so the ask arrives already labelled. */
+function requestAccessHref(repo: string, title: string): string {
+  const subject = `Repo access request: ${repo}`;
+  const body = `Hi Aditya,\n\nI read about ${title} on your portfolio and would like access to the ${repo} repository.\n\nWho I am:\nWhy I am asking:\n\nThanks`;
+  return `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) => {
   const { depth, setDepth } = useDepth();
@@ -186,9 +194,19 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
               </section>
 
               {(project.links.github ||
-                (project.links.live && project.links.live !== "#") ||
-                (project.links.demo && project.links.demo !== "#")) && (
+                project.links.requestAccess ||
+                project.links.live ||
+                project.links.demo) && (
                 <section className="flex flex-wrap items-center gap-2 border-t border-white/10 pt-6">
+                  {project.links.requestAccess && (
+                    <a
+                      href={requestAccessHref(project.links.requestAccess, project.title)}
+                      className="flex items-center gap-2 rounded-full border border-white/[0.12] px-4 py-2 text-xs font-semibold text-text-dim transition-colors hover:border-white/25 hover:text-text"
+                    >
+                      <Lock size={14} strokeWidth={2} />
+                      Private repo · request access
+                    </a>
+                  )}
                   {project.links.github && (
                     <a
                       href={project.links.github}
@@ -200,7 +218,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       GitHub
                     </a>
                   )}
-                  {project.links.live && project.links.live !== "#" && (
+                  {project.links.live && (
                     <a
                       href={project.links.live}
                       target="_blank"
@@ -211,7 +229,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       Live / DOI
                     </a>
                   )}
-                  {project.links.demo && project.links.demo !== "#" && (
+                  {project.links.demo && (
                     <a
                       href={project.links.demo}
                       target="_blank"
