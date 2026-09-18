@@ -1248,18 +1248,18 @@ export const EXPERIENCE: ExperienceSectionContent = {
       period: "Jun 2021 \u2013 Jul 2021",
       accent: "purple",
       hook:
-        "First taste of computer vision: labeled aerial photos and trained a small object detector on them.",
+        "First taste of computer vision: running a detector over test video and writing down where it broke.",
       plain:
-        "A short remote internship early in undergrad. I annotated a dataset of aerial imagery and trained a YOLOv5 model to spot small objects in it, which is where I learned that detection work is mostly about dataset quality.",
+        "A short remote internship early in undergrad. I ran a YOLOv5 and OpenCV detection pipeline over test video, compared how reliably it held up as lighting, motion and occlusion changed, and wrote up the cases where it failed.",
       story:
-        "A short remote internship early in my undergrad, and my first real exposure to computer vision. Annotating aerial imagery taught me how much of detection work is dataset quality rather than model choice.",
+        "A short remote internship early in my undergrad, and my first real exposure to computer vision. Running the same detector across clips that differed in lighting, motion and occlusion taught me that the interesting part is not the model, it is characterising the conditions under which it stops working.",
       signal:
-        "Introductory object detection: annotated an aerial imagery dataset in Roboflow and trained YOLOv5 on it for small object detection.",
+        "Introductory object detection: YOLOv5 and OpenCV detection on test video, with reliability compared across lighting, motion and occlusion changes and failure cases documented.",
       bullets: [
-        "Annotated and managed an aerial imagery dataset in Roboflow for small object detection",
-        "Trained and evaluated a YOLOv5 model on the annotated dataset",
+        "Evaluated a YOLOv5 and OpenCV detection pipeline on test video",
+        "Compared detection reliability across lighting, motion and occlusion changes, and documented the failure cases",
       ],
-      tags: ["YOLOv5", "Roboflow", "Object Detection", "Aerial Imagery"],
+      tags: ["YOLOv5", "OpenCV", "Object Detection", "Failure Analysis"],
     },
   ],
 };
@@ -1334,25 +1334,41 @@ export const RESEARCH: ResearchContent = {
       ],
     },
     {
-      badge: "PUBLICATION \u00b7 IJRASET VOL 11 (PEER-REVIEWED)",
-      title: "Wind Power Analysis using Digital Twins & ML",
+      /*
+       * Title corrected 2026-09-18 to the publisher record. The old title,
+       * "Wind Power Analysis using Digital Twins & ML", was never what IJRASET
+       * published. Second of four authors, stated plainly rather than implied.
+       *
+       * The Digital Twin / Azure / TCN / KNN claims were flagged as unsupported
+       * during the audit, then verified directly against the PDF: section II
+       * states the cloud architecture of digital twins, "Microsoft Azure's
+       * platform for the creation of three-dimensional digital twins", and
+       * "a non-parametric k-nearest neighbors (KNN) regression method combined
+       * with a deep learning approach called a temporal convolution network
+       * (TCN)". They stay. Note the paper is internally inconsistent: its
+       * abstract and index terms describe SVM and Random Forest regression
+       * instead, so do not claim a single headline method for it.
+       */
+      badge: "PUBLICATION \u00b7 IJRASET VOL 11, AUG 2023",
+      title: "Wind Power Analysis Using Machine Learning in Wind Turbines",
       hook:
-        "Forecasting wind-farm output by building a live software model of the farm and pairing two ML methods.",
+        "Forecasting wind-farm output from a live software model of the farm, as the second of four authors.",
       plain:
-        "Wind power is hard to predict, which makes it hard to plan around. This peer-reviewed paper builds a 'digital twin' \u2014 a running software copy of a wind farm on Azure \u2014 and combines two forecasting methods to predict output more accurately.",
+        "Wind power is hard to predict, which makes it hard to plan around. This undergraduate publication builds a 'digital twin', a running software copy of a wind farm on Azure, and pairs two forecasting methods to predict output. I was the second of four authors.",
       story:
-        "Wind is messy. I built a Digital Twin on Azure to simulate the present and forecast the future\u2014then tested models that respect long-range time dependencies.",
+        "Wind is messy. The paper builds a Digital Twin on Azure to mirror the farm in software, then forecasts output with models that respect long-range time dependencies. My first publication, second of four authors, from undergrad at SRM.",
       signal:
-        "Hybrid forecasting model combining TCN + KNN inside a Digital Twin architecture on Azure to improve wind output forecasting.",
+        "Hybrid forecasting combining TCN and KNN regression inside a Digital Twin architecture on Azure. IJRASET Vol 11 Issue VIII, Aug 2023. Second of four authors.",
       metrics: [
         { label: "Architecture", value: "Digital Twin", accent: "cyan" },
         { label: "Model", value: "TCN + KNN", accent: "purple" },
-        { label: "Cloud", value: "Azure", accent: "blue" },
-        { label: "Focus", value: "Forecasting", accent: "green" },
+        { label: "Authorship", value: "2nd of 4", accent: "blue" },
+        { label: "DOI", value: "10.22214/ijraset.2023.52452", accent: "green" },
       ],
       links: [
         { label: "Read The Paper", href: ASSETS.publicationPaper },
         { label: "View Certificate", href: ASSETS.publicationCertificate },
+        { label: "DOI", href: "https://doi.org/10.22214/ijraset.2023.52452" },
       ],
     },
   ],
@@ -1503,19 +1519,19 @@ export const SIDEBAR: SidebarContent = {
       },
       {
         category: "LLM & Orchestration",
-        tools: ["LangChain", "Ollama", "Hugging Face", "RAG", "ChromaDB", "FAISS"],
+        tools: ["LangChain", "LangGraph", "Ollama", "Hugging Face", "RAG", "ChromaDB", "pgvector"],
         iconName: "Sparkles",
         accent: "purple",
       },
       {
         category: "ML / CV / Audio",
-        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "MediaPipe", "librosa", "Demucs", "Beat This!", "CLAP", "Essentia", "Diffusers"],
+        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "MediaPipe", "librosa", "Demucs", "Beat This!", "CLAP", "Diffusers"],
         iconName: "Cpu",
         accent: "cyan",
       },
       {
         category: "Systems & Engineering",
-        tools: ["FastAPI", "React/TypeScript", "Docker", "AWS", "Flask", "GitHub Actions", "CI/CD", "pytest"],
+        tools: ["FastAPI", "React/TypeScript", "Docker", "Flask", "GitHub Actions", "CI/CD", "pytest", "uv"],
         iconName: "Wrench",
         accent: "emerald",
       },
@@ -1847,7 +1863,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "work experience",
     ],
     answer:
-      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I annotated an aerial imagery dataset and trained a YOLOv5 model for small object detection.",
+      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I evaluated a YOLOv5 and OpenCV detection pipeline on test video and documented where its reliability broke down under lighting, motion and occlusion changes.",
     links: [
       { label: "Experience section", href: "#experience", sectionId: "experience" },
     ],
@@ -1881,7 +1897,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "ijraset",
     ],
     answer:
-      "Two papers. (1) Sole-author preprint — “Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security” (Zenodo, 2026), introducing Transparency Rate as a third evaluation axis on the Inspect AI harness. (2) Peer-reviewed publication — “Wind Power Analysis using Digital Twins & ML” in IJRASET Vol 11 (Aug 2023, co-author), combining KNN + TCN inside a Digital Twin on Azure for wind forecasting.",
+      "Two papers. (1) Sole-author preprint — “Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security” (Zenodo, 2026), introducing Transparency Rate as a third evaluation axis on the Inspect AI harness. (2) Peer-reviewed publication — “Wind Power Analysis Using Machine Learning in Wind Turbines” in IJRASET Vol 11 Issue VIII (Aug 2023), second of four authors, combining KNN + TCN inside a Digital Twin on Azure for wind forecasting.",
     links: [
       { label: "Agent Shield Paper", href: ASSETS.agentShieldPaper },
       { label: "View on Zenodo", href: "https://doi.org/10.5281/zenodo.20789431" },
@@ -1904,7 +1920,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "technical skills",
     ],
     answer:
-      "Eval & adversarial: Inspect AI, AgentDojo, OWASP LLM/Agentic, MITRE ATLAS, AIVSS, red teaming, prompt injection. LLM & orchestration: LangChain, Ollama, Hugging Face, RAG, ChromaDB. ML / CV / Audio: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, librosa, Demucs, Beat This!, CLAP, Essentia, Diffusers. Systems & engineering: FastAPI, React/TypeScript, Docker, AWS, Flask, GitHub Actions, CI/CD, pytest. Languages: Python, SQL, JavaScript/TypeScript, Bash, C/C++.",
+      "Eval & adversarial: Inspect AI, AgentDojo, HarmBench, OWASP LLM/Agentic, MITRE ATLAS, red teaming, prompt injection, MCP proxying, mutation testing. LLM & orchestration: LangChain, LangGraph, Ollama, Hugging Face, RAG, ChromaDB, pgvector. ML / CV / Audio: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, MediaPipe, librosa, Demucs, Beat This!, CLAP, Diffusers. Systems & engineering: FastAPI, React/TypeScript, Docker, Flask, GitHub Actions, CI/CD, pytest, uv. Languages: Python, SQL, JavaScript/TypeScript, Bash.",
     links: [
       { label: "View Skills", href: "#skills", sectionId: "skills" },
     ],
