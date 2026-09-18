@@ -228,7 +228,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       href={project.links.live}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan px-4 py-2 text-xs font-bold text-white"
+                      className="flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-2 text-xs font-bold text-white"
                     >
                       <ExternalLink size={14} strokeWidth={2} />
                       Live / DOI

@@ -21,6 +21,11 @@ export default {
           pink: "#ec4899",
           emerald: "#34d399",
           amber: "#fbbf24",
+          // Deep pair for CTA fills only. White text on the bright violet/cyan
+          // measured 4.23:1 and 1.81:1, both below AA for the 13px bold labels
+          // these buttons use. Keep the bright tokens for text and accents.
+          "violet-deep": "#7c3aed",
+          "cyan-deep": "#0e7490",
         },
       },
       // These must match the families actually imported in src/index.css.

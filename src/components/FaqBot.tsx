@@ -101,7 +101,7 @@ const FaqBot: React.FC = () => {
         <button
           ref={launcherRef}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan px-4 py-3 text-xs font-bold text-white shadow-[0_20px_50px_-18px_rgba(139,92,246,0.7)] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-violet/60"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-3 text-xs font-bold text-white shadow-[0_20px_50px_-18px_rgba(139,92,246,0.7)] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-violet/60"
           aria-label="Open FAQ bot"
         >
           <Sparkles size={15} strokeWidth={2} />
@@ -138,7 +138,7 @@ const FaqBot: React.FC = () => {
                   className={`max-w-[85%] rounded-2xl p-3 text-[13px] leading-relaxed ${
                     msg.isBot
                       ? "border border-white/10 bg-white/[0.04] text-text-dim"
-                      : "bg-gradient-to-r from-accent-violet to-accent-cyan text-white"
+                      : "bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep text-white"
                   }`}
                 >
                   <div>{msg.text}</div>
@@ -203,7 +203,7 @@ const FaqBot: React.FC = () => {
               <button
                 onClick={() => handleSend()}
                 disabled={!inputValue.trim()}
-                className="rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan p-2.5 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep p-2.5 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Send message"
               >
                 <Send size={14} strokeWidth={2} />

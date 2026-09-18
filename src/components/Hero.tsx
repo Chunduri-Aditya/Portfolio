@@ -100,7 +100,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <button
               type="button"
               onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
-              className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan px-6 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-20px_rgba(139,92,246,0.7)] transition-transform hover:scale-[1.03] active:scale-[0.98]"
+              className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-6 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-20px_rgba(139,92,246,0.7)] transition-transform hover:scale-[1.03] active:scale-[0.98]"
             >
               {HERO.ctas.primary.label}
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 transition-transform group-hover:translate-x-0.5">

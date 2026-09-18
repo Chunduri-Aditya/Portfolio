@@ -11,11 +11,13 @@ import MiniViz from "./MiniViz";
 const HUE: Record<string, string> = {
   "AI-SAFETY / EVAL": "#22d3ee",
   "AUDIO-ML": "#ec4899",
-  "GENAI / PIPELINE": "#8b5cf6",
+  // Lightened from #8b5cf6: the "Full brief" label sits on this hue as ink,
+  // and #8b5cf6 measured 4.49:1, just under AA. #a78bfa is 6.99:1.
+  "GENAI / PIPELINE": "#a78bfa",
   "RAG / SAFETY": "#34d399",
   "EVAL / TOOLING": "#3b82f6",
   "CV / LOCAL-FIRST": "#22d3ee",
-  "SYSTEMS / SECURITY": "#8b5cf6",
+  "SYSTEMS / SECURITY": "#a78bfa",
   "AUTOML / BENCHMARK": "#34d399",
   "DEV-TOOL / SQL": "#fbbf24",
 };
@@ -108,8 +110,8 @@ const ProjectCard = memo(function ProjectCard({
             type="button"
             onClick={onOpen}
             aria-label={`Open project: ${project.title}`}
-            className="flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white transition-transform hover:scale-[1.03]"
-            style={{ background: `linear-gradient(90deg, ${hue}, ${hue}bb)` }}
+            className="flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold text-ink transition-transform hover:scale-[1.03]"
+            style={{ background: hue }}
           >
             Full brief
             <Icon name="ArrowUpRight" size={13} />

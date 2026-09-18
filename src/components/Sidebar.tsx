@@ -117,7 +117,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               rel="noreferrer"
               download
               aria-label="Open resume PDF"
-              className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan px-4 py-2.5 text-xs font-bold text-white"
+              className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-2.5 text-xs font-bold text-white"
             >
               <Icon name="FileText" size={13} />
               {cta.resumeLabel}

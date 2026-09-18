@@ -109,7 +109,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   aria-pressed={on}
                   className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
                     on
-                      ? "bg-gradient-to-r from-accent-violet to-accent-cyan text-white"
+                      ? "bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep text-white"
                       : "border border-white/10 text-text-faint hover:border-white/20 hover:text-text-dim"
                   }`}
                 >

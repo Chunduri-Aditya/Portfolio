@@ -50,7 +50,7 @@ const SegToggle = memo(function SegToggle<T extends string>({
             {active && (
               <motion.span
                 layoutId={`seg-${label}`}
-                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-violet to-accent-cyan"
+                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep"
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />
             )}
@@ -90,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({
             className="group flex items-center gap-2.5"
             aria-label="Go to top"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-accent-violet to-accent-cyan text-white shadow-lg transition-transform group-hover:scale-105">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-accent-violet-deep to-accent-cyan-deep text-white shadow-lg transition-transform group-hover:scale-105">
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
             </span>
             <span className="text-sm font-bold tracking-tight text-text">Aditya Chunduri</span>
