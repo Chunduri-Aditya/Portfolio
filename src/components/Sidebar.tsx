@@ -5,7 +5,7 @@ import { SIDEBAR, CONTACT, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
 
 const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
-  const { userManual, offKeyboard, skills, cta } = SIDEBAR;
+  const { userManual, offKeyboard, skills, education, cta } = SIDEBAR;
 
   return (
     <div className="flex flex-col gap-6 lg:sticky lg:top-24">
@@ -77,6 +77,28 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
                       </span>
                     ))}
                   </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection id="education" direction="right" delay={0.2}>
+        <div className="glass rounded-4xl p-6">
+          <p className="eyebrow mb-4">{education.title}</p>
+          <StaggerContainer className="flex flex-col gap-3">
+            {education.items.map((entry) => (
+              <StaggerItem key={entry.school}>
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <Icon name={education.iconName} size={14} className="text-accent-cyan" />
+                    <span className="text-sm font-bold text-text">{entry.school}</span>
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-text-dim">{entry.degree}</p>
+                  <p className="mt-1 font-mono text-[11px] text-text-faint">
+                    {entry.location} · {entry.graduated}
+                  </p>
                 </div>
               </StaggerItem>
             ))}

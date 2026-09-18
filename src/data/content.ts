@@ -47,7 +47,10 @@ interface Chip {
 }
 
 export interface HeroContent {
-  statusBadge: string;
+  /** Role framing in the hero eyebrow. */
+  roleLabel: string;
+  /** Availability. The single most perishable string on the site, so it lives here. */
+  availability: string;
   headline: { signal: string; story: string };
   subhead: string;
   intro: { signal: string; story: string };
@@ -62,7 +65,8 @@ export interface HeroContent {
 }
 
 export const HERO: HeroContent = {
-  statusBadge: "System Status: ONLINE // Current build: Agent Shield",
+  roleLabel: "ML / AI engineer",
+  availability: "open to work",
   headline: {
     signal: "I ship ML systems, then measure whether they actually work.",
     story: "I like the messy middle: a hard problem, a metric, and a system that has to earn the number.",
@@ -1199,7 +1203,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       org: "Easley Dunn Productions, Inc.",
       role: "AI/ML Engineer Intern \u00b7 Gameplay Analyzer Team",
       location: "Remote",
-      period: "Aug 2026 \u2013 Oct 2026",
+      period: "Aug 2026 \u2013 Present",
       accent: "emerald",
       hook:
         "Built the tool a video team relies on to decide whether a camera to field mapping is trustworthy before they accept it.",
@@ -1240,6 +1244,48 @@ export const EXPERIENCE: ExperienceSectionContent = {
         "Contributed to team brainstorming on modeling approaches, with runs tracked in MLflow across the RITE and FIVES datasets and augmentation variants",
       ],
       tags: ["TensorFlow/Keras", "U-Net", "segmentation_models", "MLflow", "Medical Imaging"],
+    },
+    {
+      org: "Yashoda Hospitals",
+      role: "Data Analyst Intern",
+      location: "Remote",
+      period: "Nov 2022 \u2013 May 2023",
+      accent: "emerald",
+      hook:
+        "Turned confidential insurance paperwork into something a doctor could read at a glance.",
+      plain:
+        "Hospital insurance documents are dense and doctors do not have time to dig through them. I analyzed that data and built dashboards that put the handful of fields they actually need on one screen.",
+      story:
+        "A remote data analyst internship working on confidential insurance-document data. The analysis mattered less than the delivery: the useful output was not a model, it was a dashboard a busy doctor would actually open.",
+      signal:
+        "Exploratory data analysis on confidential insurance-document data, delivered as Power BI and Tableau dashboards for doctor review.",
+      bullets: [
+        "Performed exploratory data analysis on confidential insurance-document data",
+        "Developed Power BI and Tableau dashboards and visual summaries to help doctors review key insurance information",
+      ],
+      tags: ["Power BI", "Tableau", "EDA", "Dashboards"],
+    },
+    {
+      org: "RB Associates",
+      role: "Automation Engineering Intern (Finance and Accounting)",
+      location: "Remote",
+      period: "Aug 2021 \u2013 Sep 2022",
+      accent: "purple",
+      hook:
+        "Automated four reconciliation processes by sitting with the accountants who ran them by hand.",
+      plain:
+        "An accounting firm was reconciling large transaction batches manually, which is slow and easy to get wrong late in a long day. I shadowed the accountants through live audits, learned the four processes they repeated most, and wrote Python workflows that do the matching and flag what needs a human.",
+      story:
+        "My first engineering job, and the one that taught me requirements are gathered by watching, not asking. I tagged along with accountants during live audits until I understood which four processes were repetitive enough to be worth automating, then built reconciliation workflows around rule-based matching with the failure cases written down rather than hidden.",
+      signal:
+        "Built Python and pandas reconciliation workflows for four repetitive finance processes, on transaction batches averaging roughly USD 120,000 per run.",
+      bullets: [
+        "Developed Python/pandas reconciliation workflows with transaction-data standardization, schema validation, SQL storage, and rule-based matching",
+        "Gathered requirements by interviewing accountants and shadowing them during live audits, and automated four repetitive processes",
+        "Incorporated accountant feedback into human-review workflows; validated reconciliation outputs against manual calculations and documented failure cases and recovery procedures",
+        "Ran against reconciliation batches averaging about USD 120,000 per run as an internal tool for the firm",
+      ],
+      tags: ["Python", "pandas", "SQL", "Schema Validation", "Process Automation"],
     },
     {
       org: "SSN College of Engineering",
@@ -1380,6 +1426,14 @@ export const RESEARCH: ResearchContent = {
 
 export type SkillAccent = "rose" | "purple" | "cyan" | "emerald" | "blue";
 
+export interface EducationEntry {
+  school: string;
+  location: string;
+  degree: string;
+  /** Graduation date, not a range, matching how the resume prints it. */
+  graduated: string;
+}
+
 export interface SkillCategory {
   category: string;
   tools: string[];
@@ -1419,6 +1473,11 @@ export interface SidebarContent {
     title: string;
     iconName: IconName;
     items: SkillCategory[];
+  };
+  education: {
+    title: string;
+    iconName: IconName;
+    items: EducationEntry[];
   };
   cta: {
     title: string;
@@ -1543,9 +1602,27 @@ export const SIDEBAR: SidebarContent = {
       },
     ],
   },
+  education: {
+    title: "Education",
+    iconName: "ScrollText",
+    items: [
+      {
+        school: "University of Southern California",
+        location: "Los Angeles, CA",
+        degree: "M.S., Applied Data Science",
+        graduated: "Dec 2025",
+      },
+      {
+        school: "SRM Institute of Science and Technology",
+        location: "Chennai, India",
+        degree: "B.Tech, Computer Science and Engineering (AI/ML)",
+        graduated: "Jul 2023",
+      },
+    ],
+  },
   cta: {
     title: "Want the receipts?",
-    subtitle: "One resume, kept current.",
+    subtitle: "One resume, and the numbers on this site trace back to it.",
     resumeLabel: "Resume (PDF)",
     emailLabel: "Email",
     resumeHref: ASSETS.resumePdf,
@@ -1610,7 +1687,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "tell me about aditya",
     ],
     answer:
-      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025). I build ML systems across a range of domains and measure each one instead of just shipping it: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Same habit everywhere, seeded runs and a reproducible number. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
+      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025), B.Tech in CSE with an AI/ML specialisation from SRM (Jul 2023). I build ML systems across a range of domains and measure each one instead of just shipping it: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Same habit everywhere, seeded runs and a reproducible number. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
     links: [
       { label: "View Projects", href: "#projects", sectionId: "projects" },
       { label: "How I Think", href: "#thinking", sectionId: "thinking" },
@@ -1863,7 +1940,7 @@ export const FAQ_INTENTS: FAQIntent[] = [
       "work experience",
     ],
     answer:
-      "Three roles. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug\u2013Oct 2026), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At SSN College (Jun\u2013Jul 2021), a short remote internship, I evaluated a YOLOv5 and OpenCV detection pipeline on test video and documented where its reliability broke down under lighting, motion and occlusion changes.",
+      "Five roles across about four years. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug 2026 to present), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At Yashoda Hospitals (Nov 2022\u2013May 2023), I did exploratory analysis on confidential insurance-document data and built Power BI and Tableau dashboards for doctors. At RB Associates (Aug 2021\u2013Sep 2022), my first engineering job, I automated four repetitive finance reconciliation processes in Python and pandas, gathering the requirements by shadowing accountants during live audits. At SSN College (Jun\u2013Jul 2021), a short remote internship, I evaluated a YOLOv5 and OpenCV detection pipeline on test video and documented where its reliability broke down under lighting, motion and occlusion changes.",
     links: [
       { label: "Experience section", href: "#experience", sectionId: "experience" },
     ],

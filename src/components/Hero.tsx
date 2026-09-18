@@ -43,11 +43,14 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
         <div className="lg:col-span-7">
           <motion.div {...fade(0.05)} className="mb-6 flex flex-wrap items-center gap-3">
             <span className="eyebrow rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
-              ML / AI engineer
+              {HERO.roleLabel}
             </span>
             <span className="flex items-center gap-1.5 text-xs font-medium text-accent-emerald">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
-              open to work
+              <span
+                aria-hidden="true"
+                className="h-1.5 w-1.5 rounded-full bg-accent-emerald shadow-[0_0_10px_rgba(52,211,153,0.9)]"
+              />
+              {HERO.availability}
             </span>
           </motion.div>
 
