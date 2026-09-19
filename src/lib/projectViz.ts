@@ -20,7 +20,17 @@ export const PROJECT_VIZ: Record<string, { title: string; bars: Bar[] }> = {
     bars: [
       { label: "valence_flip category (before)", value: 0.667, max: 1, display: "0.667", hue: "#c1743a" },
       { label: "valence_flip category (after)", value: 1.0, max: 1, display: "1.000", hue: "#22c48c" },
-      { label: "Recall@3 overall (after)", value: 0.979, max: 1, display: "0.979", hue: "#17b3b3" },
+      /*
+       * 0.968, not 0.979.
+       *
+       * This bar read 0.979 while METRICS.md said in writing that 0.979 "must
+       * not be printed as the headline": it is the easier pre-noise subset,
+       * superseded the moment the noisy_typo and noisy_rambling queries were
+       * folded in. The card's own metrics field already said 0.968, so the same
+       * project was showing both numbers and the chart was showing the wrong
+       * one. Full 31-query corpus figure now.
+       */
+      { label: "Recall@3, full corpus (after)", value: 0.968, max: 1, display: "0.968", hue: "#17b3b3" },
     ],
   },
   metalearnml: {

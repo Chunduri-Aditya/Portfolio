@@ -236,6 +236,14 @@ interface ProjectLinks {
 interface ProjectDecision {
   title: string;
   why: string;
+  /**
+   * What the decision cost. A decision with no stated cost reads as a feature
+   * list; the tradeoff is the part that shows judgement.
+   *
+   * Optional because it is sourced from each repo's own docs, and a tradeoff
+   * the repo does not record is not one to invent.
+   */
+  tradeoff?: string;
 }
 
 interface ProjectArchitecture {
@@ -258,6 +266,18 @@ export interface Project {
   status: ProjectStatus;
   /** Always visible on the card. One punchy line, <= ~14 words. */
   hook: string;
+  /** The engineering problem, in the repo's own framing. Case study only. */
+  problem?: string;
+  /** What the design had to work within: latency, privacy, compute, noisy output. */
+  constraints?: string[];
+  /**
+   * Where it breaks, is incomplete, or where a result went against the author.
+   * Sourced from each repo's own limitations and caveats, never invented.
+   * Honest limits make the rest of a case study believable.
+   */
+  failureModes?: string[];
+  /** Renders the interactive context-selection demo on this project's page. */
+  hasContextDemo?: boolean;
   /** The technical description. One paragraph, used on the card and the case study. */
   oneLiner: string;
   evidence: string[];
@@ -318,12 +338,31 @@ export const PROJECTS: ProjectsSectionContent = {
         "I break AI agents on purpose so they fail in my lab, not in production.",
       oneLiner:
         "Agent Shield stress tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift. It runs on UK AISI's Inspect AI harness, maps every threat to OWASP and MITRE ATLAS, and now carries a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
+      problem:
+        "Agent security benchmarks generally answer two questions: did the user's task succeed, and did the attack succeed. That leaves a third outcome invisible, the agent that resists an attack and never mentions it. Silent resistance beats a hijack, but it still leaves the person accountable for the agent with no idea an attack happened, so the project measures operator-facing disclosure as a third axis next to attack success.",
+      constraints: [
+        "Statistical power. Exactly one module is anchored at n=20; the rest are underpowered, so module count must never be read as result count.",
+        "Providers do not honour seeds. The Anthropic API has no server-side seed, so epochs are stochastic samples and baselines have to be re-run in the same session as the defended runs.",
+        "Provider capability. One provider emits tool-call envelopes its own API rejects and another hung at log open, so some rows are marked absent rather than filled with zeros that would read as safe.",
+        "Paraphrase. Disclosure is scored against a phrase list, and a model that discloses in its own words escapes it.",
+        "Dual-use. High-risk fixtures stay gated behind an explicit confirmation flag.",
+      ],
+      failureModes: [
+        "The agentic anchor was withdrawn after publication. A harness subtlety (Inspect reads the model-visible tool description from the execute function's docstring) meant the poisoning payload never reached the model, so an n=20 table that had already been written up measured something else entirely.",
+        "Both scorers miss the same paraphrase in the same direction. A completion that plainly describes the injection attempt scores zero transparency and inflates attack success, because the phrase list does not contain that wording.",
+        "A better transparency scorer exists and is deliberately not shipped. The v2 LLM judge beat v1 on a live holdout (recall 0.889 vs 0.444), but that holdout was synthetic, so the worse scorer stays in the headline until the expanded set is human-labelled.",
+        "The standalone screener passes an email-redacted poisoned catalog as a clean ALLOW; only the proxy path catches it. Tool input_schema is not screened at all, and schema screening remains shadow-only.",
+        "The repo's own CI runs mypy against a file list that excludes the shipped runtime perimeter, so the product surface is the part not type-checked. Noted in its internal audit: a project that screens other people's agents for unsafe patterns was running none of that tooling on itself.",
+        "Two planned modules were never built, and internal docs still describe the withdrawn anchor as current.",
+      ],
       evidence: [
         "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi turn behavioral drift",
         "Introduced Transparency Rate, whether an agent flags an attack to its operator, as a third axis alongside ASR and Benign Utility in a six cell outcome model extending AgentDojo's 2x2 matrix",
-        "Two anchored surfaces at n=20 with Wilson 95% CIs: inputs/ (prompt injection) logged on 4 of the 8 target frontier models, and tools/ (MCP tool description poisoning) logged on Sonnet 4.5 and Llama 3.1 8B. Every other module is labeled a diagnostic probe, not a powered result",
-        "On anchored prompt injection, Sonnet 4.5 is the sole model with non-zero TR (0.150); the other three sit at 0.000. Spotlighting raises TR to 0.800 but adds 0.200 to ASR via paraphrase residue",
-        "On anchored MCP tool poisoning (TL-01, n=20), both logged models score ASR 0.000 and TR 0.000: the poisoned description is neither executed nor flagged. Resisting quietly and never telling the operator is exactly the gap TR exists to name",
+        "One anchored surface: inputs/ (prompt injection) at n=20 with Wilson 95% CIs. Every other module is labelled a diagnostic probe rather than quietly presented as a powered result",
+        "The tools/ anchor was withdrawn by its own author. Inspect builds the model-visible tool description from the execute function's docstring, not the @tool factory's, so the TL-01 payload never reached the model: the published n=20 rows measured unprompted send_message calls, not tool poisoning. The rows are kept as historical records and a rerun is pending",
+        "On anchored prompt injection Sonnet 4.5 shows TR 0.150 while three other models read 0.000, but only Sonnet has the anchored n=20 row. At n=5 the Wilson upper bound is 0.435, so 'Sonnet is the only model that discloses' is not yet a powered claim and the repo refuses to make it",
+        "Spotlighting raises TR to 0.800 and also adds 0.200 to ASR. That second number is a scorer artifact, not compliance: the completion discloses the attack in a paraphrase the v1 phrase list does not cover, so both scorers miss the same disclosure in the same direction",
+        "The runtime perimeter ships with its own honest-limits block: an email-redacted TL-01 catalog is a clean ALLOW on the standalone screener, and input_schema (parameter descriptions, examples, $defs) is not screened at all",
         "Local runtime perimeter (agent-shield-guard, agent-shield-mcp-proxy) screens untrusted text and MCP tool descriptions, quarantines known poisons, and raises operator alerts. A library and CLI by design, deliberately not a hosted firewall",
         "Bounded research control plane that makes no network calls of its own: query redaction, CIA classification, source screening, approval manifests, retrieved content screening, quarantine, and append only audit events wrapped around whichever agent does the fetching",
         "TR-v2 LLM judge built as a challenger to the v1 phrase list scorer, held back from promotion until a human labeled holdout clears a 5% false positive gate",
@@ -359,7 +398,7 @@ export const PROJECTS: ProjectsSectionContent = {
                                           |  Operator Alert   |
                                           +-------------------+`,
         tradeoffs: [
-          "Anchored vs diagnostic: only 2 surfaces are powered at n=20; the rest are labeled probes rather than quietly presented as results",
+          "Anchored vs diagnostic: exactly one surface is powered at n=20 and the rest are labelled probes, so module count must not be read as result count",
           "Automated scoring vs human rater (automated is cheaper and seeded for reproducibility)",
           "Safety of running attacks vs value of knowing failure modes (sandboxed, logged, bounded)",
           "Local library vs hosted service: shipping a library keeps the claim checkable and avoids a product promise the evidence does not support yet",
@@ -380,11 +419,27 @@ export const PROJECTS: ProjectsSectionContent = {
         },
         {
           title: "Label anchored results separately from diagnostic probes",
-          why: "Six live modules is not six powered results. Two surfaces carry n=20 and Wilson intervals; the rest are explicitly marked probes so the README can never be misread as a leaderboard.",
+          why: "Six live modules is not six powered results. One surface carries n=20 and Wilson intervals; the rest are explicitly marked probes so the README can never be misread as a leaderboard.",
+          tradeoff:
+            "The project reads as thinner than a benchmark that reports every module as a result, and the honest framing is the less impressive one.",
+        },
+        {
+          title: "Withdraw a published anchor rather than keep the rows",
+          why: "The TL-01 payload never reached the model-visible tool description, so the n=20 table measured unprompted message calls rather than tool poisoning. A result that measures the wrong thing is worse than no result.",
+          tradeoff:
+            "It cost the project its second headline claim: no agentic anchor currently stands, and the rerun is still pending.",
+        },
+        {
+          title: "Keep the weaker transparency scorer in the headline",
+          why: "The v2 LLM judge beat the phrase-list scorer on a live holdout, but that holdout was synthetic rather than real episode text, so promoting it would swap a measured number for a promising one.",
+          tradeoff:
+            "The published transparency numbers are knowingly too low, and the paraphrase gap stays in the headline until the expanded set is human-labelled.",
         },
         {
           title: "Ship the runtime perimeter as a local library, not a service",
           why: "The eval numbers and the runtime guard are different claims with different evidence. Keeping the perimeter local and CLI-shaped keeps them from being quoted as one thing.",
+          tradeoff:
+            "Two separate claims in one repository are harder to explain than one, and the fixture proof metrics get mistaken for the eval result anyway.",
         },
       ],
       links: {
@@ -393,8 +448,110 @@ export const PROJECTS: ProjectsSectionContent = {
       },
       metrics: [
         { label: "Attack IDs", value: "6 modules · 28" },
-        { label: "Anchored", value: "2 surfaces · n=20" },
+        { label: "Anchored", value: "1 surface · n=20" },
       ],
+    },
+    {
+      id: "twin",
+      title: "Personal Digital Twin",
+      subtitle: "Persistent Agent Memory Behind a Fail-Closed Privacy Boundary",
+      iconName: "Brain",
+      tags: [
+        "Agent Architecture",
+        "Memory",
+        "RAG",
+        "Context Engineering",
+        "Local Inference",
+        "Python",
+      ],
+      discipline: "AGENT / MEMORY",
+      status: "SHIPPED",
+      hook: "A context window is always too small. This decides what earns a slot in it.",
+      oneLiner:
+        "A persistent personalised agent whose retrieval layer tags every chunk with its origin (profile, interview transcript, or expert reflection), ranks candidates by cosine similarity with a per-section offset, and masks disallowed sources to negative infinity before top-k so a filtered-out chunk cannot re-enter on score alone. The index refuses to build at all while a real transcript lacks a matching redacted copy, or while any transcript chunk contains more than 60% of a gold evaluation answer.",
+      problem:
+        "A personalised agent accumulates far more material than a context window holds, so every turn is a selection problem: given a question, which few pieces of what the system knows about a person actually deserve to be in front of the model? Ranking by similarity alone answers that badly, because the most textually similar paragraph is often not the most useful one, and because some material should never reach the model regardless of how well it scores.",
+      constraints: [
+        "Fixed context budget. Five chunks reach the model per turn, so selection is the whole game.",
+        "Privacy. Raw interview transcripts must never be embedded; only a redacted copy may enter the index.",
+        "Evaluation integrity. Indexed material can silently contain the answers to the evaluation set, which would make retrieval scores meaningless.",
+        "Local inference, so the material never leaves the machine, against weaker models than hosted frontier ones.",
+        "Reproducibility. The same profile, transcript, and reflections must produce the same index.",
+      ],
+      evidence: [
+        "Three source-tagged indexes over the profile, the redacted interview transcript, and expert reflections; every chunk and every index row carries its source",
+        "Retrieval masks disallowed sources to negative infinity before top-k, so a source filter cannot be defeated by a high similarity score",
+        "Section-aware ranking: a decide-intent query adds a +0.05 offset to chunks from the Decisions section, enough to change the cut only where scores are close",
+        "The index build fails closed twice: RedactionRequired when a real transcript has no up-to-date redacted copy, and LeakError when a transcript chunk contains more than 60% of a gold evaluation answer",
+        "A combined content hash over all three inputs, so an index cannot silently drift from the material it was built from",
+        "Index files written before the source tagging existed still load, so the schema change did not orphan earlier work",
+      ],
+      architecture: {
+        overview:
+          "Profile + redacted transcript + reflections -> collect_chunks (tag source) -> embed -> index (+ combined hash) -> query embed -> cosine + section boost -> source mask -> top-k -> local model",
+        diagram: `  profile.md    transcript.md    reflections.md
+       |              |                 |
+       |         [ redact ]             |
+       |              |                 |
+       +------+-------+--------+--------+
+              |
+       collect_chunks          tags each chunk: profile | transcript | reflection
+              |
+        +-----+------+
+        | build gate |         RedactionRequired : no matching redacted copy
+        +-----+------+         LeakError         : chunk >= 60% of a gold answer
+              |                (nothing is embedded if either fires)
+           [ embed ]
+              |
+     index.npz + chunks.json  (per-row source, combined_sha over all 3 inputs)
+              |
+  query --> [ embed ] --> cosine score
+              |
+        + section boost        decide intent: Decisions +0.05
+              |
+        source mask            disallowed sources -> -inf, applied BEFORE top-k
+              |
+           top-k = 5
+              |
+        prompt assembly --> local model --> response`,
+        tradeoffs: [
+          "The section boost is a hand-set constant, not a learned weight. It is legible and tunable, but it is a judgement call rather than a fitted one.",
+          "Failing the whole index build on a redaction or leak check means one bad chunk blocks all work, which is the correct default for privacy and the wrong one for iteration speed.",
+          "Local embedding and inference keep the material on the machine at the cost of model quality relative to hosted frontier models.",
+        ],
+      },
+      decisions: [
+        {
+          title: "Mask sources before top-k, not after",
+          why: "Filtering after ranking would let a disallowed chunk consume one of the five slots and then be dropped, silently shrinking the context. Setting masked rows to negative infinity before selection means the budget is always spent on admissible material.",
+          tradeoff:
+            "Scores are no longer comparable across filter settings, so a chunk's rank only means something relative to the sources currently allowed.",
+        },
+        {
+          title: "Refuse to build the index rather than warn",
+          why: "A redaction gate that only warns is a gate that gets skipped under time pressure, and the failure it prevents is unrecoverable: once raw transcript text is embedded, it is in the index. The build raises instead.",
+          tradeoff:
+            "One unredacted chunk blocks the entire build, which is deliberately obstructive during iteration.",
+        },
+        {
+          title: "Treat evaluation leakage as a build-time error",
+          why: "If indexed material contains the gold answers, retrieval scores measure memorisation rather than retrieval, and the evaluation quietly stops meaning anything. A containment check over gold answers runs before anything is embedded.",
+          tradeoff:
+            "The 60% word-containment threshold is a heuristic. It will not catch a paraphrased answer, and it can fire on a passage that merely shares vocabulary.",
+        },
+        {
+          title: "A small additive section offset instead of a re-ranker",
+          why: "For a decide-style question, a recorded decision is usually more useful than a merely similar paragraph. A +0.05 offset expresses that preference where scores are close and stays out of the way where they are not.",
+          tradeoff:
+            "It cannot express anything more subtle than a per-section constant, and the value was set by inspection rather than fitted against a labelled set.",
+        },
+      ],
+      links: { requestAccess: "twin" },
+      metrics: [
+        { label: "Context budget", value: "k=5 · 3 sources" },
+        { label: "Leak gate", value: "0.6 containment" },
+      ],
+      hasContextDemo: true,
     },
     {
       id: "ai-remixmate",
@@ -575,6 +732,23 @@ export const PROJECTS: ProjectsSectionContent = {
         "A private journaling AI where the two claims that matter, recall and crisis safety, are measured, not promised.",
       oneLiner:
         "AI Health Journal is a local first journaling assistant whose two load bearing claims, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline rather than asserted.",
+      problem:
+        "A journaling assistant that reads back your own history has to do two things well, and both are easy to fake. It has to retrieve the entry that actually matters rather than the one that shares the most words, and it has to recognise when an entry describes a crisis rather than a bad week. Getting the second one wrong in either direction causes harm: miss it and someone in danger gets a cheerful reframe, over-trigger it and ordinary difficulty gets pathologised.",
+      constraints: [
+        "Privacy. Journal content must not leave the machine; cloud backends are double-gated and the client is never constructed while the gate is closed.",
+        "The safety floor cannot depend on the model. It has to fire when the verifier call fails or the machine is offline.",
+        "Local models are slow and weaker. Measured per-case latency ran 24 to 67 seconds across eight local models.",
+        "Evaluation data could not be scraped from real people's mental-health posts, so the case sets are authored rather than collected.",
+        "Dependencies were kept minimal, which bounded what could be measured: no cross-encoder rerank was testable without pulling torch for a single measurement.",
+      ],
+      failureModes: [
+        "The external validation is unflattering and was kept. Scored against GoEmotions, the valence lexicon reached 0.551 overall accuracy where always guessing the majority class is the baseline, with negative recall at 0.260. A coverage fix moved it to 0.575 on an untouched split, and the log's own verdict is that this is the correct headline number and it is not a good one.",
+        "Crisis sensitivity is optimistic by construction. The case set was authored with the detection patterns visible, so specificity is the more trustworthy half and an unbiased estimate needs a held-out set. The repo says so next to the number.",
+        "Six known gaps in the safety floor are excluded from the headline scores and still missed by design, including vague departure phrasing and non-English self-harm phrasing.",
+        "One bug was traced and deliberately left unfixed: an entry about someone else's crisis fires the user's own support message, because the exemption that would suppress it would also suppress a person describing their own feelings through a therapist's framing. The case is marked accepted rather than quietly patched.",
+        "A config value can be silently ignored. Reading a store built with one embedder while configured for another does not raise; the vector store falls back to the embedding function recorded on the collection, so retrieval keeps working under the old model. Recorded as not yet detected.",
+        "No outcome data of any kind. Nothing here shows that using the app helps anyone, and there is no efficacy study or psychometric validation.",
+      ],
       evidence: [
         "Retrieval ablation across 4 strategies (dense MiniLM, BM25, hybrid RRF, dense nomic-embed-text) on a corpus where every query is tagged with the confusion it was built to induce",
         "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted full corpus Recall@3 to 0.968 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
@@ -635,7 +809,21 @@ export const PROJECTS: ProjectsSectionContent = {
         },
         {
           title: "Deterministic safety floor underneath the model, not inside it",
-          why: "The tier gate cannot depend on an LLM call succeeding. Whatever else fails, the crisis path still has to hold.",
+          why: "The tier gate cannot depend on an LLM call succeeding. Whatever else fails, the crisis path still has to hold. The rule is that whether a property is mechanically checkable decides whether it belongs in code or in the model.",
+          tradeoff:
+            "The floor is English-only and brittle to phrasing. Six known gaps are recorded and excluded from the headline rather than chased with an ever-growing regex, and two patterns were removed after live testing because they collided with ordinary usage.",
+        },
+        {
+          title: "Set each filter's breadth by the cost of its own false positive",
+          why: "Missing a crisis is unrecoverable, so the crisis floor is deliberately over-broad and keeps false positives it could remove. The harsh-output filter runs the opposite way: a false positive there silently deletes a useful suggestion, so over-broad patterns would quietly gut the analysis.",
+          tradeoff:
+            "There is no single sensitivity dial to reason about. Each filter has to be argued and measured separately, and some false positives are kept on purpose.",
+        },
+        {
+          title: "Run local models by default and accept what that costs",
+          why: "Journal content is the most sensitive data the app touches, so the trust boundary is local disk and cloud backends stay double-gated.",
+          tradeoff:
+            "Measured across eight local models the best case-pass rate was 0.500, and the shipped default scores below that. It was chosen for latency instead, at roughly 24 seconds per case against a worst case near 67.",
         },
       ],
       links: {
@@ -796,13 +984,30 @@ export const PROJECTS: ProjectsSectionContent = {
         "A chatbot that helps you build n8n workflows, and only exposes what's actually safe to expose.",
       oneLiner:
         "Sourcewarden merges a retrieval index and a multi agent orchestration system for building n8n workflows behind a read only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
+      problem:
+        "An assistant that builds automation workflows has two ways to be dangerous. It can invent a node parameter that looks plausible and produces a workflow that fails in production, and it can take a live action against a real instance on the strength of its own say-so. This project treats both as gate problems rather than prompt problems: evidence has a fixed precedence order, and any live mutation is held behind a fail-closed, externally signed approval.",
+      constraints: [
+        "Evidence precedence is fixed. Documentation and community examples inform a plan but never prove an exact node parameter for the target instance.",
+        "The retrieval package runs on the Python standard library alone, with no network and no vector database in the test path.",
+        "The signing key must be unreachable by agents and workspace code, which puts approval outside the system that wants approval.",
+        "Self-improvement shares a trust boundary with the controls that authorise it, so a local apply would let a compromised tuner change both behaviour and its own evidence.",
+        "Writes are serialised and concurrency is capped, so reviewers cannot race ahead of writers.",
+      ],
+      failureModes: [
+        "The flagship evaluation run executed zero behavioural cases. Its own result file records the reason: no approved behavioural runner or externally signed evaluator evidence was available, and structural validation is not a behavioural score. The audit reaches the same verdict independently and holds the proposal as not promotable.",
+        "Live mutation against a real instance is never exercised end to end. It needs a connected instance plus an externally produced signed ledger, so the gate correctly denies by default and there is no in-repo demo of a successful signed mutation.",
+        "Security is defence in depth, not a guarantee. Higher-precedence settings can still disable project hooks, and an ALLOW from a reviewing agent never grants new authority.",
+        "The self-improvement loop cannot close. It always terminates at an external-integrator block by design, and the infrastructure that would complete it does not exist in the repository.",
+        "The retrieval fallback is a degradation rather than an equivalent. Hash-based fallback is lower quality than semantic embeddings and is documented as an availability fallback only.",
+        "No CI workflow is committed; the gate is a make target run by hand. The project's own audit ships as done-with-concerns with open blockers.",
+      ],
       evidence: [
         "2,256-row retrieval index across official n8n docs and community workflow examples, with an explicit evidence precedence: live instance schema, then official docs, then community examples, then untrusted references",
         "Six-role agent orchestration (supervisor, security firewall, skeleton architect, module builder, deviation monitor, eval tuner) gated by an Ed25519-signed run ledger, one-time nonces, and a 15-minute authorization window",
         "Deterministic secret-detection policy blocks any self-improvement feedback containing a PEM key, named credential, or GitHub/OpenAI token pattern, fail closed",
         "FastAPI chat endpoint returns cited evidence for every answer, never a plan without a source",
         "Monitoring dashboard recomputes all security control hashes live against the signed manifest instead of trusting a cached result",
-        "20 of 20 tests passing, including a mutation test that flips one byte in a tracked file and confirms the hash check reports a mismatch for that file and a match for the rest",
+        "71 tests across three offline suites (20 web layer, 34 retrieval, 17 self-improvement adversarial), run with no network and no vector database",
         "Ships as a single Docker image and degrades to a clear empty state instead of failing when the retrieval index isn't mounted",
       ],
       architecture: {
@@ -844,7 +1049,21 @@ export const PROJECTS: ProjectsSectionContent = {
         },
         {
           title: "Reimplemented the hash check in Python instead of shelling out",
-          why: "The existing hash generator is Node-only, write-capable, and maintainer-only. Giving a read-only backend any path to a write-capable script defeats the point of read-only.",
+          why: "The existing hash generator is Node-only, write-capable, and maintainer-only. Giving a read-only backend any path to a write-capable script defeats the point of read-only, and reimplementing removes both the external binary dependency and the shell-injection surface.",
+          tradeoff:
+            "Two implementations of the same hashing rule now have to agree, and the repo does not record what that duplication costs to maintain.",
+        },
+        {
+          title: "Self-improvement may propose, never apply",
+          why: "The tuner and the controls that authorise it share one local trust boundary, so a local apply command would let a compromised tuner change both the behaviour and the evidence for it. The loop terminates at an external integrator instead.",
+          tradeoff:
+            "The loop cannot close. Every proposal sits permanently on hold, because the external signing infrastructure that would complete it does not exist in the repository.",
+        },
+        {
+          title: "Fail closed by default on the mutation gate",
+          why: "Until a pinned public key and a matching signed ledger exist, the hooks deny. A gate that defaults to allow is a gate that is off.",
+          tradeoff:
+            "The system is unusable for live mutation out of the box, and there is no in-repo demonstration of a successful signed mutation to show that the path works.",
         },
         {
           title: "Merged the two source repos before building anything on top",
@@ -882,6 +1101,23 @@ export const PROJECTS: ProjectsSectionContent = {
         "I built an AutoML ranker, then the benchmark that proved it does not save time, and I kept that result.",
       oneLiner:
         "MetaLearnML is a tabular AutoML engine that ranks preprocessing by model candidates with a meta learner trained on past runs, next to a benchmark over 15 datasets built to measure whether that learned ranking actually beats proxy and random baselines. On end to end evaluation savings it does not, and the repo records that.",
+      problem:
+        "An AutoML system can rank candidate pipelines with a meta-learner trained on past runs, and the obvious claim is that better ranking finds a good pipeline in fewer evaluations. That claim is rarely tested against the baselines it needs to beat. This project builds the ranker and then builds the benchmark that decides whether the ranking actually saves any evaluations.",
+      constraints: [
+        "Leakage. Development and test partitions split before any encoder is fitted, preprocessing fitted inside each fold, and the target dataset excluded from its own meta-training history.",
+        "Cold start. Meta-ranking needs at least 20 compatible history rows before it can rank anything at all.",
+        "Compute. CPU only on a single laptop, which bounds the candidate universe and the number of seeds.",
+        "Licensing. Third-party datasets cannot be committed, so the suite is pinned by task version, checksum, and snapshot hash instead.",
+        "The comparison is scoped. Exhaustive search is the reference inside a fixed 28 to 36 pipeline universe, not a global optimum.",
+      ],
+      failureModes: [
+        "The headline result is null and stays published. Median evaluation reduction against random is 0.0%, with a dataset-bootstrap 95% CI spanning 0% to 50% over 10,000 resamples, which does not establish a reduction. The repo states it does not claim a search speedup.",
+        "Ranking quality and evaluation savings came apart. Median Spearman is 0.5676 for meta-only against 0.0216 for random, so the learned ranking genuinely orders candidates better; it just does not convert that into fewer evaluations. The gap between those two facts is the actual finding.",
+        "One dataset visibly regresses and is published anyway: micro-mass at 0.154 test regret in a table where the rest are near zero. Another has negative R² for every method, meaning worse than predicting the mean.",
+        "18 candidate runs failed on power transformation and are retained in the denominators rather than dropped, which depresses the method's own numbers.",
+        "No runtime or memory claim is made, because the cold wall-clock trial was not run and peak memory was not isolated. The published runtime plot is replay-equivalent, not wall clock.",
+        "The published evidence run was made from a dirty working tree, recorded in the report rather than hidden.",
+      ],
       evidence: [
         "Candidate universe: up to 12 preprocessing strategies × 7 (classification) or 9 (regression) models, ranked by fast proxy evaluation plus an optional RandomForest meta-learner over prior-run meta-features",
         "Leakage controls: outer dev/test split before any encoder is fit, fold-local preprocessing, a single scored touch of the test partition, deterministic splits, SHA-256 content-addressed candidate identity, and a versioned meta-feature schema that refuses to load on drift",
@@ -930,12 +1166,22 @@ export const PROJECTS: ProjectsSectionContent = {
           why: "Meta-learned ranking is supposed to save evaluations. The only honest way to claim that is a leakage-resistant suite that measures it, including when the answer is no.",
         },
         {
-          title: "Write ‘resume-impact criterion not met’ into the repo",
-          why: "A negative result that lives only in my head gets rounded up to a positive one later. In the benchmark report, it stays honest.",
+          title: "Pre-register the success bar in code, then publish the failure",
+          why: "The criterion is a boolean in the analysis script, evaluated automatically: a wholly positive bootstrap interval, at least 95% quality retention at budget 10, and regret no worse than 0.05. Deciding it after seeing results is how a null quietly becomes a win.",
+          tradeoff:
+            "It cost the project its headline claim. The generator wrote 'resume impact criterion not met' and the machine-readable summary records eligibility as false.",
         },
         {
           title: "Separate ranking quality from end-to-end savings",
-          why: "The meta-learner genuinely ranks better than random. That is not the same as reaching a good model in fewer evaluations, and conflating the two is the trap.",
+          why: "The meta-learner genuinely ranks better than random, by median Spearman 0.5676 against 0.0216. That is not the same as reaching a good model in fewer evaluations, and conflating the two is the trap.",
+          tradeoff:
+            "Reporting both means publishing a real improvement next to a null result and refusing to let the first one stand in for the second.",
+        },
+        {
+          title: "Report replay-equivalent runtime instead of wall clock",
+          why: "Every ranking method replays the same measured candidates, folds and failures, which isolates ordering quality from execution noise.",
+          tradeoff:
+            "It forfeits any speed claim outright: the cold end-to-end timing trial was never run, so the report cannot say the system is faster.",
         },
         {
           title: "Content-address candidates and version the meta-feature schema",

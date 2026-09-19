@@ -8,6 +8,7 @@ import { PROJECT_VIZ } from "../lib/projectViz";
 import { requestAccessHref } from "../lib/projectLinks";
 import FlowDiagram from "../components/FlowDiagram";
 import MiniViz from "../components/MiniViz";
+import ContextDemo from "../components/ContextDemo";
 
 const Section: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <section className="border-t border-white/[0.08] pt-8">
@@ -88,6 +89,27 @@ const CaseStudy: React.FC = () => {
         </header>
 
         <div className="mt-12 space-y-10">
+          {project.problem && (
+            <Section label="Problem">
+              <p className="max-w-2xl text-[15px] leading-relaxed text-text-dim">{project.problem}</p>
+            </Section>
+          )}
+
+          {project.constraints && project.constraints.length > 0 && (
+            <Section label="Constraints">
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {project.constraints.map((c) => (
+                  <li
+                    key={c}
+                    className="rounded-2xl border border-white/[0.10] bg-white/[0.02] px-4 py-3 text-[13px] leading-relaxed text-text-dim"
+                  >
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
           {project.metrics.length > 0 && (
             <Section label="Result">
               <dl className="grid gap-4 sm:grid-cols-2">
@@ -155,12 +177,49 @@ const CaseStudy: React.FC = () => {
             <div className="grid gap-3">
               {project.decisions.map((d) => (
                 <div key={d.title} className="rounded-2xl border border-white/[0.12] bg-white/[0.02] p-4">
-                  <p className="mb-1 text-sm font-bold text-text">{d.title}</p>
-                  <p className="text-[13px] leading-relaxed text-text-dim">{d.why}</p>
+                  <p className="mb-2 text-sm font-bold text-text">{d.title}</p>
+                  <p className="text-[13px] leading-relaxed text-text-dim">
+                    <span className="font-mono text-[11px] uppercase tracking-wide text-accent-teal">Why </span>
+                    {d.why}
+                  </p>
+                  {d.tradeoff && (
+                    <p className="mt-2 text-[13px] leading-relaxed text-text-dim">
+                      <span className="font-mono text-[11px] uppercase tracking-wide text-accent-bronze">
+                        Tradeoff{" "}
+                      </span>
+                      {d.tradeoff}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
           </Section>
+
+          {project.failureModes && project.failureModes.length > 0 && (
+            <Section label="Failure modes & limitations">
+              <ul className="space-y-2">
+                {project.failureModes.map((f) => (
+                  <li key={f} className="flex gap-3 text-sm leading-relaxed text-text-dim">
+                    <span className="mt-1 shrink-0 text-accent-bronze" aria-hidden="true">
+                      !
+                    </span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
+          {project.hasContextDemo && (
+            <Section label="Try the context-selection policy">
+              <p className="mb-4 max-w-2xl text-[13px] leading-relaxed text-text-dim">
+                The ranking rule below is the one the system uses. It runs in your browser: no
+                backend, no model call, and the chunks are a fixed worked example rather than
+                anyone&rsquo;s notes.
+              </p>
+              <ContextDemo />
+            </Section>
+          )}
 
           <Section label="Source">
             <div className="flex flex-wrap items-center gap-2">
