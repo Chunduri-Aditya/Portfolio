@@ -60,22 +60,31 @@ All figures below collected **2026-09-18**.
   holds only stock `yolov8n.pt`. No trained weights, no mAP, no latency. The
   project is not on the site and should not be added until it has results.
 
-## Open item: the resume PDF
+## Resume PDF
 
-`public/Docs/Aditya_Chunduri.pdf` was replaced on 2026-09-18 with the master
-from `Desktop/I_got_the_job` (dated 2026-09-09). That closes the conflicts the
-old July copy carried: it reads Jun 2024 for USC, RITE and FIVES rather than
-CHASE_DB1 and DRIVE, Easley Dunn as Present, and it includes the Yashoda and
-RB Associates roles this site now shows.
+`public/Docs/Aditya_Chunduri.pdf` is the **ML Engineer lane base** from
+`Desktop/I_got_the_job/work/jobright-2026-09-17/`, chosen because this site
+positions as ML / AI engineer and its title tag says the same.
 
-**Three things in it still contradict the source of truth.** They need a
-resume pass in `I_got_the_job`, under `RESUME_CONSTRUCTION_RULES.md`, not a
-change here: the filled resume exists only as a PDF, and
-`RESUME_SKELETON_ONEPAGE_ATS.tex` is a placeholder template, so it cannot be
-recompiled from this repo.
+### Correcting what this file said on 2026-09-18
 
-| In the PDF | Source of truth says |
-|---|---|
-| "Draft preprint, 2026" | Never "draft". It is a published Zenodo deposit, open access, CC-BY 4.0, 2026-06-22. |
-| Title "Agent Shield: An Adversarial Evaluation Framework for LLM Agents" | The old title, explicitly retired. The verified title is "Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security", which is what this site's research section now prints. The PDF and the site currently disagree for the same DOI. |
-| Agent Shield engagement "May 2025 - Jul 2026" | October 2025 to August 2026, reconfirmed 2026-09-10, explicitly superseding the May 2025 to July 2026 range this PDF still carries. |
+An earlier version of this section claimed the resume "exists only as a PDF"
+and that `RESUME_SKELETON_ONEPAGE_ATS.tex` is a placeholder template "so it
+cannot be recompiled from this repo". The second half is true and the
+conclusion drawn from it was wrong. `I_got_the_job` has a scripted resume
+pipeline, and three live lane bases with real `.tex` sources listed under
+`live_bases` in `work/job-hunt/active-resumes.json`. The skeleton is a
+template because it is not the source; the lane bases are.
+
+The three defects recorded here earlier, "Draft preprint", the retired Agent
+Shield paper title, and a May 2025 to July 2026 engagement range, were
+defects in the **stale root `Aditya_Chunduri.pdf` dated 2026-09-09**, which is
+what this site was briefly serving. The live lane bases never had them:
+checked against all three, they carry "Beyond Attack Success Rate", no
+"draft", and Oct 2025 to Aug 2026.
+
+The lesson worth keeping: a file at the obvious path is not the source of
+truth. `active-resumes.json` names the live bases explicitly, and the repo's
+own CLAUDE.md says to select from it "never by filename or modification
+time". Reading that first would have avoided both the wrong PDF and the wrong
+conclusion about it.
