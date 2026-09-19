@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import Navbar from "./Navbar";
 import Hero from "./Hero";
@@ -10,13 +10,18 @@ import CapabilitiesSection from "./CapabilitiesSection";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import CommandPalette from "./CommandPalette";
+import { NAV_LINKS } from "../data/content";
+import { useScrollSpy } from "../lib/useScrollSpy";
 
 const Portfolio: React.FC = () => {
-  const [activeSection, setActiveSection] = useState("projects");
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
 
+  // "hero" is tracked so no nav link is marked current while the hero is on
+  // screen, but it is not itself a nav link.
+  const sectionIds = useMemo(() => ["hero", ...NAV_LINKS.map((l) => l.id)], []);
+  const activeSection = useScrollSpy(sectionIds);
+
   const scrollTo = useCallback((id: string) => {
-    setActiveSection(id);
     const el = document.getElementById(id);
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);

@@ -156,6 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
                         scrollTo(link.id);
                         setMobileOpen(false);
                       }}
+                      aria-current={active ? "page" : undefined}
                       className={`rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                         active ? "bg-white/10 text-text" : "text-text-dim hover:bg-white/5 hover:text-text"
                       }`}
