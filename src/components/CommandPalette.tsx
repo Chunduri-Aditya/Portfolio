@@ -213,7 +213,15 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
       ?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
-  let runningIndex = -1;
+  // Flat render order, computed once. This used to be a `let` counter mutated
+  // inside the render tree, which broke onMouseEnter (every closure shared the
+  // one binding and read its final value, so hovering any row highlighted the
+  // last) and is not safe under concurrent rendering.
+  const flatCommands = grouped.flatMap((g) => g.items);
+  const indexOfCommand = new Map(flatCommands.map((c, i) => [c.id, i]));
+  const activeCommandId = flatCommands[activeIndex]
+    ? `command-option-${flatCommands[activeIndex].id}`
+    : undefined;
 
   return (
     <AnimatePresence>
@@ -253,6 +261,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="command-palette-list"
+                aria-activedescendant={activeCommandId}
               />
               <kbd className="hidden shrink-0 rounded border border-white/[0.12] px-1.5 font-mono text-[10px] text-text-faint sm:inline-block">
                 ESC
@@ -275,11 +284,13 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 <div key={group} className="mb-1">
                   <div className="eyebrow px-3 py-1.5">{group}</div>
                   {items.map((command) => {
-                    runningIndex += 1;
-                    const isActive = runningIndex === activeIndex;
+                    const index = indexOfCommand.get(command.id) ?? -1;
+                    const isActive = index === activeIndex;
+                    const optionId = `command-option-${command.id}`;
                     return (
                       <button
                         key={command.id}
+                        id={optionId}
                         type="button"
                         role="option"
                         aria-selected={isActive}
@@ -287,7 +298,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                           command.action();
                           onClose();
                         }}
-                        onMouseEnter={() => setActiveIndex(runningIndex)}
+                        onMouseEnter={() => setActiveIndex(index)}
                         className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors ${
                           isActive
                             ? "bg-gradient-to-r from-accent-violet/25 to-accent-cyan/15 text-text"

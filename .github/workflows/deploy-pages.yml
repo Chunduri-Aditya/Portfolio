@@ -26,14 +26,27 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
+      # Gates, in the order that gives the most useful failure first.
+      # Nothing checked this repo before: a full pass of accessibility bugs,
+      # 34 Tailwind classes that compiled to nothing, and 17 type errors all
+      # shipped because build was the only step.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:run
+
       - name: Build
         run: npm run build
       
