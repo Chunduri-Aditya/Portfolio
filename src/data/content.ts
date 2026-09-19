@@ -128,6 +128,46 @@ export interface HudStat {
  * maintained. See the comment on the export itself.
  */
 
+/* ── Hero evidence panel ──────────────────────────────────────────────── */
+
+export interface AttackModule {
+  /** Module prefix as it appears in the attack IDs themselves. */
+  code: string;
+  label: string;
+  ids: number;
+}
+
+/**
+ * Agent Shield's attack surface, the one Agent Shield figure that is fully
+ * documented and currently printable.
+ *
+ * This is coverage, not results. METRICS.md withdraws the agentic / TL-01
+ * anchored results pending a rerun, so leading the page with a results chart
+ * would be printing a number the ledger says not to print. Counts are the
+ * unique IDs across the six in-house modules; `AA-01`..`AA-05` (the external
+ * Auto_Apply benchmark) and the `XX-99` test fixture are excluded, which is why
+ * the total is 28 and not 34. See METRICS.md, `agent-shield` 6c142ee.
+ */
+export const ATTACK_SURFACE: AttackModule[] = [
+  { code: "IN", label: "Prompt injection", ids: 5 },
+  { code: "PS", label: "Social engineering", ids: 6 },
+  { code: "MM", label: "RAG / memory poisoning", ids: 1 },
+  { code: "DR", label: "Behavioral drift", ids: 6 },
+  { code: "EX", label: "Covert exfiltration", ids: 5 },
+  { code: "TL", label: "MCP tool poisoning", ids: 5 },
+];
+
+/* ── Proof strip ──────────────────────────────────────────────────────── */
+
+/** Short, checkable claims. Each one is backed by a section further down. */
+export const PROOF_POINTS: string[] = [
+  "M.S. Applied Data Science, USC",
+  "LLM security & evaluation",
+  "Agent systems",
+  "Computer vision",
+  "Open-source engineering",
+];
+
 /* ============================================================================
  * SECTION 2 — NAVIGATION
  * ========================================================================= */
@@ -173,7 +213,7 @@ export const ABOUT: AboutContent = {
 };
 
 /* ============================================================================
- * SECTION 5 — PROJECTS ("The Rabbit Holes")
+ * SECTION 4 — PROJECTS
  * ========================================================================= */
 
 interface ProjectMetric {
@@ -1149,22 +1189,9 @@ export const PROJECTS: ProjectsSectionContent = {
  * read "4 of the 8 target" models. Neither number was supportable, so the stat
  * is gone rather than swapped for a different wrong one.
  */
-export const HUD_STATS: HudStat[] = [
-  {
-    label: "SYSTEMS SHIPPED",
-    value: String(PROJECTS.projects.filter((p) => p.status === "SHIPPED").length),
-  },
-  {
-    label: "DISCIPLINES",
-    value: String(new Set(PROJECTS.projects.map((p) => p.discipline)).size),
-  },
-  { label: "PAPERS", value: "2" },
-  // 6 in-house modules: IN 5, PS 6, MM 1, DR 6, EX 5, TL 5. See METRICS.md.
-  { label: "ATTACK IDS CATALOGUED", value: "28" },
-];
 
 /* ============================================================================
- * SECTION 6 — EXPERIENCE ("Field Work")
+ * SECTION 5 — EXPERIENCE
  * ========================================================================= */
 
 export type ExperienceAccent = "teal" | "sapphire" | "viridian";
@@ -1291,7 +1318,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
 };
 
 /* ============================================================================
- * SECTION 7 — RESEARCH ("Deep Theory")
+ * SECTION 6 — RESEARCH
  * ========================================================================= */
 
 export type ResearchAccent = "teal" | "sapphire" | "indigo" | "viridian";
@@ -1386,8 +1413,35 @@ export const RESEARCH: ResearchContent = {
 };
 
 /* ============================================================================
- * SECTION 8 — SIDEBAR (User Manual + Off-Keyboard + Skills + CTA)
+ * SECTION 7 — SIDEBAR (Education + CTA)
  * ========================================================================= */
+
+/* ── Hero telemetry. Derived wherever a derivation exists. ────────────── */
+
+/**
+ * Every value here is computed from the data above, so a stat cannot drift from
+ * the thing it counts.
+ *
+ * "DISCIPLINES" used to sit in this list, counting unique `discipline` strings.
+ * Every project carries a distinct one, so it was the project count wearing a
+ * second label: it read as a credibility signal and carried no information.
+ * Public repositories replaced it, because that one is checkable by clicking.
+ */
+export const HUD_STATS: HudStat[] = [
+  {
+    label: "SYSTEMS SHIPPED",
+    value: String(PROJECTS.projects.filter((p) => p.status === "SHIPPED").length),
+  },
+  {
+    label: "PUBLIC REPOS",
+    value: String(PROJECTS.projects.filter((p) => p.links.github).length),
+  },
+  { label: "PAPERS", value: String(RESEARCH.publications.length) },
+  {
+    label: "ATTACK IDS CATALOGUED",
+    value: String(ATTACK_SURFACE.reduce((n, m) => n + m.ids, 0)),
+  },
+];
 
 export type SkillAccent = "bronze" | "sapphire" | "teal" | "viridian" | "indigo";
 
@@ -1407,11 +1461,6 @@ export interface SkillCategory {
 }
 
 export interface SidebarContent {
-  skills: {
-    title: string;
-    iconName: IconName;
-    items: SkillCategory[];
-  };
   education: {
     title: string;
     iconName: IconName;
@@ -1428,42 +1477,6 @@ export interface SidebarContent {
 }
 
 export const SIDEBAR: SidebarContent = {
-  skills: {
-    title: "Cognitive Stack",
-    iconName: "Layers",
-    items: [
-      {
-        category: "Eval & Adversarial (Safety)",
-        tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection", "MCP Proxying", "Mutation Testing", "Wilson CIs"],
-        iconName: "ShieldCheck",
-        accent: "bronze",
-      },
-      {
-        category: "LLM & Orchestration",
-        tools: ["LangChain", "LangGraph", "Ollama", "Hugging Face", "RAG", "ChromaDB", "pgvector"],
-        iconName: "Sparkles",
-        accent: "sapphire",
-      },
-      {
-        category: "ML / CV / Audio",
-        tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "MediaPipe", "librosa", "Demucs", "Beat This!", "CLAP", "Diffusers"],
-        iconName: "Cpu",
-        accent: "teal",
-      },
-      {
-        category: "Systems & Engineering",
-        tools: ["FastAPI", "React/TypeScript", "Docker", "Flask", "GitHub Actions", "CI/CD", "pytest", "uv"],
-        iconName: "Wrench",
-        accent: "viridian",
-      },
-      {
-        category: "Data & Storage",
-        tools: ["PostgreSQL", "SQLAlchemy", "SQLite", "ChromaDB", "Pandas", "NumPy", "Plotly"],
-        iconName: "Database",
-        accent: "indigo",
-      },
-    ],
-  },
   education: {
     title: "Education",
     iconName: "ScrollText",
@@ -1490,6 +1503,68 @@ export const SIDEBAR: SidebarContent = {
     resumeHref: ASSETS.resumePdf,
     emailHref: `mailto:${CONTACT.email}`,
   },
+};
+
+/* ============================================================================
+ * SECTION 8 — TECHNICAL CAPABILITIES
+ * ----------------------------------------------------------------------------
+ * Grouped by capability, not by language, so a reader scanning for one lane
+ * (evaluation, say, or computer vision) finds it as a block.
+ *
+ * No proficiency bars and no percentages, here or anywhere: a self-assigned
+ * "PyTorch 90%" is a number with nothing behind it, and this site's whole
+ * argument is that its numbers trace to something.
+ * ========================================================================= */
+
+export interface CapabilitiesContent {
+  header: { title: string; eyebrow: string; subtitle: string };
+  groups: SkillCategory[];
+}
+
+export const CAPABILITIES: CapabilitiesContent = {
+  header: {
+    title: "Technical Capabilities",
+    eyebrow: "Skills",
+    subtitle: "Grouped by what they are used to build.",
+  },
+  groups: [
+    {
+      category: "Evaluation & Adversarial Testing",
+      tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection", "Benchmark Design", "Mutation Testing", "Wilson CIs"],
+      iconName: "ShieldCheck",
+      accent: "bronze",
+    },
+    {
+      category: "LLM & Agent Systems",
+      tools: ["LangChain", "LangGraph", "Ollama", "Hugging Face", "RAG", "Tool Use", "Agent Orchestration", "Context Engineering", "MCP"],
+      iconName: "Sparkles",
+      accent: "sapphire",
+    },
+    {
+      category: "ML & Modeling",
+      tools: ["Python", "PyTorch", "TensorFlow", "Keras", "Scikit-learn", "NumPy", "Pandas"],
+      iconName: "Cpu",
+      accent: "teal",
+    },
+    {
+      category: "Computer Vision & Audio",
+      tools: ["OpenCV", "MediaPipe", "YOLO", "Segmentation", "Homography", "librosa", "Demucs", "CLAP", "Diffusers"],
+      iconName: "Eye",
+      accent: "viridian",
+    },
+    {
+      category: "Backend & ML Systems",
+      tools: ["FastAPI", "Flask", "React/TypeScript", "Docker", "GitHub Actions", "CI/CD", "pytest", "uv"],
+      iconName: "Wrench",
+      accent: "indigo",
+    },
+    {
+      category: "Data & Retrieval",
+      tools: ["ChromaDB", "pgvector", "Vector Search", "PostgreSQL", "SQLAlchemy", "SQLite", "Plotly"],
+      iconName: "Database",
+      accent: "sapphire",
+    },
+  ],
 };
 
 /* ============================================================================

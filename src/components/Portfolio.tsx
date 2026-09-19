@@ -6,6 +6,7 @@ import AboutSection from "./AboutSection";
 import ProjectsSection from "./ProjectsSection";
 import ExperienceSection from "./ExperienceSection";
 import ResearchSection from "./ResearchSection";
+import CapabilitiesSection from "./CapabilitiesSection";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import CommandPalette from "./CommandPalette";
@@ -43,6 +44,7 @@ const Portfolio: React.FC = () => {
           <div className="flex flex-col gap-28 lg:col-span-8">
             <ProjectsSection />
             <ExperienceSection />
+            <CapabilitiesSection />
             <ResearchSection />
           </div>
 

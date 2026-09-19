@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Github, Linkedin, Menu, X, Search } from "lucide-react";
-import { NAV_LINKS, CONTACT } from "../data/content";
+import { Sparkles, Mail, Github, Linkedin, Menu, X, Search, FileText } from "lucide-react";
+import { NAV_LINKS, CONTACT, HERO } from "../data/content";
 
 const isMac =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
@@ -43,12 +43,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
             <button
               type="button"
               onClick={onOpenPalette}
-              className="flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1.5 text-[11px] font-medium text-text-faint transition-colors hover:border-white/20 hover:text-text"
+              className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] py-1.5 pl-3 pr-2 text-[11px] font-medium text-text-dim transition-colors hover:border-white/35 hover:bg-white/[0.07] hover:text-text"
               aria-label="Open command palette"
             >
               <Search size={13} strokeWidth={2} />
-              Search
-              <kbd className="rounded border border-white/10 px-1 font-mono text-[10px]">
+              <span className="pr-6">Search projects, sections, links</span>
+              <kbd className="rounded border border-white/15 bg-white/[0.06] px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
                 {isMac ? "⌘K" : "^K"}
               </kbd>
             </button>
@@ -77,6 +77,16 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
 
           {/* Right */}
           <div className="flex items-center gap-2">
+            <a
+              href={HERO.ctas.resume.href}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-full bg-accent-sapphire-deep px-3.5 py-1.5 text-xs font-bold text-white transition-transform hover:scale-[1.03]"
+            >
+              <FileText size={13} strokeWidth={2} />
+              Resume
+            </a>
+
             <div className="hidden items-center xl:flex">
               {SOCIAL.map(({ href, icon: I, label }) => (
                 <a

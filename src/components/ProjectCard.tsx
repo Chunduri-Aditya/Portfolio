@@ -8,11 +8,21 @@ import { PROJECT_VIZ } from "../lib/projectViz";
 import FlowDiagram from "./FlowDiagram";
 import MiniViz from "./MiniViz";
 
-const HUE: Record<string, string> = {
+/**
+ * Discipline to accent hue.
+ *
+ * Keyed by every discipline in PROJECTS, checked by a test rather than by
+ * eye: the map previously held nine entries against eleven disciplines, so
+ * jarvis and Company Agents silently took the fallback and looked like a
+ * different tier of work than they are.
+ *
+ * Hues are the ones that clear AA as ink-on-colour, since the case-study
+ * button sits on this hue. #2f8fe0 measured 4.49:1, just under; #7fb4ee is
+ * 6.99:1.
+ */
+export const HUE: Record<string, string> = {
   "AI-SAFETY / EVAL": "#17b3b3",
   "AUDIO-ML": "#c1743a",
-  // Lightened from #2f8fe0: the "Full brief" label sits on this hue as ink,
-  // and #2f8fe0 measured 4.49:1, just under AA. #7fb4ee is 6.99:1.
   "GENAI / PIPELINE": "#7fb4ee",
   "RAG / SAFETY": "#22c48c",
   "EVAL / TOOLING": "#6d82e8",
@@ -20,6 +30,8 @@ const HUE: Record<string, string> = {
   "SYSTEMS / SECURITY": "#7fb4ee",
   "AUTOML / BENCHMARK": "#22c48c",
   "DEV-TOOL / SQL": "#e3b23c",
+  "AGENT-SECURITY / RUNTIME": "#17b3b3",
+  "MULTI-AGENT / TOOLING": "#6d82e8",
 };
 
 const STATUS: Record<Project["status"], string> = {
@@ -152,9 +164,20 @@ const ProjectCard = memo(function ProjectCard({
             </span>
           ))}
         </div>
-        <dl className="grid grid-cols-2 border-t border-white/[0.08]">
+        {/*
+          Column count follows the data. Fixed at two, Sourcewarden's three
+          metrics left an orphaned half-width cell on its own row.
+        */}
+        <dl
+          className={`grid border-t border-white/[0.08] ${
+            project.metrics.length === 3 ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-2"
+          }`}
+        >
           {project.metrics.map((m) => (
-            <div key={m.label} className="border-white/[0.08] px-6 py-3 [&:nth-child(odd)]:border-r">
+            <div
+              key={m.label}
+              className="border-white/[0.08] px-6 py-3 [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-r"
+            >
               <dt className="text-[11px] text-text-faint">{m.label}</dt>
               <dd className="mt-0.5 font-mono text-sm font-bold text-text">{m.value}</dd>
             </div>

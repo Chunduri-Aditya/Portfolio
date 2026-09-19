@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import CaseStudy from "./CaseStudy";
 import { PROJECTS } from "../data/content";
+import { HUE } from "../components/ProjectCard";
 
 /**
  * Mounts the real route so the test exercises param parsing, not just the
@@ -62,6 +63,14 @@ describe("CaseStudy", () => {
       const { unmount } = renderAt(`/work/${project.id}`);
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(project.title);
       unmount();
+    }
+  });
+
+  test("every discipline has an accent hue, so none falls back silently", () => {
+    // The map held 9 entries against 11 disciplines, so two projects rendered in
+    // the fallback colour and nothing said so.
+    for (const project of PROJECTS.projects) {
+      expect(HUE[project.discipline], `no hue for "${project.discipline}"`).toBeDefined();
     }
   });
 });

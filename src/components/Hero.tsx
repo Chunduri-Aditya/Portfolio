@@ -1,8 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail } from "lucide-react";
-import { CONTACT, HERO } from "../data/content";
+import { CONTACT, HERO, HUD_STATS, PROOF_POINTS } from "../data/content";
 import { Icon } from "../lib/iconMap";
+import Counter from "./Counter";
+import EvidencePanel from "./EvidencePanel";
 
 interface HeroProps {
   scrollTo: (id: string) => void;
@@ -26,7 +28,8 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
 
   return (
     <section id="hero" className="relative pt-10 lg:pt-16">
-      <div className="max-w-3xl">
+      <div className="grid grid-cols-1 gap-x-10 gap-y-12 lg:grid-cols-12">
+        <div className="lg:col-span-7">
         <motion.div {...fade(0.05)} className="mb-5 flex flex-wrap items-center gap-3">
           <h1 className="font-display text-sm uppercase tracking-[0.2em] text-text-dim">
             {HERO.name}
@@ -118,7 +121,43 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
             Email
           </a>
         </motion.div>
+        </div>
+
+        <motion.div {...fade(0.3)} className="lg:col-span-5">
+          <EvidencePanel />
+        </motion.div>
       </div>
+
+      {/* Proof strip. Very little vertical space, every claim backed below. */}
+      <motion.ul
+        {...fade(0.44)}
+        className="mt-14 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-white/[0.08] py-4 text-[12px] text-text-dim"
+      >
+        {PROOF_POINTS.map((p, i) => (
+          <li key={p} className="flex items-center gap-3">
+            {i > 0 && (
+              <span aria-hidden="true" className="text-text-faint/50">
+                |
+              </span>
+            )}
+            {p}
+          </li>
+        ))}
+      </motion.ul>
+
+      <motion.dl {...fade(0.5)} className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {HUD_STATS.map((s) => (
+          <div
+            key={s.label}
+            className="rounded-2xl border border-white/[0.12] bg-white/[0.03] px-4 py-5 transition-colors hover:border-white/25"
+          >
+            <dd className="font-display text-3xl text-text">
+              <Counter value={s.value} className="gradient-text" />
+            </dd>
+            <dt className="mt-1 text-[11px] leading-tight text-text-faint">{s.label}</dt>
+          </div>
+        ))}
+      </motion.dl>
     </section>
   );
 };

@@ -5,39 +5,11 @@ import { SIDEBAR, CONTACT } from "../data/content";
 import { Icon } from "../lib/iconMap";
 
 const Sidebar: React.FC = () => {
-  const { skills, education, cta } = SIDEBAR;
+  const { education, cta } = SIDEBAR;
 
   return (
     <div className="flex flex-col gap-6 lg:sticky lg:top-24">
-      <AnimatedSection id="skills" direction="right" labelledBy="skills-heading">
-        <div className="glass rounded-4xl p-6">
-          <h2 id="skills-heading" className="eyebrow mb-4">{skills.title}</h2>
-          <StaggerContainer className="flex flex-col gap-3">
-            {skills.items.map((skill) => (
-              <StaggerItem key={skill.category}>
-                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-                  <div className="mb-2 flex items-center gap-2">
-                    <Icon name={skill.iconName} size={14} className="text-accent-sapphire" />
-                    <span className="text-sm font-bold text-text">{skill.category}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {skill.tools.map((tool) => (
-                      <span
-                        key={tool}
-                        className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5 text-[11px] text-text-faint"
-                      >
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </AnimatedSection>
-
-      <AnimatedSection id="education" direction="right" delay={0.08} labelledBy="education-heading">
+      <AnimatedSection id="education" direction="right" labelledBy="education-heading">
         <div className="glass rounded-4xl p-6">
           <h2 id="education-heading" className="eyebrow mb-4">{education.title}</h2>
           <StaggerContainer className="flex flex-col gap-3">
@@ -59,7 +31,7 @@ const Sidebar: React.FC = () => {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection direction="right" delay={0.16} labelledBy="sidebar-cta-heading">
+      <AnimatedSection direction="right" delay={0.08} labelledBy="sidebar-cta-heading">
         <div className="glass edge-gradient rounded-4xl p-6 text-center">
           <h2 id="sidebar-cta-heading" className="font-display text-lg text-text">{cta.title}</h2>
           <p className="mb-4 mt-1 text-[13px] text-text-faint">{cta.subtitle}</p>
