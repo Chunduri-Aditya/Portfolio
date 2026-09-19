@@ -1,10 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    The ocellus, the eye of a peacock feather, read outward: gold ring, bronze,
+    viridian, teal barbs, sapphire core. Drawn as four solid bands rather than
+    a smooth gradient because the mark has to survive 16px, where an
+    interpolated ring turns to mud.
+  -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8b5cf6"/>
-      <stop offset="1" stop-color="#22d3ee"/>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e3b23c"/>
+      <stop offset="1" stop-color="#c1743a"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#g)"/>
-  <path fill="#fff" d="M32 12l4.6 11.2L48 28l-11.4 4.8L32 44l-4.6-11.2L16 28l11.4-4.8z"/>
+  <rect width="64" height="64" rx="16" fill="#0a1016"/>
+  <ellipse cx="32" cy="32" rx="21" ry="23" fill="url(#ring)"/>
+  <ellipse cx="32" cy="32" rx="15.5" ry="17.5" fill="#22c48c"/>
+  <ellipse cx="32" cy="32" rx="10.5" ry="12.5" fill="#17b3b3"/>
+  <ellipse cx="32" cy="31" rx="6" ry="8" fill="#12325c"/>
+  <ellipse cx="32" cy="30.5" rx="3" ry="4.5" fill="#2f8fe0"/>
 </svg>

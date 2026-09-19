@@ -24,8 +24,8 @@ function Blob() {
       <mesh ref={mesh} scale={2.15}>
         <icosahedronGeometry args={[1, 24]} />
         <MeshDistortMaterial
-          color="#7c5cff"
-          emissive="#2a1a6b"
+          color="#1f7fb8"
+          emissive="#0b2f4a"
           emissiveIntensity={0.45}
           roughness={0.28}
           metalness={0.35}
@@ -47,10 +47,10 @@ const HeroScene: React.FC = () => (
     gl={{ antialias: true, alpha: true }}
   >
     <ambientLight intensity={0.5} />
-    <directionalLight position={[4, 5, 3]} intensity={2.6} color="#22d3ee" />
-    <directionalLight position={[-5, -2, -4]} intensity={2.0} color="#ec4899" />
+    <directionalLight position={[4, 5, 3]} intensity={2.6} color="#17b3b3" />
+    <directionalLight position={[-5, -2, -4]} intensity={2.0} color="#e3b23c" />
     <directionalLight position={[0, 3, -6]} intensity={1.4} color="#ffffff" />
-    <pointLight position={[2, -3, 4]} intensity={30} color="#8b5cf6" distance={12} />
+    <pointLight position={[2, -3, 4]} intensity={30} color="#22c48c" distance={12} />
     <Blob />
   </Canvas>
 );

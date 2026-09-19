@@ -85,7 +85,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={PROJECTS.searchPlaceholder}
-              className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
+              className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
               aria-label="Search projects"
             />
             {!!query && (
@@ -109,7 +109,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   aria-pressed={on}
                   className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
                     on
-                      ? "bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep text-white"
+                      ? "bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep text-white"
                       : "border border-white/10 text-text-faint hover:border-white/20 hover:text-text-dim"
                   }`}
                 >
@@ -121,7 +121,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               <button
                 type="button"
                 onClick={clearTags}
-                className="ml-1 text-[11px] font-semibold text-accent-pink hover:opacity-80"
+                className="ml-1 text-[11px] font-semibold text-accent-bronze hover:opacity-80"
               >
                 Reset
               </button>

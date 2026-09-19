@@ -1129,7 +1129,7 @@ export const PROJECTS: ProjectsSectionContent = {
       title: "jarvis",
       subtitle: "Turn-Scoped Containment for Coding Agents",
       iconName: "ShieldCheck",
-      iconClassName: "text-accent-emerald",
+      iconClassName: "text-accent-viridian",
       tags: ["Claude Code Hooks", "Prompt Injection", "Taint Tracking", "Fail-Closed", "Python", "Agent Shield"],
       discipline: "AGENT-SECURITY / RUNTIME",
       status: "SHIPPED",
@@ -1208,7 +1208,7 @@ export const PROJECTS: ProjectsSectionContent = {
       title: "Company Agents",
       subtitle: "An Executable Map of a Company's Roles",
       iconName: "Boxes",
-      iconClassName: "text-accent-amber",
+      iconClassName: "text-accent-gold",
       tags: ["Multi-Agent", "Node.js", "Zero Dependencies", "Mutation Testing", "LangGraph.js", "Agent Shield"],
       discipline: "MULTI-AGENT / TOOLING",
       status: "SHIPPED",
@@ -1321,7 +1321,7 @@ export const HUD_STATS: HudStat[] = [
  * SECTION 6 — EXPERIENCE ("Field Work")
  * ========================================================================= */
 
-export type ExperienceAccent = "cyan" | "purple" | "emerald";
+export type ExperienceAccent = "teal" | "sapphire" | "viridian";
 
 export interface ExperienceItem {
   org: string;
@@ -1365,7 +1365,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       role: "AI/ML Engineer Intern \u00b7 Gameplay Analyzer Team",
       location: "Remote",
       period: "Aug 2026 \u2013 Present",
-      accent: "emerald",
+      accent: "viridian",
       hook:
         "Built the tool a video team relies on to decide whether a camera to field mapping is trustworthy before they accept it.",
       plain:
@@ -1389,7 +1389,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       role: "Research Assistant \u00b7 Computer Vision & Medical Imaging",
       location: "Los Angeles, CA",
       period: "Jun 2024 \u2013 Dec 2024",
-      accent: "cyan",
+      accent: "teal",
       hook:
         "Made the clean artery versus vein training masks a team's retinal scan segmentation model learned from.",
       plain:
@@ -1411,7 +1411,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       role: "Data Analyst Intern",
       location: "Remote",
       period: "Nov 2022 \u2013 May 2023",
-      accent: "emerald",
+      accent: "viridian",
       hook:
         "Turned confidential insurance paperwork into something a doctor could read at a glance.",
       plain:
@@ -1431,7 +1431,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       role: "Automation Engineering Intern (Finance and Accounting)",
       location: "Remote",
       period: "Aug 2021 \u2013 Sep 2022",
-      accent: "purple",
+      accent: "sapphire",
       hook:
         "Automated four reconciliation processes by sitting with the accountants who ran them by hand.",
       plain:
@@ -1453,7 +1453,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       role: "Research Intern \u00b7 Computer Vision & Object Detection",
       location: "Remote",
       period: "Jun 2021 \u2013 Jul 2021",
-      accent: "purple",
+      accent: "sapphire",
       hook:
         "First taste of computer vision: running a detector over test video and writing down where it broke.",
       plain:
@@ -1475,7 +1475,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
  * SECTION 7 — RESEARCH ("Deep Theory")
  * ========================================================================= */
 
-export type ResearchAccent = "cyan" | "purple" | "blue" | "green";
+export type ResearchAccent = "teal" | "sapphire" | "indigo" | "viridian";
 
 export interface PublicationLink {
   label: string;
@@ -1529,10 +1529,10 @@ export const RESEARCH: ResearchContent = {
       signal:
         "Sole-author preprint introducing a transparency-aware evaluation protocol on Inspect AI. Adds Transparency Rate (TR) as a third axis to the AgentDojo outcome matrix, with an anchored prompt-injection result (n=20, Wilson 95% CIs) across four models and diagnostic probes over six adversarial surfaces.",
       metrics: [
-        { label: "Contribution", value: "Transparency Rate", accent: "purple" },
-        { label: "Harness", value: "Inspect AI", accent: "cyan" },
-        { label: "Surfaces", value: "6 attack", accent: "green" },
-        { label: "Author", value: "Sole author", accent: "blue" },
+        { label: "Contribution", value: "Transparency Rate", accent: "sapphire" },
+        { label: "Harness", value: "Inspect AI", accent: "teal" },
+        { label: "Surfaces", value: "6 attack", accent: "viridian" },
+        { label: "Author", value: "Sole author", accent: "indigo" },
       ],
       links: [
         { label: "Read The Paper", href: ASSETS.agentShieldPaper },
@@ -1567,10 +1567,10 @@ export const RESEARCH: ResearchContent = {
       signal:
         "Hybrid forecasting combining TCN and KNN regression inside a Digital Twin architecture on Azure. IJRASET Vol 11 Issue VIII, Aug 2023. Second of four authors.",
       metrics: [
-        { label: "Architecture", value: "Digital Twin", accent: "cyan" },
-        { label: "Model", value: "TCN + KNN", accent: "purple" },
-        { label: "Authorship", value: "2nd of 4", accent: "blue" },
-        { label: "DOI", value: "10.22214/ijraset.2023.52452", accent: "green" },
+        { label: "Architecture", value: "Digital Twin", accent: "teal" },
+        { label: "Model", value: "TCN + KNN", accent: "sapphire" },
+        { label: "Authorship", value: "2nd of 4", accent: "indigo" },
+        { label: "DOI", value: "10.22214/ijraset.2023.52452", accent: "viridian" },
       ],
       links: [
         { label: "Read The Paper", href: ASSETS.publicationPaper },
@@ -1585,7 +1585,7 @@ export const RESEARCH: ResearchContent = {
  * SECTION 8 — SIDEBAR (User Manual + Off-Keyboard + Skills + CTA)
  * ========================================================================= */
 
-export type SkillAccent = "rose" | "purple" | "cyan" | "emerald" | "blue";
+export type SkillAccent = "bronze" | "sapphire" | "teal" | "viridian" | "indigo";
 
 export interface EducationEntry {
   school: string;
@@ -1735,31 +1735,31 @@ export const SIDEBAR: SidebarContent = {
         category: "Eval & Adversarial (Safety)",
         tools: ["Inspect AI", "AgentDojo", "HarmBench", "Red Teaming", "Prompt Injection", "MCP Proxying", "Mutation Testing", "Wilson CIs"],
         iconName: "ShieldCheck",
-        accent: "rose",
+        accent: "bronze",
       },
       {
         category: "LLM & Orchestration",
         tools: ["LangChain", "LangGraph", "Ollama", "Hugging Face", "RAG", "ChromaDB", "pgvector"],
         iconName: "Sparkles",
-        accent: "purple",
+        accent: "sapphire",
       },
       {
         category: "ML / CV / Audio",
         tools: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "OpenCV", "MediaPipe", "librosa", "Demucs", "Beat This!", "CLAP", "Diffusers"],
         iconName: "Cpu",
-        accent: "cyan",
+        accent: "teal",
       },
       {
         category: "Systems & Engineering",
         tools: ["FastAPI", "React/TypeScript", "Docker", "Flask", "GitHub Actions", "CI/CD", "pytest", "uv"],
         iconName: "Wrench",
-        accent: "emerald",
+        accent: "viridian",
       },
       {
         category: "Data & Storage",
         tools: ["PostgreSQL", "SQLAlchemy", "SQLite", "ChromaDB", "Pandas", "NumPy", "Plotly"],
         iconName: "Database",
-        accent: "blue",
+        accent: "indigo",
       },
     ],
   },

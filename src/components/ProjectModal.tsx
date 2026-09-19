@@ -87,7 +87,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
           >
             <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-white/10 bg-ink-2/80 p-6 backdrop-blur-xl">
               <div className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-violet/30 to-accent-cyan/20 text-accent-cyan">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-sapphire/30 to-accent-teal/20 text-accent-teal">
                   <Icon name={project.iconName} size={20} />
                 </span>
                 <div>
@@ -102,7 +102,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                className="rounded-full border border-white/[0.12] p-2 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink focus:outline-none focus:ring-2 focus:ring-accent-violet/50"
+                className="rounded-full border border-white/[0.12] p-2 text-text-dim transition-colors hover:border-accent-bronze/60 hover:text-accent-bronze focus:outline-none focus:ring-2 focus:ring-accent-sapphire/50"
                 aria-label="Close modal"
               >
                 <X className="h-4 w-4" strokeWidth={2} />
@@ -138,7 +138,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 <ul className="space-y-2">
                   {project.evidence.map((item, idx) => (
                     <li key={idx} className="flex gap-3 text-sm leading-snug text-text-dim">
-                      <span className="mt-1 shrink-0 text-accent-cyan">▹</span>
+                      <span className="mt-1 shrink-0 text-accent-teal">▹</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -168,7 +168,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 {rawDiagram ? (
                   <div className="code-block p-4">
                     <p className="mb-3 font-mono text-[13px] text-text-dim">{project.architecture.overview}</p>
-                    <pre className="overflow-x-auto whitespace-pre font-mono text-[11px] leading-relaxed text-accent-cyan/80">
+                    <pre className="overflow-x-auto whitespace-pre font-mono text-[11px] leading-relaxed text-accent-teal/80">
                       {project.architecture.diagram}
                     </pre>
                   </div>
@@ -179,7 +179,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                 <ul className="space-y-1.5">
                   {project.architecture.tradeoffs.map((t, idx) => (
                     <li key={idx} className="flex gap-2 text-[13px] leading-snug text-text-dim">
-                      <span className="mt-1 shrink-0 text-accent-pink">/</span>
+                      <span className="mt-1 shrink-0 text-accent-bronze">/</span>
                       <span>{t}</span>
                     </li>
                   ))}
@@ -228,7 +228,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, mode, onClose }) =
                       href={project.links.live}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-2 text-xs font-bold text-white"
+                      className="flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep px-4 py-2 text-xs font-bold text-white"
                     >
                       <ExternalLink size={14} strokeWidth={2} />
                       Live / DOI

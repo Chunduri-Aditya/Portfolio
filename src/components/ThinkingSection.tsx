@@ -23,7 +23,7 @@ const ThinkingSection: React.FC<{ mode: Mode }> = ({ mode }) => (
                 <span className="font-display text-lg gradient-text">
                   {String(idx + 1).padStart(2, "0")}
                 </span>
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/10 text-accent-cyan">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/10 text-accent-teal">
                   <Icon name={step.iconName} size={15} />
                 </span>
                 <div>
@@ -42,7 +42,7 @@ const ThinkingSection: React.FC<{ mode: Mode }> = ({ mode }) => (
           {THINKING.values.map((v) => (
             <StaggerItem key={v.title}>
               <div className="flex gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/10 text-accent-pink">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/10 text-accent-bronze">
                   <Icon name={v.iconName} size={15} />
                 </span>
                 <div>

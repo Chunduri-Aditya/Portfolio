@@ -50,7 +50,7 @@ const SegToggle = memo(function SegToggle<T extends string>({
             {active && (
               <motion.span
                 layoutId={`seg-${label}`}
-                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep"
+                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep"
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />
             )}
@@ -90,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({
             className="group flex items-center gap-2.5"
             aria-label="Go to top"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-accent-violet-deep to-accent-cyan-deep text-white shadow-lg transition-transform group-hover:scale-105">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-accent-sapphire-deep to-accent-teal-deep text-white shadow-lg transition-transform group-hover:scale-105">
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
             </span>
             <span className="text-sm font-bold tracking-tight text-text">Aditya Chunduri</span>
@@ -99,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({
           {/* Center: ticker + search + links */}
           <div className="hidden items-center gap-3 xl:flex">
             <div className="flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-viridian shadow-[0_0_8px_rgba(34,196,140,0.8)]" />
               <div className="h-4 w-52 overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -173,7 +173,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <a
                   key={label}
                   href={href}
-                  className="p-2 text-text-faint transition-colors hover:text-accent-cyan"
+                  className="p-2 text-text-faint transition-colors hover:text-accent-teal"
                   aria-label={label}
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel={href.startsWith("mailto") ? undefined : "noreferrer"}
@@ -267,7 +267,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   <a
                     key={label}
                     href={href}
-                    className="p-2.5 text-text-faint transition-colors hover:text-accent-cyan"
+                    className="p-2.5 text-text-faint transition-colors hover:text-accent-teal"
                     aria-label={label}
                     target={href.startsWith("mailto") ? undefined : "_blank"}
                     rel={href.startsWith("mailto") ? undefined : "noreferrer"}

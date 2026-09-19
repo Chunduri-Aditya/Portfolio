@@ -5,7 +5,7 @@ import { AnimatedSection } from "./AnimatedSection";
 import { RESEARCH, type Mode } from "../data/content";
 import { useDepth } from "../lib/depth";
 
-const ACCENT: Record<string, string> = { cyan: "#22d3ee", purple: "#8b5cf6", blue: "#3b82f6", green: "#34d399" };
+const ACCENT: Record<string, string> = { teal: "#17b3b3", sapphire: "#2f8fe0", indigo: "#6d82e8", viridian: "#22c48c" };
 
 const PubFile: React.FC<{
   pub: (typeof RESEARCH.publications)[number];
@@ -20,7 +20,7 @@ const PubFile: React.FC<{
   return (
     <div className="glass edge-gradient overflow-hidden rounded-4xl">
       <div className="flex items-center justify-between px-6 pt-5">
-        <span className="font-mono text-[11px] font-semibold text-accent-violet">
+        <span className="font-mono text-[11px] font-semibold text-accent-sapphire">
           {String(index + 1).padStart(2, "0")}
         </span>
         <span className="eyebrow">{pub.badge}</span>
@@ -92,7 +92,7 @@ const PubFile: React.FC<{
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
+              className="flex items-center gap-1.5 rounded-full border border-white/[0.12] px-3 py-1.5 text-xs font-semibold text-text-dim transition-colors hover:border-accent-teal/50 hover:text-accent-teal"
             >
               {link.label}
               <ExternalLink size={12} strokeWidth={2} />

@@ -45,10 +45,10 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <span className="eyebrow rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
               {HERO.roleLabel}
             </span>
-            <span className="flex items-center gap-1.5 text-xs font-medium text-accent-emerald">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-accent-viridian">
               <span
                 aria-hidden="true"
-                className="h-1.5 w-1.5 rounded-full bg-accent-emerald shadow-[0_0_10px_rgba(52,211,153,0.9)]"
+                className="h-1.5 w-1.5 rounded-full bg-accent-viridian shadow-[0_0_10px_rgba(34,196,140,0.9)]"
               />
               {HERO.availability}
             </span>
@@ -89,7 +89,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
                   key={c.text}
                   className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-text-dim"
                 >
-                  <Icon name={c.iconName} size={13} className="text-accent-cyan" />
+                  <Icon name={c.iconName} size={13} className="text-accent-teal" />
                   {c.text}
                 </span>
               ))}
@@ -100,7 +100,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             <button
               type="button"
               onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
-              className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-6 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-20px_rgba(139,92,246,0.7)] transition-transform hover:scale-[1.03] active:scale-[0.98]"
+              className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep px-6 py-3 text-sm font-bold text-white shadow-[0_20px_50px_-20px_rgba(47,143,224,0.7)] transition-transform hover:scale-[1.03] active:scale-[0.98]"
             >
               {HERO.ctas.primary.label}
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 transition-transform group-hover:translate-x-0.5">
@@ -136,11 +136,11 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
         >
           <div className="absolute inset-0 rounded-full bg-mesh-hero blur-2xl" aria-hidden="true" />
           {show3D ? (
-            <Suspense fallback={<div className="absolute inset-6 rounded-full bg-gradient-to-br from-accent-violet/40 to-accent-cyan/30 blur-2xl" />}>
+            <Suspense fallback={<div className="absolute inset-6 rounded-full bg-gradient-to-br from-accent-sapphire/40 to-accent-teal/30 blur-2xl" />}>
               <HeroScene />
             </Suspense>
           ) : (
-            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-accent-violet via-accent-blue to-accent-pink opacity-70 blur-xl" />
+            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-accent-sapphire via-accent-indigo to-accent-bronze opacity-70 blur-xl" />
           )}
         </motion.div>
       </div>
@@ -148,7 +148,7 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
       {/* Telemetry counters */}
       <motion.div
         {...fade(0.5)}
-        className="glass mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl sm:grid-cols-3 lg:grid-cols-5"
+        className="glass mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl sm:grid-cols-4"
       >
         {HUD_STATS.map((s) => (
           <div key={s.label} className="bg-white/[0.015] px-4 py-5">

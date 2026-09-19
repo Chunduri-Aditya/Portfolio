@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
               target={href.startsWith("mailto") ? undefined : "_blank"}
               rel={href.startsWith("mailto") ? undefined : "noreferrer"}
               aria-label={label}
-              className="p-2 text-text-faint transition-colors hover:text-accent-cyan"
+              className="p-2 text-text-faint transition-colors hover:text-accent-teal"
             >
               <I size={16} strokeWidth={2} />
             </a>
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
             href={FOOTER.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            className="underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent-cyan hover:decoration-accent-cyan"
+            className="underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent-teal hover:decoration-accent-teal"
           >
             {FOOTER.tagline}
           </a>

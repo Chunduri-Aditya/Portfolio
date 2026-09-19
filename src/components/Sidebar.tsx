@@ -15,7 +15,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
           <ul className="flex flex-col gap-3">
             {userManual.items.map((item) => (
               <li key={item.num} className="flex gap-3 text-[13px] leading-relaxed text-text-dim">
-                <span className="font-mono font-bold text-accent-cyan">{item.num}</span>
+                <span className="font-mono font-bold text-accent-teal">{item.num}</span>
                 <span>
                   <strong className="text-text">{item.strong}</strong> {item.text}
                 </span>
@@ -42,7 +42,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               <StaggerItem key={item.title}>
                 <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                   <div className="mb-1.5 flex items-center gap-2">
-                    <Icon name={item.iconName} size={14} className="text-accent-emerald" />
+                    <Icon name={item.iconName} size={14} className="text-accent-viridian" />
                     <span className="text-sm font-bold text-text">{item.title}</span>
                     {item.extra && (
                       <span className="ml-auto font-mono text-[11px] text-text-faint">{item.extra}</span>
@@ -64,7 +64,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               <StaggerItem key={skill.category}>
                 <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                   <div className="mb-2 flex items-center gap-2">
-                    <Icon name={skill.iconName} size={14} className="text-accent-violet" />
+                    <Icon name={skill.iconName} size={14} className="text-accent-sapphire" />
                     <span className="text-sm font-bold text-text">{skill.category}</span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -92,7 +92,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               <StaggerItem key={entry.school}>
                 <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                   <div className="mb-1.5 flex items-center gap-2">
-                    <Icon name={education.iconName} size={14} className="text-accent-cyan" />
+                    <Icon name={education.iconName} size={14} className="text-accent-teal" />
                     <span className="text-sm font-bold text-text">{entry.school}</span>
                   </div>
                   <p className="text-[13px] leading-relaxed text-text-dim">{entry.degree}</p>
@@ -117,7 +117,7 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
               rel="noreferrer"
               download
               aria-label="Open resume PDF"
-              className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-2.5 text-xs font-bold text-white"
+              className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep px-4 py-2.5 text-xs font-bold text-white"
             >
               <Icon name="FileText" size={13} />
               {cta.resumeLabel}
@@ -131,9 +131,9 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
             </a>
           </div>
           <div className="mt-3 flex items-center justify-center gap-3 text-[12px] text-text-faint">
-            <a className="hover:text-accent-cyan" href={CONTACT.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a className="hover:text-accent-teal" href={CONTACT.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
             <span aria-hidden="true">·</span>
-            <a className="hover:text-accent-cyan" href={CONTACT.github} target="_blank" rel="noreferrer">GitHub</a>
+            <a className="hover:text-accent-teal" href={CONTACT.github} target="_blank" rel="noreferrer">GitHub</a>
           </div>
         </div>
       </AnimatedSection>

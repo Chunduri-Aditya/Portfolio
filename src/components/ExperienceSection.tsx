@@ -5,9 +5,9 @@ import { EXPERIENCE, type ExperienceAccent, type Mode } from "../data/content";
 import { useDepth } from "../lib/depth";
 
 const HUE: Record<ExperienceAccent, string> = {
-  cyan: "#22d3ee",
-  purple: "#8b5cf6",
-  emerald: "#34d399",
+  teal: "#17b3b3",
+  sapphire: "#2f8fe0",
+  viridian: "#22c48c",
 };
 
 const ExperienceRow: React.FC<{

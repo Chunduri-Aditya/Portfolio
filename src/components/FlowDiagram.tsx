@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
  * "A -> B -> C -> D") into an animated node/connector flow. Nodes fade + rise on
  * view, connectors draw via pathLength. Falls back to the raw text if no arrows.
  */
-const HUES = ["#8b5cf6", "#3b82f6", "#22d3ee", "#ec4899", "#34d399", "#fbbf24"];
+const HUES = ["#2f8fe0", "#6d82e8", "#17b3b3", "#c1743a", "#22c48c", "#e3b23c"];
 
 const FlowDiagram: React.FC<{ overview: string }> = ({ overview }) => {
   const reduce = useReducedMotion();

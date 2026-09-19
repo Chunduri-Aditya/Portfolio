@@ -9,22 +9,22 @@ import FlowDiagram from "./FlowDiagram";
 import MiniViz from "./MiniViz";
 
 const HUE: Record<string, string> = {
-  "AI-SAFETY / EVAL": "#22d3ee",
-  "AUDIO-ML": "#ec4899",
-  // Lightened from #8b5cf6: the "Full brief" label sits on this hue as ink,
-  // and #8b5cf6 measured 4.49:1, just under AA. #a78bfa is 6.99:1.
-  "GENAI / PIPELINE": "#a78bfa",
-  "RAG / SAFETY": "#34d399",
-  "EVAL / TOOLING": "#3b82f6",
-  "CV / LOCAL-FIRST": "#22d3ee",
-  "SYSTEMS / SECURITY": "#a78bfa",
-  "AUTOML / BENCHMARK": "#34d399",
-  "DEV-TOOL / SQL": "#fbbf24",
+  "AI-SAFETY / EVAL": "#17b3b3",
+  "AUDIO-ML": "#c1743a",
+  // Lightened from #2f8fe0: the "Full brief" label sits on this hue as ink,
+  // and #2f8fe0 measured 4.49:1, just under AA. #7fb4ee is 6.99:1.
+  "GENAI / PIPELINE": "#7fb4ee",
+  "RAG / SAFETY": "#22c48c",
+  "EVAL / TOOLING": "#6d82e8",
+  "CV / LOCAL-FIRST": "#17b3b3",
+  "SYSTEMS / SECURITY": "#7fb4ee",
+  "AUTOML / BENCHMARK": "#22c48c",
+  "DEV-TOOL / SQL": "#e3b23c",
 };
 
 const STATUS: Record<Project["status"], string> = {
-  SHIPPED: "text-accent-emerald",
-  PREPRINT: "text-accent-cyan",
+  SHIPPED: "text-accent-viridian",
+  PREPRINT: "text-accent-teal",
   COURSEWORK: "text-text-faint",
 };
 
@@ -43,7 +43,7 @@ const ProjectCard = memo(function ProjectCard({
   const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
 
-  const hue = HUE[project.discipline] ?? "#8b5cf6";
+  const hue = HUE[project.discipline] ?? "#2f8fe0";
   const mission = String(index + 1).padStart(2, "0");
   const viz = PROJECT_VIZ[project.id];
   const body =

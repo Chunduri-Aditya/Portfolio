@@ -12,20 +12,20 @@
 
 /* ─── Palette tokens (kept in sync with tailwind.config.js) ─────────────── */
 :root {
-  --ink: #0d1017;
-  --ink-2: #12161f;
-  --ink-3: #171c28;
-  --text: #e9ebf2;
-  --text-dim: #aab2c5;
-  --text-faint: #7c8498;
+  --ink: #0a1016;
+  --ink-2: #0f1720;
+  --ink-3: #141e29;
+  --text: #e8eef0;
+  --text-dim: #a6b6bd;
+  --text-faint: #7d8f97;
   --line: rgba(255, 255, 255, 0.09);
 
-  --violet: #8b5cf6;
-  --blue: #3b82f6;
-  --cyan: #22d3ee;
-  --pink: #ec4899;
-  --emerald: #34d399;
-  --amber: #fbbf24;
+  --sapphire: #2f8fe0;
+  --indigo: #6d82e8;
+  --teal: #17b3b3;
+  --bronze: #c1743a;
+  --viridian: #22c48c;
+  --gold: #e3b23c;
 }
 
 /* ─── Base ────────────────────────────────────────────────── */
@@ -45,6 +45,30 @@ body {
   color: var(--text);
 }
 
+/* ─── Browser surfaces ────────────────────────────────────
+ * Selection, caret and scrollbar ship with defaults that belong to no design
+ * system. Tint them from the palette so the parts we did not draw still read
+ * as part of it.
+ */
+::selection {
+  background: rgba(47, 143, 224, 0.32);
+  color: var(--text);
+}
+:root {
+  caret-color: var(--teal);
+  scrollbar-color: rgba(23, 179, 179, 0.45) transparent;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(23, 179, 179, 0.38);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(47, 143, 224, 0.55); background-clip: content-box; }
+
 /* ─── Focus ───────────────────────────────────────────────
  * One rule so every interactive element has a visible keyboard ring on a dark
  * background. :focus-visible, not :focus, so a mouse click does not light it up.
@@ -52,7 +76,7 @@ body {
  * two search inputs that did not are handled at their own call sites.
  */
 :focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 2px solid var(--teal);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -66,7 +90,7 @@ body {
   padding: 0.6rem 1rem;
   border-radius: 9999px;
   background: var(--ink-2);
-  border: 1px solid var(--cyan);
+  border: 1px solid var(--teal);
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
@@ -110,18 +134,18 @@ body {
 
 /* Text painted with a multi-stop gradient. */
 .gradient-text {
-  background-image: linear-gradient(110deg, var(--violet), var(--cyan) 45%, var(--pink));
+  background-image: linear-gradient(110deg, var(--sapphire), var(--teal) 42%, var(--viridian) 68%, var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 /* Coloured ambient glow on hover / focus. */
-.glow-violet { box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 24px 70px -20px rgba(139, 92, 246, 0.45); }
+.glow-violet { box-shadow: 0 0 0 1px rgba(47, 143, 224, 0.35), 0 24px 70px -20px rgba(47, 143, 224, 0.45); }
 .glow-blue   { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), 0 24px 70px -20px rgba(59, 130, 246, 0.45); }
 .glow-cyan   { box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 24px 70px -20px rgba(34, 211, 238, 0.45); }
 .glow-pink   { box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.35), 0 24px 70px -20px rgba(236, 72, 153, 0.45); }
-.glow-emerald{ box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.35), 0 24px 70px -20px rgba(52, 211, 153, 0.45); }
+.glow-emerald{ box-shadow: 0 0 0 1px rgba(34, 196, 140, 0.35), 0 24px 70px -20px rgba(34, 196, 140, 0.45); }
 
 /* Gradient hairline top-edge for cards / modals. */
 .edge-gradient {
@@ -132,7 +156,7 @@ body {
   position: absolute;
   inset: 0 0 auto 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--violet), var(--cyan), var(--pink), transparent);
+  background: linear-gradient(90deg, transparent, var(--sapphire), var(--teal), var(--gold), transparent);
   opacity: 0.7;
 }
 
@@ -163,10 +187,18 @@ body {
   mix-blend-mode: screen;
   will-change: transform;
 }
-.aurora__blob--1 { background: radial-gradient(circle at 30% 30%, var(--violet), transparent 70%); top: -10%; left: -5%; animation: drift-1 26s ease-in-out infinite alternate; }
-.aurora__blob--2 { background: radial-gradient(circle at 60% 40%, var(--cyan), transparent 70%); top: 20%; right: -10%; animation: drift-2 32s ease-in-out infinite alternate; }
-.aurora__blob--3 { background: radial-gradient(circle at 40% 60%, var(--pink), transparent 70%); bottom: -15%; left: 20%; animation: drift-3 30s ease-in-out infinite alternate; }
-.aurora__blob--4 { background: radial-gradient(circle at 50% 50%, var(--blue), transparent 70%); top: 45%; left: 45%; width: 34vw; height: 34vw; opacity: 0.35; animation: drift-1 28s ease-in-out infinite alternate-reverse; }
+/*
+ * Blob order follows the ocellus outward: sapphire and teal are the barbs,
+ * viridian the green ring, gold the metallic outer ring. Gold is what makes
+ * the page read as a feather rather than as generic teal, but it is the
+ * warmest and highest-luminance token here, so it runs at a lower opacity and
+ * a smaller radius than the cool blobs. Equal weight turns the whole page
+ * brass.
+ */
+.aurora__blob--1 { background: radial-gradient(circle at 30% 30%, var(--sapphire), transparent 70%); top: -10%; left: -5%; animation: drift-1 26s ease-in-out infinite alternate; }
+.aurora__blob--2 { background: radial-gradient(circle at 60% 40%, var(--teal), transparent 70%); top: 20%; right: -10%; animation: drift-2 32s ease-in-out infinite alternate; }
+.aurora__blob--3 { background: radial-gradient(circle at 40% 60%, var(--viridian), transparent 70%); bottom: -15%; left: 20%; animation: drift-3 30s ease-in-out infinite alternate; }
+.aurora__blob--4 { background: radial-gradient(circle at 50% 50%, var(--gold), transparent 68%); top: 38%; left: 46%; width: 30vw; height: 30vw; opacity: 0.22; animation: drift-1 28s ease-in-out infinite alternate-reverse; }
 
 @keyframes drift-1 { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
 @keyframes drift-2 { to { transform: translate3d(-10vw, 8vh, 0) scale(1.1); } }
@@ -188,9 +220,9 @@ body {
   border-radius: 999px;
   border: 2px solid var(--ink);
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+::-webkit-scrollbar-thumb:hover { background: rgba(47, 143, 224, 0.5); }
 
-::selection { background: rgba(139, 92, 246, 0.4); color: #fff; }
+::selection { background: rgba(47, 143, 224, 0.4); color: #fff; }
 
 /* ─── Very faint grain (fixed, non-interactive) ──────────── */
 .grain-overlay {

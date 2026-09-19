@@ -9,7 +9,7 @@ export interface Bar {
   hue?: string;
 }
 
-const DEFAULT_HUE = "#8b5cf6";
+const DEFAULT_HUE = "#2f8fe0";
 
 /**
  * Compact animated horizontal bar chart (hand-rolled SVG-free, pure divs).

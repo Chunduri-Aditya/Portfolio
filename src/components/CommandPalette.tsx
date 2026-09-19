@@ -124,7 +124,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Display" as Group,
         label: `Tone: switch to ${nextMode}`,
         sublabel: nextMode === "story" ? "Narrative voice" : "Terse, scannable",
-        icon: <span className="font-mono text-[11px] text-accent-amber">T</span>,
+        icon: <span className="font-mono text-[11px] text-accent-gold">T</span>,
         keywords: "signal story tone voice",
         action: () => setMode(nextMode),
       },
@@ -133,7 +133,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         group: "Display" as Group,
         label: `Depth: switch to ${nextDepth}`,
         sublabel: nextDepth === "plain" ? "Jargon-free explanations" : "Full engineering detail",
-        icon: <span className="font-mono text-[11px] text-accent-amber">D</span>,
+        icon: <span className="font-mono text-[11px] text-accent-gold">D</span>,
         keywords: "technical plain depth eli5 baby terms",
         action: () => setDepth(nextDepth),
       },
@@ -256,7 +256,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Jump to a section, project, or link..."
-                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
+                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-faint focus-visible:ring-2 focus-visible:ring-accent-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink-2"
                 aria-label="Search commands"
                 role="combobox"
                 aria-expanded="true"
@@ -301,7 +301,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                         onMouseEnter={() => setActiveIndex(index)}
                         className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors ${
                           isActive
-                            ? "bg-gradient-to-r from-accent-violet/25 to-accent-cyan/15 text-text"
+                            ? "bg-gradient-to-r from-accent-sapphire/25 to-accent-teal/15 text-text"
                             : "text-text-dim hover:bg-white/5"
                         }`}
                       >
@@ -317,7 +317,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                           )}
                         </span>
                         {isActive && (
-                          <CornerDownLeft size={13} strokeWidth={2} className="shrink-0 text-accent-cyan" />
+                          <CornerDownLeft size={13} strokeWidth={2} className="shrink-0 text-accent-teal" />
                         )}
                       </button>
                     );

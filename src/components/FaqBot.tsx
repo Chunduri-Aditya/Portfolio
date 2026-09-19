@@ -101,7 +101,7 @@ const FaqBot: React.FC = () => {
         <button
           ref={launcherRef}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep px-4 py-3 text-xs font-bold text-white shadow-[0_20px_50px_-18px_rgba(139,92,246,0.7)] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-violet/60"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep px-4 py-3 text-xs font-bold text-white shadow-[0_20px_50px_-18px_rgba(47,143,224,0.7)] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-sapphire/60"
           aria-label="Open FAQ bot"
         >
           <Sparkles size={15} strokeWidth={2} />
@@ -113,12 +113,12 @@ const FaqBot: React.FC = () => {
         <div className="glass-strong fixed bottom-5 right-5 z-50 flex h-[70vh] max-h-[600px] w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-4xl">
           <div className="edge-gradient flex items-center justify-between border-b border-white/10 bg-white/[0.02] p-3">
             <span className="flex items-center gap-2 text-sm font-bold text-text">
-              <Sparkles size={14} strokeWidth={2} className="text-accent-cyan" />
+              <Sparkles size={14} strokeWidth={2} className="text-accent-teal" />
               Ask about my work
             </span>
             <button
               onClick={handleClose}
-              className="rounded-full border border-white/[0.12] p-1.5 text-text-dim transition-colors hover:border-accent-pink/60 hover:text-accent-pink"
+              className="rounded-full border border-white/[0.12] p-1.5 text-text-dim transition-colors hover:border-accent-bronze/60 hover:text-accent-bronze"
               aria-label="Close chat"
             >
               <X size={14} strokeWidth={2} />
@@ -138,7 +138,7 @@ const FaqBot: React.FC = () => {
                   className={`max-w-[85%] rounded-2xl p-3 text-[13px] leading-relaxed ${
                     msg.isBot
                       ? "border border-white/10 bg-white/[0.04] text-text-dim"
-                      : "bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep text-white"
+                      : "bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep text-white"
                   }`}
                 >
                   <div>{msg.text}</div>
@@ -156,7 +156,7 @@ const FaqBot: React.FC = () => {
                           }}
                           target={link.href.startsWith("http") ? "_blank" : undefined}
                           rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                          className="rounded-full border border-white/15 px-2.5 py-1 text-[11px] font-semibold text-text-dim transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
+                          className="rounded-full border border-white/15 px-2.5 py-1 text-[11px] font-semibold text-text-dim transition-colors hover:border-accent-teal/50 hover:text-accent-teal"
                         >
                           {link.label}
                         </a>
@@ -197,13 +197,13 @@ const FaqBot: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={FAQ_BOT_UI.inputPlaceholder}
-                className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-text placeholder:text-text-faint focus:border-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
+                className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-text placeholder:text-text-faint focus:border-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-teal"
                 aria-label="Ask a question"
               />
               <button
                 onClick={() => handleSend()}
                 disabled={!inputValue.trim()}
-                className="rounded-full bg-gradient-to-r from-accent-violet-deep to-accent-cyan-deep p-2.5 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep p-2.5 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Send message"
               >
                 <Send size={14} strokeWidth={2} />
