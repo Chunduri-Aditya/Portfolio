@@ -1124,6 +1124,167 @@ export const PROJECTS: ProjectsSectionContent = {
         { label: "Stack", value: "pandas · SQLAlchemy" },
       ],
     },
+    {
+      id: "jarvis",
+      title: "jarvis",
+      subtitle: "Turn-Scoped Containment for Coding Agents",
+      iconName: "ShieldCheck",
+      iconClassName: "text-accent-emerald",
+      tags: ["Claude Code Hooks", "Prompt Injection", "Taint Tracking", "Fail-Closed", "Python", "Agent Shield"],
+      discipline: "AGENT-SECURITY / RUNTIME",
+      status: "SHIPPED",
+      hook:
+        "Once a coding agent reads something hostile, it stops being allowed to act for the rest of that turn.",
+      plain:
+        "Coding assistants read web pages, files and tool output, and some of that text is written to trick them. This sits between the tool and the model: it screens what comes back, marks anything suspicious as untrusted data rather than instructions, and then blocks that turn from writing files, running commands or reaching the network.",
+      oneLiner:
+        "A Claude Code hook layer that screens tool results through Agent Shield, wraps flagged content as untrusted data before the model reads it, and denies every write, execute and network tool for the remainder of that turn, keyed by prompt_id.",
+      story:
+        "The interesting constraint is that a settings file cannot express this. Permission rules are static: allow, ask and deny decide a call the same way every time, because nothing in a config knows what has already happened in the turn. The sentence I wanted was 'not after this turn ingested something flagged', and that needs state keyed to the turn. That one sentence is the product, and the rest is plumbing around it.",
+      evidence: [
+        "Turn-scoped taint keyed by prompt_id, surviving across separate hook subprocesses, so ingest in one tool call constrains every later call in the same turn",
+        "Gate covers 14 tool names plus every mcp__* tool by prefix. The matcher was checked against the harness rather than assumed: a probe confirmed Bash and an MCP tool fire while Read does not, which a wildcard matcher would have hidden",
+        "Fails closed. With the screener pointed at a path that does not exist, a WebFetch was denied with an explicit reason rather than quietly allowed",
+        "Live deny rate of 1 denied in 10 gated calls, recorded with the allow path too, so the rate has a real denominator",
+        "124 tests, and ten mutations reintroduced as defects were each observed red then restored byte-identical",
+        "Documents its own recall gaps rather than hiding them: as screened on 2026-09-17, secret-key assignments and a base64-piped-to-shell command scored allow low and are not wrapped. Those are gaps in the screener's ruleset, named in the README",
+      ],
+      architecture: {
+        overview:
+          "Tool call → PostToolUse hook → Agent Shield screen → wrap flagged output as untrusted data and set turn taint → PreToolUse gate reads taint by prompt_id → deny writes, execution and network for the rest of the turn",
+        diagram: `
+   tool result
+        |
+        v
++-------------------+     +---------------------+
+| PostToolUse hook  |---->|  Agent Shield       |
+|  (cannot block)   |     |  screener           |
++---------+---------+     +----------+----------+
+          |                          |
+          |   flagged                | clean
+          v                          v
++-------------------+     +---------------------+
+| wrap as UNTRUSTED |     |  pass through       |
+| + taint[prompt_id]|     +---------------------+
++---------+---------+
+          |
+          v              next tool call, same turn
++-------------------------------------------------------+
+| PreToolUse gate: is taint[prompt_id] set?              |
+|   yes -> DENY writes / exec / network, with a reason   |
+|   no  -> allow                                         |
+|   screener unrunnable -> DENY (fail closed)            |
++-------------------------------------------------------+`,
+        tradeoffs: [
+          "PostToolUse cannot block, only rewrite, so quarantine wraps unconditionally when the guard is missing rather than pretending it screened something",
+          "Turn scope rather than session scope: a session-wide block would make one bad web page end the session, while a turn-scoped one degrades to read-only and recovers",
+          "Guards a cooperative model's mistakes, not an adversarial one. The run log is writable through Bash by means no gate here inspects, and the README says so rather than implying containment it does not provide",
+        ],
+      },
+      decisions: [
+        {
+          title: "Key the taint on prompt_id, not session_id",
+          why: "It is the only identifier that scopes to a single turn and survives across separate hook subprocesses. A probe confirmed a subagent's PreToolUse carries the parent turn's prompt_id, so taint propagates into subagents rather than leaking around them.",
+        },
+        {
+          title: "Fail closed when the screener cannot run",
+          why: "A security layer that silently degrades to allow is worse than none, because it is trusted. An executable check denies writes and names the exact missing binary in the message.",
+        },
+        {
+          title: "Publish the recall gaps in the README",
+          why: "The layer wraps what the screener flags, which is not the same as everything dangerous. Stating the payloads that currently score allow low is the difference between a security tool and a security claim.",
+        },
+      ],
+      links: {
+        requestAccess: "jarvis",
+      },
+      metrics: [
+        { label: "Tests", value: "124" },
+        { label: "Mutations verified red", value: "10" },
+      ],
+    },
+    {
+      id: "company-agents",
+      title: "Company Agents",
+      subtitle: "An Executable Map of a Company's Roles",
+      iconName: "Boxes",
+      iconClassName: "text-accent-amber",
+      tags: ["Multi-Agent", "Node.js", "Zero Dependencies", "Mutation Testing", "LangGraph.js", "Agent Shield"],
+      discipline: "MULTI-AGENT / TOOLING",
+      status: "SHIPPED",
+      hook:
+        "Company functions down to role agents, with a verifier that refuses to call a blank job done.",
+      plain:
+        "A company is a set of functions, departments and jobs. This turns that structure into records a machine can check, then generates the role agents from them. A new company is a configuration file, not a fork of the code.",
+      oneLiner:
+        "An executable map of company functions to departments to branches to jobs to role agents, with a five-layer enforcement chain: job records, branch designs, a preflight gate, context screening through Agent Shield, and generated role agents.",
+      story:
+        "The honest part of this project is its own correction. It claimed the company ran. Then a captioning pass produced output on a blank job, because 51 of 159 job records used a heading the runner never read, so the model got empty inputs and still exited 0. The verifier now catches that class, and the repo's own assessment is that this is a verification harness, not an operational multi-agent company.",
+      evidence: [
+        "node scripts/verify.mjs passes 42 of 42 steps, exit 0, with the repository audit green",
+        "Caught its own false success: a caption pass ran against blank inputs because 51 of 159 job records used a heading the runner did not read, and the run still exited 0. Fixed, and the verifier now fails on it",
+        "Three mutations reintroduced as defects, each observed red then restored",
+        "Zero runtime dependencies: Node builtins and relative imports only, tested with node --test",
+        "Live model runs recorded with their failures, not just their successes: of three runs on a local 8B model, one completed with all four required outputs and two were blocked for inventing a URL",
+        "Agent Shield wired in as a live dependency for context screening rather than named as a design intention",
+      ],
+      architecture: {
+        overview:
+          "Functions → departments → branches → job records → preflight gate → Agent Shield context screen → generated role agents, with a verifier over every layer",
+        diagram: `
++------------------+
+| company profile  |   a pack plus a profile, not a fork
++--------+---------+
+         v
++------------------+   +------------------+   +------------------+
+|  functions       |-->|  departments     |-->|  branches        |
++------------------+   +------------------+   +--------+---------+
+                                                       v
+                                            +----------------------+
+                                            |  job records (159)   |
+                                            +----------+-----------+
+                                                       v
+                                            +----------------------+
+                                            |  preflight gate      |  blank -> FAIL
+                                            +----------+-----------+
+                                                       v
+                                            +----------------------+
+                                            |  Agent Shield screen |
+                                            +----------+-----------+
+                                                       v
+                                            +----------------------+
+                                            |  generated role      |
+                                            |  agents              |
+                                            +----------------------+
+       verify.mjs asserts every layer above: 42 / 42`,
+        tradeoffs: [
+          "Zero dependencies keeps the whole chain auditable and installable anywhere, at the cost of writing the runner and test scaffolding by hand",
+          "Records and generated agents rather than hand-written agents: adding a company is configuration, but the generator becomes the thing that has to be right",
+          "A preflight gate that fails on blank input costs runs that would previously have reported success, which is the point",
+        ],
+      },
+      decisions: [
+        {
+          title: "A company is a pack plus a profile, not a fork",
+          why: "Forking the repo per company means every fix has to be applied N times and drift is guaranteed. Keeping the structure in records means a new company is data.",
+        },
+        {
+          title: "Fail the run on a blank job rather than let it exit 0",
+          why: "The failure that motivated this produced plausible output from empty inputs and reported success. An agent pipeline that cannot tell empty input from a hard task will confidently produce nothing.",
+        },
+        {
+          title: "Record what the repo is not",
+          why: "STATE.md carries the correction that this is not an operational multi-agent company, along with its open bugs. A skeleton described as a product is the failure mode this project exists to avoid.",
+        },
+      ],
+      links: {
+        requestAccess: "Company_Agents_skeleton",
+      },
+      metrics: [
+        { label: "Verify steps", value: "42 / 42" },
+        { label: "Runtime deps", value: "0" },
+      ],
+    },
   ],
 };
 
