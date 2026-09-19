@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { copyFileSync, readFileSync, writeFileSync } from 'fs'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
 // GitHub Pages base path - update this to match your repository name
@@ -37,10 +37,38 @@ export default defineConfig({
       },
     },
     {
+      /**
+       * Give every case-study route a real file, so GitHub Pages answers 200.
+       *
+       * Pages serves static files only, so /work/agent-shield had nothing to
+       * match and fell through to 404.html, whose redirect restores the route
+       * for anyone running JavaScript. That is fine for a reader and useless
+       * for a crawler: the response is still HTTP 404, so the twelve URLs in
+       * the sitemap were all advertised as missing. Verified on the live site
+       * before this existed: status 404, while the page itself rendered as
+       * "Agent Shield — Aditya Chunduri".
+       *
+       * Copying the built index.html to each route is enough, because assets
+       * are referenced from the base path and so resolve at any depth. The
+       * 404.html fallback stays for genuinely unknown paths.
+       */
+      name: 'emit-route-pages',
+      closeBundle() {
+        const html = readFileSync(join(__dirname, 'dist', 'index.html'), 'utf8')
+        for (const id of projectIds()) {
+          const dir = join(__dirname, 'dist', 'work', id)
+          mkdirSync(dir, { recursive: true })
+          writeFileSync(join(dir, 'index.html'), html)
+        }
+      },
+    },
+    {
       name: 'generate-sitemap',
       closeBundle() {
         const base = `${SITE_ORIGIN}/${REPO_NAME}/`
-        const urls = ['', ...projectIds().map((id) => `work/${id}`)]
+        // Trailing slash matches the emitted directory index, so the canonical
+        // URL is the one Pages serves directly rather than one it redirects to.
+        const urls = ['', ...projectIds().map((id) => `work/${id}/`)]
         const body = urls
           .map((path) => `  <url>\n    <loc>${base}${path}</loc>\n  </url>`)
           .join('\n')
