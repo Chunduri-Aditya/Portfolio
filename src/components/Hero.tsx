@@ -1,11 +1,9 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { HERO, HUD_STATS, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
 import { useDepth } from "../lib/depth";
 import Counter from "./Counter";
-
-const HeroScene = lazy(() => import("./HeroScene"));
 
 interface HeroProps {
   mode: Mode;
@@ -15,17 +13,6 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
   const { depth } = useDepth();
   const isPlain = depth === "plain";
-  const reduce = useReducedMotion();
-  const [show3D, setShow3D] = useState(false);
-
-  useEffect(() => {
-    if (reduce) return;
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setShow3D(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setShow3D(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, [reduce]);
 
   const headline = isPlain ? HERO.plain.headline : HERO.headline[mode];
   const intro = isPlain ? HERO.plain.intro : HERO.intro[mode];
@@ -39,8 +26,8 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
 
   return (
     <section id="hero" className="relative pt-10 lg:pt-16">
-      <div className="grid grid-cols-1 items-center gap-x-8 gap-y-14 lg:grid-cols-12">
-        <div className="lg:col-span-7">
+      <div>
+        <div className="max-w-3xl">
           <motion.div {...fade(0.05)} className="mb-6 flex flex-wrap items-center gap-3">
             <span className="eyebrow rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
               {HERO.roleLabel}
@@ -128,21 +115,6 @@ const Hero: React.FC<HeroProps> = ({ mode, scrollTo }) => {
             </a>
           </motion.div>
         </div>
-
-        {/* 3D showpiece */}
-        <motion.div
-          {...fade(0.2)}
-          className="relative aspect-square w-full max-w-[420px] justify-self-center lg:col-span-5"
-        >
-          <div className="absolute inset-0 rounded-full bg-mesh-hero blur-2xl" aria-hidden="true" />
-          {show3D ? (
-            <Suspense fallback={<div className="absolute inset-6 rounded-full bg-gradient-to-br from-accent-sapphire/40 to-accent-teal/30 blur-2xl" />}>
-              <HeroScene />
-            </Suspense>
-          ) : (
-            <div className="absolute inset-8 rounded-full bg-gradient-to-br from-accent-sapphire via-accent-indigo to-accent-bronze opacity-70 blur-xl" />
-          )}
-        </motion.div>
       </div>
 
       {/* Telemetry counters */}

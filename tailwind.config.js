@@ -54,22 +54,6 @@ export default {
         spring: "cubic-bezier(0.32, 0.72, 0, 1)",
         smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
-      backgroundImage: {
-        "mesh-hero":
-          "radial-gradient(60% 60% at 20% 20%, rgba(47,143,224,0.25), transparent 60%), radial-gradient(50% 50% at 85% 30%, rgba(34,211,238,0.20), transparent 60%), radial-gradient(55% 55% at 50% 90%, rgba(236,72,153,0.18), transparent 60%)",
-      },
-      keyframes: {
-        "count-pulse": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.6" },
-        },
-        shimmer: {
-          "100%": { transform: "translateX(100%)" },
-        },
-      },
-      animation: {
-        shimmer: "shimmer 2.5s infinite",
-      },
     },
   },
   plugins: [],

@@ -11,7 +11,6 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import FaqBot from "./FaqBot";
 import CommandPalette from "./CommandPalette";
-import Aurora from "./Aurora";
 import { DepthProvider } from "../lib/depth";
 import { TICKER_THOUGHTS, type Mode } from "../data/content";
 
@@ -47,8 +46,6 @@ const Portfolio: React.FC = () => {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <Aurora />
-        <div className="grain-overlay" aria-hidden="true" />
 
         <Navbar
           mode={mode}

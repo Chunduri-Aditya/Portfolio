@@ -141,11 +141,6 @@ body {
 }
 
 /* Coloured ambient glow on hover / focus. */
-.glow-violet { box-shadow: 0 0 0 1px rgba(47, 143, 224, 0.35), 0 24px 70px -20px rgba(47, 143, 224, 0.45); }
-.glow-blue   { box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), 0 24px 70px -20px rgba(59, 130, 246, 0.45); }
-.glow-cyan   { box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 24px 70px -20px rgba(34, 211, 238, 0.45); }
-.glow-pink   { box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.35), 0 24px 70px -20px rgba(236, 72, 153, 0.45); }
-.glow-emerald{ box-shadow: 0 0 0 1px rgba(34, 196, 140, 0.35), 0 24px 70px -20px rgba(34, 196, 140, 0.45); }
 
 /* Gradient hairline top-edge for cards / modals. */
 .edge-gradient {
@@ -180,41 +175,6 @@ body {
   color: var(--gold);
 }
 
-/* ─── Aurora background blobs ────────────────────────────── */
-.aurora {
-  position: fixed;
-  inset: -20vh -10vw;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  filter: blur(90px) saturate(1.3);
-}
-.aurora__blob {
-  position: absolute;
-  width: 46vw;
-  height: 46vw;
-  border-radius: 50%;
-  opacity: 0.5;
-  mix-blend-mode: screen;
-  will-change: transform;
-}
-/*
- * Blob order follows the ocellus outward: sapphire and teal are the barbs,
- * viridian the green ring, gold the metallic outer ring. Gold is what makes
- * the page read as a feather rather than as generic teal, but it is the
- * warmest and highest-luminance token here, so it runs at a lower opacity and
- * a smaller radius than the cool blobs. Equal weight turns the whole page
- * brass.
- */
-.aurora__blob--1 { background: radial-gradient(circle at 30% 30%, var(--sapphire), transparent 70%); top: -10%; left: -5%; animation: drift-1 26s ease-in-out infinite alternate; }
-.aurora__blob--2 { background: radial-gradient(circle at 60% 40%, var(--teal), transparent 70%); top: 20%; right: -10%; animation: drift-2 32s ease-in-out infinite alternate; }
-.aurora__blob--3 { background: radial-gradient(circle at 40% 60%, var(--viridian), transparent 70%); bottom: -15%; left: 20%; animation: drift-3 30s ease-in-out infinite alternate; }
-.aurora__blob--4 { background: radial-gradient(circle at 50% 50%, var(--gold), transparent 68%); top: 38%; left: 46%; width: 30vw; height: 30vw; opacity: 0.22; animation: drift-1 28s ease-in-out infinite alternate-reverse; }
-
-@keyframes drift-1 { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
-@keyframes drift-2 { to { transform: translate3d(-10vw, 8vh, 0) scale(1.1); } }
-@keyframes drift-3 { to { transform: translate3d(6vw, -8vh, 0) scale(1.2); } }
-
 /* ─── Code / diagram raw view ────────────────────────────── */
 .code-block {
   background: rgba(255, 255, 255, 0.03);
@@ -223,30 +183,9 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* ─── Scrollbar / selection ──────────────────────────────── */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  border: 2px solid var(--ink);
-}
-::-webkit-scrollbar-thumb:hover { background: rgba(47, 143, 224, 0.5); }
-
-::selection { background: rgba(47, 143, 224, 0.4); color: #fff; }
-
-/* ─── Very faint grain (fixed, non-interactive) ──────────── */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 40;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 220px 220px;
-}
-
-/* ─── Reduced motion ─────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .aurora__blob { animation: none !important; }
-}
+/*
+ * Scrollbar and selection are declared once, near the top of this file, tinted
+ * from the palette. A second copy used to live here with plain-white values.
+ * Being later, it won, so the tinting described up there never actually
+ * rendered and the page kept a default-looking scrollbar.
+ */
