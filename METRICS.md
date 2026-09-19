@@ -59,3 +59,23 @@ All figures below collected **2026-09-18**.
 - **Any produce-inspection-yolov8 metric.** `data/raw/` is empty and `models/`
   holds only stock `yolov8n.pt`. No trained weights, no mAP, no latency. The
   project is not on the site and should not be added until it has results.
+
+## Open item: the resume PDF
+
+`public/Docs/Aditya_Chunduri.pdf` was replaced on 2026-09-18 with the master
+from `Desktop/I_got_the_job` (dated 2026-09-09). That closes the conflicts the
+old July copy carried: it reads Jun 2024 for USC, RITE and FIVES rather than
+CHASE_DB1 and DRIVE, Easley Dunn as Present, and it includes the Yashoda and
+RB Associates roles this site now shows.
+
+**Three things in it still contradict the source of truth.** They need a
+resume pass in `I_got_the_job`, under `RESUME_CONSTRUCTION_RULES.md`, not a
+change here: the filled resume exists only as a PDF, and
+`RESUME_SKELETON_ONEPAGE_ATS.tex` is a placeholder template, so it cannot be
+recompiled from this repo.
+
+| In the PDF | Source of truth says |
+|---|---|
+| "Draft preprint, 2026" | Never "draft". It is a published Zenodo deposit, open access, CC-BY 4.0, 2026-06-22. |
+| Title "Agent Shield: An Adversarial Evaluation Framework for LLM Agents" | The old title, explicitly retired. The verified title is "Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security", which is what this site's research section now prints. The PDF and the site currently disagree for the same DOI. |
+| Agent Shield engagement "May 2025 - Jul 2026" | October 2025 to August 2026, reconfirmed 2026-09-10, explicitly superseding the May 2025 to July 2026 range this PDF still carries. |
