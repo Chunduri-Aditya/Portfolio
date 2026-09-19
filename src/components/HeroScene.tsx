@@ -8,6 +8,14 @@ import * as THREE from "three";
  * gradient material, drifting on a Float and nudged by the pointer. Self
  * contained — no external HDRI, just scene lights. Lazy-loaded and never mounted
  * under reduced-motion / on small screens (see Hero.tsx).
+ *
+ * The mesh must fit inside the camera frustum or the near planes shear it flat
+ * and it reads as a ball in a box. At z=6 with fov=42 the frustum half-extent
+ * is 6 * tan(21deg) = 2.30 world units. MeshDistortMaterial displaces vertices
+ * outward by roughly `distort`, so the real silhouette radius is about
+ * scale * (1 + distort), not `scale`. It was 2.15 * 1.4 = 3.01 against a 2.30
+ * budget, which is exactly why the top, sides and bottom rendered as straight
+ * edges. Keep scale * (1 + distort) under about 2.1 to leave margin for Float.
  */
 function Blob() {
   const mesh = useRef<THREE.Mesh>(null);
@@ -21,7 +29,7 @@ function Blob() {
 
   return (
     <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.8}>
-      <mesh ref={mesh} scale={2.15}>
+      <mesh ref={mesh} scale={1.6}>
         <icosahedronGeometry args={[1, 24]} />
         <MeshDistortMaterial
           color="#1f7fb8"
@@ -31,7 +39,7 @@ function Blob() {
           metalness={0.35}
           clearcoat={0.9}
           clearcoatRoughness={0.25}
-          distort={0.4}
+          distort={0.35}
           speed={1.6}
         />
       </mesh>
@@ -41,7 +49,7 @@ function Blob() {
 
 const HeroScene: React.FC = () => (
   <Canvas
-    className="!absolute inset-0"
+    className="!absolute -inset-[9%]"
     dpr={[1, 1.75]}
     camera={{ position: [0, 0, 6], fov: 42 }}
     gl={{ antialias: true, alpha: true }}
