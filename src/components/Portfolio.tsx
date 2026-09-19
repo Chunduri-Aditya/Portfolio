@@ -20,7 +20,6 @@ const Portfolio: React.FC = () => {
   const [tickerIndex, setTickerIndex] = useState(0);
   const [activeSection, setActiveSection] = useState("projects");
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   // Honour prefers-reduced-motion: hold on the first thought rather than
   // rotating. Auto-advancing text is the clearest case the preference covers.
@@ -74,11 +73,7 @@ const Portfolio: React.FC = () => {
           */}
           <div className="mt-28 grid grid-cols-1 gap-x-8 gap-y-28 lg:grid-cols-12">
             <div className="flex flex-col gap-28 lg:col-span-8">
-              <ProjectsSection
-                mode={mode}
-                selectedProjectId={selectedProjectId}
-                onSelectProject={setSelectedProjectId}
-              />
+              <ProjectsSection mode={mode} />
               <ExperienceSection mode={mode} />
               <ResearchSection mode={mode} />
             </div>
@@ -104,7 +99,6 @@ const Portfolio: React.FC = () => {
           mode={mode}
           setMode={setMode}
           scrollTo={scrollTo}
-          onSelectProject={setSelectedProjectId}
         />
       </div>
     </DepthProvider>

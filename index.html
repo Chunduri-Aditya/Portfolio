@@ -39,6 +39,32 @@
     <meta name="twitter:image" content="https://chunduri-aditya.github.io/Portfolio/og-image.png" />
 
     <title>Aditya Chunduri — ML / AI Engineer</title>
+
+    <!--
+      Second half of the GitHub Pages deep-link mechanism. Pages serves
+      404.html for any path it has no file for, and public/404.html rewrites
+      /Portfolio/work/agent-shield to /Portfolio/?/work/agent-shield so the
+      request lands on this document. Without the decode below that redirect
+      goes nowhere: the visitor arrives at the home page with a strange query
+      string, which is exactly what shipped before routes existed.
+
+      Runs before the module bundle so React Router reads the restored path on
+      its first render and never sees the encoded one.
+    -->
+    <script>
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })(window.location);
+    </script>
   </head>
   <body>
     <div id="root"></div>

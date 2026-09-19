@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import type { Mode, Project } from "../data/content";
 import { Icon } from "../lib/iconMap";
@@ -32,12 +33,10 @@ const ProjectCard = memo(function ProjectCard({
   project,
   index,
   mode,
-  onOpen,
 }: {
   project: Project;
   index: number;
   mode: Mode;
-  onOpen: () => void;
 }) {
   const { depth, setDepth } = useDepth();
   const reduce = useReducedMotion();
@@ -106,16 +105,15 @@ const ProjectCard = memo(function ProjectCard({
             <ChevronDown size={13} strokeWidth={2} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
             {expanded ? "Less" : "Expand"}
           </button>
-          <button
-            type="button"
-            onClick={onOpen}
-            aria-label={`Open project: ${project.title}`}
+          <Link
+            to={`/work/${project.id}`}
+            aria-label={`Read the case study for ${project.title}`}
             className="flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold text-ink transition-transform hover:scale-[1.03]"
             style={{ background: hue }}
           >
-            Full brief
+            Case study
             <Icon name="ArrowUpRight" size={13} />
-          </button>
+          </Link>
         </div>
 
         <AnimatePresence initial={false}>

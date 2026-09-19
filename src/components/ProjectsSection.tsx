@@ -3,20 +3,13 @@ import { AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import ProjectCard from "./ProjectCard";
-import ProjectModal from "./ProjectModal";
 import { PROJECTS, type Mode } from "../data/content";
 
 interface ProjectsSectionProps {
   mode: Mode;
-  selectedProjectId: string | null;
-  onSelectProject: (id: string | null) => void;
 }
 
-const ProjectsSection: React.FC<ProjectsSectionProps> = ({
-  mode,
-  selectedProjectId,
-  onSelectProject,
-}) => {
+const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
   const [query, setQuery] = useState("");
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
 
@@ -46,11 +39,6 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
     });
   }, [query, activeTags]);
 
-  const selectedProject = useMemo(
-    () => PROJECTS.projects.find((p) => p.id === selectedProjectId) || null,
-    [selectedProjectId],
-  );
-
   const toggleTag = useCallback((tag: string) => {
     setActiveTags((prev) => {
       const next = new Set(prev);
@@ -74,8 +62,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   }, [filteredProjects]);
 
   return (
-    <>
-      <AnimatedSection id="projects" labelledBy="projects-heading">
+    <AnimatedSection id="projects" labelledBy="projects-heading">
         <header className="mb-8">
           <p className="eyebrow mb-2">{PROJECTS.header.eyebrow}</p>
           <div className="flex items-end justify-between gap-4">
@@ -149,12 +136,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             )}
             {featured.map((project) => (
               <StaggerItem key={project.id}>
-                <ProjectCard
-                  project={project}
-                  index={indexById.get(project.id) ?? 0}
-                  mode={mode}
-                  onOpen={() => onSelectProject(project.id)}
-                />
+                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} mode={mode} />
               </StaggerItem>
             ))}
             {featured.length > 0 && rest.length > 0 && (
@@ -166,12 +148,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             )}
             {rest.map((project) => (
               <StaggerItem key={project.id}>
-                <ProjectCard
-                  project={project}
-                  index={indexById.get(project.id) ?? 0}
-                  mode={mode}
-                  onOpen={() => onSelectProject(project.id)}
-                />
+                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} mode={mode} />
               </StaggerItem>
             ))}
           </AnimatePresence>
@@ -180,11 +157,8 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               No projects match the current filter.
             </p>
           )}
-        </StaggerContainer>
-      </AnimatedSection>
-
-      <ProjectModal project={selectedProject} mode={mode} onClose={() => onSelectProject(null)} />
-    </>
+      </StaggerContainer>
+    </AnimatedSection>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO, PROJECTS, type Mode } from "../data/content";
 import { Icon } from "../lib/iconMap";
@@ -31,7 +32,6 @@ interface CommandPaletteProps {
   mode: Mode;
   setMode: (mode: Mode) => void;
   scrollTo: (id: string) => void;
-  onSelectProject: (id: string) => void;
 }
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({
@@ -41,8 +41,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   mode,
   setMode,
   scrollTo,
-  onSelectProject,
 }) => {
+  const navigate = useNavigate();
   const { depth, setDepth } = useDepth();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -80,10 +80,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         sublabel: p.discipline,
         icon: <Icon name={p.iconName} size={15} className={p.iconClassName} />,
         keywords: `${p.tags.join(" ")} ${p.discipline}`,
-        action: () => {
-          scrollTo("projects");
-          onSelectProject(p.id);
-        },
+        action: () => navigate(`/work/${p.id}`),
       })),
       {
         id: "link-github",
@@ -138,7 +135,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => setDepth(nextDepth),
       },
     ];
-  }, [mode, depth, scrollTo, onSelectProject, setMode, setDepth]);
+  }, [mode, depth, scrollTo, navigate, setMode, setDepth]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
