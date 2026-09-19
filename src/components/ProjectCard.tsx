@@ -61,7 +61,7 @@ const ProjectCard = memo(function ProjectCard({
       id={project.id}
       whileHover={reduce ? undefined : { y: -4 }}
       transition={{ duration: 0.25 }}
-      className="glass edge-gradient group relative scroll-mt-28 overflow-hidden rounded-4xl"
+      className="glass edge-gradient group relative scroll-mt-28 overflow-hidden rounded-4xl border-white/[0.14] transition-colors duration-300 hover:border-white/30"
       style={{ ["--card-hue" as string]: hue }}
     >
       <div

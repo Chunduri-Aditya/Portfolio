@@ -79,15 +79,37 @@ describe("Portfolio", () => {
     expect(links[0].getAttribute("href")).toBe("/work/ai-remixmate");
   });
 
-  test("tag filter toggles on/off", async () => {
+  test("the tag filter shows a preview, not every tag at once", async () => {
     const user = userEvent.setup();
     renderHome();
 
-    const tagBtn = await screen.findByRole("button", { name: "Inspect AI", pressed: false });
+    // A rarely used tag is behind the expander, so it is not on screen yet.
+    expect(screen.queryByRole("button", { name: "Inspect AI" })).not.toBeInTheDocument();
+
+    const expander = screen.getByRole("button", { name: /Show all \d+/ });
+    await user.click(expander);
+
+    expect(screen.getByRole("button", { name: "Inspect AI" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Show fewer/ })).toBeInTheDocument();
+  });
+
+  test("an active tag stays visible after the list collapses", async () => {
+    const user = userEvent.setup();
+    renderHome();
+
+    await user.click(screen.getByRole("button", { name: /Show all \d+/ }));
+    const tagBtn = screen.getByRole("button", { name: "Inspect AI" });
     await user.click(tagBtn);
     expect(tagBtn).toHaveAttribute("aria-pressed", "true");
 
+    // Collapsing must not strand an active filter with no way to switch it off.
+    await user.click(screen.getByRole("button", { name: /Show fewer/ }));
+    expect(screen.getByRole("button", { name: "Inspect AI" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
     await user.click(screen.getByRole("button", { name: /Reset/i }));
-    expect(tagBtn).toHaveAttribute("aria-pressed", "false");
+    expect(screen.queryByRole("button", { name: "Inspect AI" })).not.toBeInTheDocument();
   });
 });

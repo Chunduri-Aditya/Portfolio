@@ -9,10 +9,16 @@ export default {
           2: "#0f1720",
           3: "#141e29",
         },
+        // Ratios below are measured against the *lightest surface this text
+        // actually lands on*, not against bare ink. Surfaces stack: a
+        // white/[0.06] card sits on a white/[0.04] glass panel sitting on ink,
+        // and each layer lifts the background and cuts contrast. Measured on
+        // bare ink alone, faint looked fine at 5.69; on that stack it was
+        // 4.44, under AA.
         text: {
-          DEFAULT: "#e8eef0",
-          dim: "#a6b6bd",
-          faint: "#7d8f97",
+          DEFAULT: "#e8eef0", // 12.73 on the lightest stack
+          dim: "#a6b6bd", // 7.14 on the lightest stack
+          faint: "#7f9199", // 4.55 on the lightest stack, 5.84 on bare ink
         },
         // Peacock ocellus: the eye of the feather. Sapphire and teal are the
         // barbs, viridian the green ring, gold and bronze the metallic outer

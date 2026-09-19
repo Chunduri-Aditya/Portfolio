@@ -17,8 +17,10 @@
   --ink-3: #141e29;
   --text: #e8eef0;
   --text-dim: #a6b6bd;
-  --text-faint: #7d8f97;
-  --line: rgba(255, 255, 255, 0.09);
+  --text-faint: #7f9199;
+  /* Raised from 0.09: card edges read as separate surfaces rather than as
+     a faint suggestion of one. */
+  --line: rgba(255, 255, 255, 0.14);
 
   --sapphire: #2f8fe0;
   --indigo: #6d82e8;

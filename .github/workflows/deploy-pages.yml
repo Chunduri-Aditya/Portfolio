@@ -44,6 +44,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Palette sync
+        run: npm run check:palette
+
       - name: Test
         run: npm run test:run
 

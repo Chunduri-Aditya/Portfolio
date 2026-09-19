@@ -5,14 +5,27 @@ import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSectio
 import ProjectCard from "./ProjectCard";
 import { PROJECTS } from "../data/content";
 
+/** How many tags the filter shows before "Show all". */
+const TAG_PREVIEW_COUNT = 10;
+
 const ProjectsSection: React.FC = () => {
   const [query, setQuery] = useState("");
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
+  const [showAllTags, setShowAllTags] = useState(false);
 
+  /**
+   * Tags ordered by how many projects carry them, most-used first.
+   *
+   * There are far more tags than a filter row can usefully show, and an
+   * alphabetical wall of them buries the ones worth filtering by. The common
+   * ones lead; the rest are one click away.
+   */
   const allTags = useMemo(() => {
-    const set = new Set<string>();
-    PROJECTS.projects.forEach((p) => p.tags.forEach((t) => set.add(t)));
-    return Array.from(set).sort((a, b) => a.localeCompare(b));
+    const counts = new Map<string, number>();
+    PROJECTS.projects.forEach((p) => p.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)));
+    return Array.from(counts.entries())
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([tag]) => tag);
   }, []);
 
   const indexById = useMemo(() => {
@@ -45,6 +58,15 @@ const ProjectsSection: React.FC = () => {
   }, []);
 
   const clearTags = useCallback(() => setActiveTags(new Set()), []);
+
+  // An active tag stays visible even when it sits outside the default slice,
+  // so a filter can always be switched off where it was switched on.
+  const visibleTags = useMemo(() => {
+    if (showAllTags) return allTags;
+    const head = allTags.slice(0, TAG_PREVIEW_COUNT);
+    const pinned = allTags.filter((t) => activeTags.has(t) && !head.includes(t));
+    return [...head, ...pinned];
+  }, [allTags, showAllTags, activeTags]);
 
   /*
    * Split after filtering, not before, so search and the tag filter still
@@ -93,7 +115,7 @@ const ProjectsSection: React.FC = () => {
             )}
           </div>
           <div className="flex flex-wrap items-center gap-1.5 px-2 pb-1 pt-3">
-            {allTags.map((tag) => {
+            {visibleTags.map((tag) => {
               const on = activeTags.has(tag);
               return (
                 <button
@@ -111,6 +133,16 @@ const ProjectsSection: React.FC = () => {
                 </button>
               );
             })}
+            {allTags.length > TAG_PREVIEW_COUNT && (
+              <button
+                type="button"
+                onClick={() => setShowAllTags((v) => !v)}
+                aria-expanded={showAllTags}
+                className="rounded-full px-2.5 py-1 text-[11px] font-semibold text-text-dim underline underline-offset-2 hover:text-text"
+              >
+                {showAllTags ? "Show fewer" : `Show all ${allTags.length}`}
+              </button>
+            )}
             {activeTags.size > 0 && (
               <button
                 type="button"
