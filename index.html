@@ -68,6 +68,82 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      Without this, a client-rendered SPA serves an empty <div id="root"> to
+      anything that does not execute JavaScript: link unfurlers, search
+      crawlers, and recruiter-side scrapers all saw a blank page with meta tags
+      attached. This is the short version of who he is and where the evidence
+      is, so the page says something on its own.
+    -->
+    <noscript>
+      <main>
+        <h1>Aditya Chunduri</h1>
+        <p><strong>ML / AI Engineer</strong></p>
+        <p>
+          Building agentic systems, evaluation infrastructure, and production AI
+          applications. Python, PyTorch, LLM systems, evaluation, computer vision,
+          backend AI. M.S. Applied Data Science, USC.
+        </p>
+
+        <h2>Featured engineering work</h2>
+        <ul>
+          <li>
+            <a href="https://github.com/Chunduri-Aditya/agent-shield">Agent Shield</a>
+            — adversarial evaluation for LLM agents on Inspect AI, measuring
+            operator-facing transparency alongside attack success.
+          </li>
+          <li>
+            <a href="https://github.com/Chunduri-Aditya/MetaLearnML">MetaLearnML</a>
+            — meta-learned AutoML ranking, benchmarked against its own baselines,
+            including the null result.
+          </li>
+          <li>
+            <a href="https://github.com/Chunduri-Aditya/journal-agent">AI Health Journal</a>
+            — local-first RAG journal with a measured retrieval and crisis-safety floor.
+          </li>
+          <li>
+            <a href="https://github.com/Chunduri-Aditya/sourcewarden">Sourcewarden</a>
+            — security-gated workflow orchestration behind a fail-closed approval gate.
+          </li>
+        </ul>
+
+        <h2>Links</h2>
+        <ul>
+          <li><a href="Docs/Aditya_Chunduri.pdf">Resume (PDF)</a></li>
+          <li><a href="https://github.com/Chunduri-Aditya">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/chunduriaditya">LinkedIn</a></li>
+          <li><a href="mailto:chunduriaditya2@gmail.com">chunduriaditya2@gmail.com</a></li>
+        </ul>
+      </main>
+    </noscript>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Aditya Chunduri",
+        "jobTitle": "ML / AI Engineer",
+        "url": "https://chunduri-aditya.github.io/Portfolio/",
+        "email": "mailto:chunduriaditya2@gmail.com",
+        "sameAs": [
+          "https://github.com/Chunduri-Aditya",
+          "https://linkedin.com/in/chunduriaditya"
+        ],
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "University of Southern California"
+        },
+        "knowsAbout": [
+          "Machine Learning Engineering",
+          "LLM Evaluation",
+          "AI Agent Security",
+          "Retrieval-Augmented Generation",
+          "Computer Vision"
+        ]
+      }
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

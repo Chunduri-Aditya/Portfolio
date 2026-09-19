@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chunduri-aditya.github.io/Portfolio/sitemap.xml
