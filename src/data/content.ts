@@ -30,11 +30,24 @@ export const ASSETS = {
 } as const;
 
 /* ── Contact / social (used by Navbar, Footer, Sidebar, FAQ bot) ──────── */
+/**
+ * One identity, shared with the resume this site serves.
+ *
+ * These three fields disagreed with the resume until 2026-09-18: the site said
+ * Los Angeles, chunduri@usc.edu and in/aditya-chunduri while the PDF in
+ * public/Docs said San Francisco, the gmail and in/chunduriaditya. A recruiter
+ * reading both saw two people. The resume wins because its values are the ones
+ * already going out on applications, and because the USC address stops working
+ * once that affiliation lapses.
+ *
+ * The USC role and education entries below keep Los Angeles: that is where the
+ * work happened, which is a different fact from where he is.
+ */
 export const CONTACT = {
-  email: "chunduri@usc.edu",
+  email: "chunduriaditya2@gmail.com",
   github: "https://github.com/Chunduri-Aditya",
-  linkedin: "https://linkedin.com/in/aditya-chunduri",
-  location: "Los Angeles, CA",
+  linkedin: "https://linkedin.com/in/chunduriaditya",
+  location: "San Francisco, CA",
 } as const;
 
 /* ============================================================================
@@ -72,7 +85,7 @@ export const HERO: HeroContent = {
     story: "I like the messy middle: a hard problem, a metric, and a system that has to earn the number.",
   },
   subhead:
-    "M.S. Applied Data Science, USC \u00b7 Evaluation \u00b7 Audio ML \u00b7 Generative AI \u00b7 Computer Vision \u00b7 Full-stack",
+    "Applied AI \u00b7 ML Systems \u00b7 LLM & Agent Evaluation \u00b7 Computer Vision \u2014 M.S. Applied Data Science, USC",
   intro: {
     signal:
       "I build ML systems end to end and measure whether they hold up: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Different domains, one habit: seeded runs, real metrics, a result you can reproduce. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
@@ -141,12 +154,13 @@ export interface NavLink {
   label: string;
 }
 
+/** Order must match the DOM order in Portfolio.tsx, or the nav reads wrong. */
 export const NAV_LINKS: NavLink[] = [
-  { id: "thinking", label: "Thinking" },
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "research", label: "Research" },
   { id: "skills", label: "Skills" },
+  { id: "thinking", label: "Thinking" },
 ];
 
 /* ============================================================================
@@ -344,6 +358,14 @@ export interface Project {
   decisions: ProjectDecision[];
   links: ProjectLinks;
   metrics: ProjectMetric[];
+  /**
+   * Surface this one above the rest. Four are marked, chosen on one rule: the
+   * evidence is strong AND the repository is public, so every flagship link
+   * resolves for a visitor who clicks it. Private work stays in the main list
+   * behind a request-access action rather than leading with a button that
+   * cannot be followed.
+   */
+  featured?: boolean;
 }
 
 export interface ProjectsSectionContent {
@@ -361,7 +383,9 @@ export const PROJECTS: ProjectsSectionContent = {
   header: {
     title: "The Rabbit Holes",
     iconName: "GitBranch",
-    eyebrow: "Systems & Obsessions",
+    // Conventional term here, character in the heading below. A recruiter
+    // scanning for "Projects" finds the word; the voice survives in the title.
+    eyebrow: "Projects",
     subtitle: {
       signal: "Case studies with constraints, tradeoffs, and outcomes.",
       story: "Systems I built because I couldn\u2019t stop thinking about the problem.",
@@ -371,6 +395,7 @@ export const PROJECTS: ProjectsSectionContent = {
   projects: [
     {
       id: "agent-shield",
+      featured: true,
       title: "Agent Shield",
       subtitle: "Adversarial Eval Framework + Local Runtime Perimeter",
       iconName: "ShieldCheck",
@@ -648,6 +673,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "ai-health-journal",
+      featured: true,
       title: "AI Health Journal",
       subtitle: "Local RAG Journal with a Measured Safety Floor",
       iconName: "Lock",
@@ -880,6 +906,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "sourcewarden",
+      featured: true,
       title: "Sourcewarden",
       subtitle: "Security-Gated n8n Workflow Orchestration",
       iconName: "Layers",
@@ -961,6 +988,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "metalearnml",
+      featured: true,
       title: "MetaLearnML",
       subtitle: "Meta-Learned AutoML Ranking, Measured Against Its Baselines",
       iconName: "Boxes",

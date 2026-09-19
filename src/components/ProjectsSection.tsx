@@ -62,6 +62,17 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   const clearTags = useCallback(() => setActiveTags(new Set()), []);
 
+  /*
+   * Split after filtering, not before, so search and the tag filter still
+   * apply to both groups. Mission numbers come from indexById, which is keyed
+   * off the source array, so a project keeps its number wherever it renders.
+   */
+  const [featured, rest] = useMemo(() => {
+    const f = filteredProjects.filter((p) => p.featured);
+    const r = filteredProjects.filter((p) => !p.featured);
+    return [f, r] as const;
+  }, [filteredProjects]);
+
   return (
     <>
       <AnimatedSection id="projects" labelledBy="projects-heading">
@@ -131,7 +142,29 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
         <StaggerContainer className="flex flex-col gap-6">
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
+            {featured.length > 0 && (
+              <StaggerItem key="featured-label">
+                <p className="eyebrow eyebrow--gold">Start here</p>
+              </StaggerItem>
+            )}
+            {featured.map((project) => (
+              <StaggerItem key={project.id}>
+                <ProjectCard
+                  project={project}
+                  index={indexById.get(project.id) ?? 0}
+                  mode={mode}
+                  onOpen={() => onSelectProject(project.id)}
+                />
+              </StaggerItem>
+            ))}
+            {featured.length > 0 && rest.length > 0 && (
+              <StaggerItem key="rest-label">
+                <p className="eyebrow mt-6 border-t border-white/[0.08] pt-8">
+                  Everything else
+                </p>
+              </StaggerItem>
+            )}
+            {rest.map((project) => (
               <StaggerItem key={project.id}>
                 <ProjectCard
                   project={project}

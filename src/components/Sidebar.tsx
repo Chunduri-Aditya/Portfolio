@@ -9,9 +9,9 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
 
   return (
     <div className="flex flex-col gap-6 lg:sticky lg:top-24">
-      <AnimatedSection direction="right">
+      <AnimatedSection direction="right" labelledBy="user-manual-heading">
         <div className="glass rounded-4xl p-6">
-          <p className="eyebrow mb-4">{userManual.title}</p>
+          <h2 id="user-manual-heading" className="eyebrow mb-4">{userManual.title}</h2>
           <ul className="flex flex-col gap-3">
             {userManual.items.map((item) => (
               <li key={item.num} className="flex gap-3 text-[13px] leading-relaxed text-text-dim">
@@ -23,19 +23,19 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
             ))}
           </ul>
           <div className="mt-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-            <p className="eyebrow mb-1">{userManual.collaborationStyle.label}</p>
+            <h3 className="eyebrow mb-1">{userManual.collaborationStyle.label}</h3>
             <p className="text-[13px] leading-relaxed text-text-dim">{userManual.collaborationStyle.text[mode]}</p>
           </div>
           <div className="mt-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-            <p className="eyebrow mb-1">{userManual.performanceHabits.label}</p>
+            <h3 className="eyebrow mb-1">{userManual.performanceHabits.label}</h3>
             <p className="text-[13px] leading-relaxed text-text-dim">{userManual.performanceHabits.text[mode]}</p>
           </div>
         </div>
       </AnimatedSection>
 
-      <AnimatedSection direction="right" delay={0.08}>
+      <AnimatedSection direction="right" delay={0.08} labelledBy="off-keyboard-heading">
         <div className="glass rounded-4xl p-6">
-          <p className="eyebrow mb-1">{offKeyboard.title}</p>
+          <h2 id="off-keyboard-heading" className="eyebrow mb-1">{offKeyboard.title}</h2>
           <p className="mb-4 text-[12px] text-text-faint">{offKeyboard.subtitle}</p>
           <StaggerContainer className="flex flex-col gap-3">
             {offKeyboard.items.map((item) => (
@@ -56,9 +56,9 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection id="skills" direction="right" delay={0.16}>
+      <AnimatedSection id="skills" direction="right" delay={0.16} labelledBy="skills-heading">
         <div className="glass rounded-4xl p-6">
-          <p className="eyebrow mb-4">{skills.title}</p>
+          <h2 id="skills-heading" className="eyebrow mb-4">{skills.title}</h2>
           <StaggerContainer className="flex flex-col gap-3">
             {skills.items.map((skill) => (
               <StaggerItem key={skill.category}>
@@ -84,9 +84,9 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection id="education" direction="right" delay={0.2}>
+      <AnimatedSection id="education" direction="right" delay={0.2} labelledBy="education-heading">
         <div className="glass rounded-4xl p-6">
-          <p className="eyebrow mb-4">{education.title}</p>
+          <h2 id="education-heading" className="eyebrow mb-4">{education.title}</h2>
           <StaggerContainer className="flex flex-col gap-3">
             {education.items.map((entry) => (
               <StaggerItem key={entry.school}>
@@ -106,9 +106,9 @@ const Sidebar: React.FC<{ mode: Mode }> = ({ mode }) => {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection direction="right" delay={0.24}>
+      <AnimatedSection direction="right" delay={0.24} labelledBy="sidebar-cta-heading">
         <div className="glass edge-gradient rounded-4xl p-6 text-center">
-          <p className="font-display text-lg text-text">{cta.title}</p>
+          <h2 id="sidebar-cta-heading" className="font-display text-lg text-text">{cta.title}</h2>
           <p className="mb-4 mt-1 text-[13px] text-text-faint">{cta.subtitle}</p>
           <div className="flex flex-col gap-2">
             <a

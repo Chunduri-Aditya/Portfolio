@@ -103,7 +103,7 @@ const ExperienceRow: React.FC<{
 const ExperienceSection: React.FC<{ mode: Mode }> = ({ mode }) => (
   <AnimatedSection id="experience" labelledBy="experience-heading">
     <header className="mb-8">
-      <p className="eyebrow mb-2">Field work</p>
+      <p className="eyebrow mb-2">Experience</p>
       <h2 id="experience-heading" className="font-display text-3xl text-text sm:text-4xl">
         <span className="gradient-text">{EXPERIENCE.header.title}</span>
       </h2>

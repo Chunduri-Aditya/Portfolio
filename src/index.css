@@ -169,6 +169,17 @@ body {
   color: var(--text-faint);
 }
 
+/*
+ * Colour modifier for .eyebrow. A Tailwind text-* utility cannot do this job:
+ * both are single-class selectors, and .eyebrow is emitted after the utility
+ * layer, so `eyebrow text-accent-gold` silently loses and renders faint grey.
+ * Same failure mode as a utility that compiles to nothing. Defined here, after
+ * .eyebrow, so it wins on order rather than on !important.
+ */
+.eyebrow--gold {
+  color: var(--gold);
+}
+
 /* ─── Aurora background blobs ────────────────────────────── */
 .aurora {
   position: fixed;

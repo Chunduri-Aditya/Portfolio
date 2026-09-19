@@ -64,10 +64,14 @@ const Portfolio: React.FC = () => {
         <main id="main" className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
           <Hero mode={mode} scrollTo={scrollTo} />
 
-          <div className="mt-28">
-            <ThinkingSection mode={mode} />
-          </div>
-
+          {/*
+            Evidence before philosophy. Thinking used to render here, directly
+            under the hero, so a visitor met the method before anything that
+            earned it. It now sits after Projects, Experience and Research,
+            where the claims it makes are already backed by what they just read.
+            NAV_LINKS in content.ts is ordered to match; nothing else depends on
+            this order, because the site has no scroll spy.
+          */}
           <div className="mt-28 grid grid-cols-1 gap-x-8 gap-y-28 lg:grid-cols-12">
             <div className="flex flex-col gap-28 lg:col-span-8">
               <ProjectsSection
@@ -82,6 +86,10 @@ const Portfolio: React.FC = () => {
             <div className="lg:col-span-4">
               <Sidebar mode={mode} />
             </div>
+          </div>
+
+          <div className="mt-28">
+            <ThinkingSection mode={mode} />
           </div>
         </main>
 

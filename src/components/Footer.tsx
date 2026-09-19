@@ -13,8 +13,13 @@ const Footer: React.FC = () => {
   return (
     <footer className="relative z-10 border-t border-white/[0.08]">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-4 px-4 py-10 sm:flex-row sm:justify-between sm:px-6">
+        {/*
+          Location was in CONTACT but rendered nowhere except a FAQ answer, so
+          the site showed no location at all while the resume said San
+          Francisco. Recruiters filter on it, so it belongs somewhere visible.
+        */}
         <p className="text-[12px] text-text-faint">
-          <span className="text-text-dim">{FOOTER.brand}</span> · {FOOTER.copyright(year)}
+          <span className="text-text-dim">{FOOTER.brand}</span> · {CONTACT.location} · {FOOTER.copyright(year)}
         </p>
         <div className="flex items-center gap-1">
           {links.map(({ href, icon: I, label }) => (
