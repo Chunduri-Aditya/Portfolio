@@ -2,13 +2,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
-import { NAV_LINKS, CONTACT, HERO, PROJECTS, type Mode } from "../data/content";
+import { NAV_LINKS, CONTACT, HERO, PROJECTS } from "../data/content";
 import { Icon } from "../lib/iconMap";
 import { useFocusTrap } from "../lib/useFocusTrap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
-import { useDepth } from "../lib/depth";
 
-type Group = "Navigate" | "Missions" | "Links" | "Display";
+type Group = "Navigate" | "Work" | "Links";
 
 interface PaletteCommand {
   id: string;
@@ -20,7 +19,7 @@ interface PaletteCommand {
   action: () => void;
 }
 
-const GROUP_ORDER: Group[] = ["Navigate", "Missions", "Links", "Display"];
+const GROUP_ORDER: Group[] = ["Navigate", "Work", "Links"];
 
 const isMac =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
@@ -29,8 +28,6 @@ interface CommandPaletteProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  mode: Mode;
-  setMode: (mode: Mode) => void;
   scrollTo: (id: string) => void;
 }
 
@@ -38,12 +35,9 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   isOpen,
   onOpen,
   onClose,
-  mode,
-  setMode,
   scrollTo,
 }) => {
   const navigate = useNavigate();
-  const { depth, setDepth } = useDepth();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,8 +48,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   useFocusTrap(panelRef, isOpen);
 
   const commands = useMemo<PaletteCommand[]>(() => {
-    const nextMode = mode === "signal" ? "story" : "signal";
-    const nextDepth = depth === "technical" ? "plain" : "technical";
     return [
       {
         id: "nav-hero",
@@ -75,7 +67,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
       })),
       ...PROJECTS.projects.map((p) => ({
         id: `project-${p.id}`,
-        group: "Missions" as Group,
+        group: "Work" as Group,
         label: p.title,
         sublabel: p.discipline,
         icon: <Icon name={p.iconName} size={15} className={p.iconClassName} />,
@@ -116,26 +108,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <FileText size={15} strokeWidth={1.5} />,
         action: () => window.open(HERO.ctas.resume.href, "_blank", "noopener,noreferrer"),
       },
-      {
-        id: "mode-toggle",
-        group: "Display" as Group,
-        label: `Tone: switch to ${nextMode}`,
-        sublabel: nextMode === "story" ? "Narrative voice" : "Terse, scannable",
-        icon: <span className="font-mono text-[11px] text-accent-gold">T</span>,
-        keywords: "signal story tone voice",
-        action: () => setMode(nextMode),
-      },
-      {
-        id: "depth-toggle",
-        group: "Display" as Group,
-        label: `Depth: switch to ${nextDepth}`,
-        sublabel: nextDepth === "plain" ? "Jargon-free explanations" : "Full engineering detail",
-        icon: <span className="font-mono text-[11px] text-accent-gold">D</span>,
-        keywords: "technical plain depth eli5 baby terms",
-        action: () => setDepth(nextDepth),
-      },
     ];
-  }, [mode, depth, scrollTo, navigate, setMode, setDepth]);
+  }, [scrollTo, navigate]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

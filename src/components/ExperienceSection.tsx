@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
-import { EXPERIENCE, type ExperienceAccent, type Mode } from "../data/content";
-import { useDepth } from "../lib/depth";
+import { EXPERIENCE, type ExperienceAccent } from "../data/content";
 
 const HUE: Record<ExperienceAccent, string> = {
   teal: "#17b3b3",
@@ -12,14 +11,12 @@ const HUE: Record<ExperienceAccent, string> = {
 
 const ExperienceRow: React.FC<{
   exp: (typeof EXPERIENCE.items)[number];
-  mode: Mode;
-}> = ({ exp, mode }) => {
-  const { depth, setDepth } = useDepth();
+}> = ({ exp }) => {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
   const hue = HUE[exp.accent];
 
-  const body = depth === "plain" ? exp.plain : mode === "story" ? exp.story : exp.signal;
+  const body = exp.summary;
 
   return (
     <div className="glass overflow-hidden rounded-4xl">
@@ -59,22 +56,6 @@ const ExperienceRow: React.FC<{
               className="overflow-hidden"
             >
               <div className="mt-5 border-t border-white/10 pt-5">
-                <div className="mb-4 inline-flex rounded-full border border-white/10 bg-white/[0.03] p-0.5" role="radiogroup" aria-label="Explanation depth">
-                  {(["plain", "technical"] as const).map((d) => (
-                    <button
-                      key={d}
-                      type="button"
-                      role="radio"
-                      aria-checked={depth === d}
-                      onClick={() => setDepth(d)}
-                      className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
-                      }`}
-                    >
-                      {d}
-                    </button>
-                  ))}
-                </div>
                 <p className="text-sm leading-relaxed text-text-dim">{body}</p>
                 <ul className="mt-4 space-y-2">
                   {exp.bullets.map((b, i) => (
@@ -100,20 +81,20 @@ const ExperienceRow: React.FC<{
   );
 };
 
-const ExperienceSection: React.FC<{ mode: Mode }> = ({ mode }) => (
+const ExperienceSection: React.FC = () => (
   <AnimatedSection id="experience" labelledBy="experience-heading">
     <header className="mb-8">
       <p className="eyebrow mb-2">Experience</p>
       <h2 id="experience-heading" className="font-display text-3xl text-text sm:text-4xl">
         <span className="gradient-text">{EXPERIENCE.header.title}</span>
       </h2>
-      <p className="mt-2 max-w-2xl text-sm text-text-dim">{EXPERIENCE.header.subtitle[mode]}</p>
+      <p className="mt-2 max-w-2xl text-sm text-text-dim">{EXPERIENCE.header.subtitle}</p>
     </header>
 
     <StaggerContainer className="flex flex-col gap-6">
       {EXPERIENCE.items.map((exp) => (
         <StaggerItem key={`${exp.org}-${exp.period}`}>
-          <ExperienceRow exp={exp} mode={mode} />
+          <ExperienceRow exp={exp} />
         </StaggerItem>
       ))}
     </StaggerContainer>

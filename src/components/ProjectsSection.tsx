@@ -3,13 +3,9 @@ import { AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import ProjectCard from "./ProjectCard";
-import { PROJECTS, type Mode } from "../data/content";
+import { PROJECTS } from "../data/content";
 
-interface ProjectsSectionProps {
-  mode: Mode;
-}
-
-const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
+const ProjectsSection: React.FC = () => {
   const [query, setQuery] = useState("");
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
 
@@ -30,7 +26,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
     return PROJECTS.projects.filter((p) => {
       const matchesQuery =
         !q ||
-        [p.title, p.subtitle, p.hook, p.plain, p.oneLiner, p.story, p.discipline, ...p.tags]
+        [p.title, p.subtitle, p.hook, p.oneLiner, p.discipline, ...p.tags]
           .join(" ")
           .toLowerCase()
           .includes(q);
@@ -73,7 +69,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
               {String(filteredProjects.length).padStart(2, "0")} / {String(PROJECTS.projects.length).padStart(2, "0")}
             </span>
           </div>
-          <p className="mt-2 max-w-2xl text-sm text-text-dim">{PROJECTS.header.subtitle[mode]}</p>
+          <p className="mt-2 max-w-2xl text-sm text-text-dim">{PROJECTS.header.subtitle}</p>
         </header>
 
         <div className="glass mb-6 rounded-3xl p-2">
@@ -136,7 +132,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
             )}
             {featured.map((project) => (
               <StaggerItem key={project.id}>
-                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} mode={mode} />
+                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} />
               </StaggerItem>
             ))}
             {featured.length > 0 && rest.length > 0 && (
@@ -148,7 +144,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ mode }) => {
             )}
             {rest.map((project) => (
               <StaggerItem key={project.id}>
-                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} mode={mode} />
+                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} />
               </StaggerItem>
             ))}
           </AnimatePresence>

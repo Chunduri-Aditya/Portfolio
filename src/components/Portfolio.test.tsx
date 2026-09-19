@@ -1,13 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import { vi } from "vitest";
 import Portfolio from "./Portfolio";
-
-// Mock the FAQ bot to keep tests focused
-vi.mock("./FaqBot", () => ({
-  default: () => <div data-testid="faq-bot" />,
-}));
+import { HERO } from "../data/content";
 
 /** Project cards and the command palette navigate, so they need router context. */
 function renderHome() {
@@ -19,10 +14,32 @@ function renderHome() {
 }
 
 describe("Portfolio", () => {
-  test("renders hero and projects section", () => {
+  test("the hero resolves identity before anything else", () => {
     renderHome();
-    expect(screen.getByRole("button", { name: /Inspect The Work/i })).toBeInTheDocument();
+
+    // Name is the h1; the role sits immediately under it. A recruiter should not
+    // have to infer the job title from a sentence about method, which is what
+    // the previous hero asked of them.
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(HERO.name);
+    expect(screen.getByText(HERO.roleLabel)).toBeInTheDocument();
+    expect(screen.getByText(HERO.headline)).toBeInTheDocument();
+  });
+
+  test("resume and primary CTA are both reachable from the hero", () => {
+    renderHome();
+
+    expect(screen.getByRole("button", { name: /View Engineering Work/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View resume/i })).toBeInTheDocument();
+  });
+
+  test("the site speaks in one voice: no tone or depth switches remain", () => {
+    renderHome();
+
+    // Two orthogonal toggles meant four possible first impressions of the same
+    // person, and four places for one fact to drift.
+    expect(screen.queryByRole("radiogroup", { name: /tone/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("radiogroup", { name: /depth/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("radiogroup", { name: /Explanation depth/i })).not.toBeInTheDocument();
   });
 
   test("every project card links to its own case-study URL", () => {

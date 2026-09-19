@@ -1,65 +1,16 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Github, Linkedin, Menu, X, Search } from "lucide-react";
-import { NAV_LINKS, CONTACT, type Mode } from "../data/content";
-import { useDepth } from "../lib/depth";
+import { NAV_LINKS, CONTACT } from "../data/content";
 
 const isMac =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
 
 interface NavbarProps {
-  mode: Mode;
-  setMode: (mode: Mode) => void;
   activeSection: string;
   scrollTo: (id: string) => void;
-  thoughts: string[];
-  tickerIndex: number;
   onOpenPalette: () => void;
 }
-
-/** Pill segmented control with an animated gradient thumb. */
-const SegToggle = memo(function SegToggle<T extends string>({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: readonly [T, T];
-  value: T;
-  onChange: (v: T) => void;
-}) {
-  return (
-    <div
-      className="relative flex rounded-full border border-white/10 bg-white/[0.03] p-0.5"
-      role="radiogroup"
-      aria-label={label}
-    >
-      {options.map((opt) => {
-        const active = opt === value;
-        return (
-          <button
-            key={opt}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            onClick={() => onChange(opt)}
-            className="relative z-10 rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors"
-          >
-            <span className={active ? "text-white" : "text-text-faint hover:text-text-dim"}>{opt}</span>
-            {active && (
-              <motion.span
-                layoutId={`seg-${label}`}
-                className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-accent-sapphire-deep to-accent-teal-deep"
-                transition={{ type: "spring", stiffness: 400, damping: 32 }}
-              />
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-});
 
 const SOCIAL = [
   { href: `mailto:${CONTACT.email}`, icon: Mail, label: "Email" },
@@ -67,17 +18,8 @@ const SOCIAL = [
   { href: CONTACT.linkedin, icon: Linkedin, label: "LinkedIn" },
 ];
 
-const Navbar: React.FC<NavbarProps> = ({
-  mode,
-  setMode,
-  activeSection,
-  scrollTo,
-  thoughts,
-  tickerIndex,
-  onOpenPalette,
-}) => {
+const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { depth, setDepth } = useDepth();
 
   return (
     <>
@@ -96,26 +38,8 @@ const Navbar: React.FC<NavbarProps> = ({
             <span className="text-sm font-bold tracking-tight text-text">Aditya Chunduri</span>
           </button>
 
-          {/* Center: ticker + search + links */}
+            {/* Center: search + section links */}
           <div className="hidden items-center gap-3 xl:flex">
-            <div className="flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-viridian shadow-[0_0_8px_rgba(34,196,140,0.8)]" />
-              <div className="h-4 w-52 overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={tickerIndex}
-                    className="block truncate font-mono text-[11px] text-text-faint"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    {thoughts[tickerIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
-            </div>
-
             <button
               type="button"
               onClick={onOpenPalette}
@@ -153,21 +77,6 @@ const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right */}
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-2 sm:flex">
-              <SegToggle
-                label="tone"
-                options={["signal", "story"] as const}
-                value={mode}
-                onChange={(v) => setMode(v as Mode)}
-              />
-              <SegToggle
-                label="depth"
-                options={["tech", "plain"] as const}
-                value={depth === "technical" ? "tech" : "plain"}
-                onChange={(v) => setDepth(v === "tech" ? "technical" : "plain")}
-              />
-            </div>
-
             <div className="hidden items-center xl:flex">
               {SOCIAL.map(({ href, icon: I, label }) => (
                 <a
@@ -245,21 +154,6 @@ const Navbar: React.FC<NavbarProps> = ({
                     </button>
                   );
                 })}
-              </div>
-
-              <div className="mt-4 flex items-center gap-2 sm:hidden">
-                <SegToggle
-                  label="tone"
-                  options={["signal", "story"] as const}
-                  value={mode}
-                  onChange={(v) => setMode(v as Mode)}
-                />
-                <SegToggle
-                  label="depth"
-                  options={["tech", "plain"] as const}
-                  value={depth === "technical" ? "tech" : "plain"}
-                  onChange={(v) => setDepth(v === "tech" ? "technical" : "plain")}
-                />
               </div>
 
               <div className="mt-4 flex items-center gap-1 border-t border-white/10 pt-4">

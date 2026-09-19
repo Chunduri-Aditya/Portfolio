@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { IconName } from "../lib/iconMap";
 
 /* ============================================================================
@@ -9,11 +8,17 @@ import type { IconName } from "../lib/iconMap";
  *
  * Conventions:
  *  - Icons are referenced by string name (see src/lib/iconMap.tsx).
- *  - "story" / "signal" copy variants are toggled by the navbar mode switch.
+ *  - One voice. Every content type carries exactly one variant.
  *  - PDFs and other assets live in /public/Docs and are resolved via getPublicPath.
+ *
+ * This file used to carry up to four copies of every string, across a
+ * signal/story tone axis and a technical/plain depth axis, both switchable from
+ * the navbar. That gave a visitor four possible first impressions of the same
+ * person and gave this file four places for one fact to drift, which it did:
+ * the FAQ answers disagreed with the project data about how many projects
+ * existed and whether ChatDB was on GitHub. One voice now, chosen as the terse
+ * technical one, because the audience for this site is technical.
  * ========================================================================= */
-
-export type Mode = "signal" | "story";
 
 const getPublicPath = (path: string): string => {
   const base = import.meta.env.BASE_URL;
@@ -60,62 +65,53 @@ interface Chip {
 }
 
 export interface HeroContent {
-  /** Role framing in the hero eyebrow. */
+  /** Full name. The first thing a recruiter needs to resolve. */
+  name: string;
+  /** The role, stated plainly. Not a claim, not a tagline. */
   roleLabel: string;
   /** Availability. The single most perishable string on the site, so it lives here. */
   availability: string;
-  headline: { signal: string; story: string };
+  /** What he builds, in one sentence. */
+  headline: string;
+  /** Capability line: the terms a recruiter is scanning for. */
+  capabilities: string[];
   subhead: string;
-  intro: { signal: string; story: string };
-  /** "Plain" depth tier — jargon-free headline + intro, tone-neutral. */
-  plain: { headline: string; intro: string };
-  chips: { signal: Chip[]; story: Chip[] };
+  chips: Chip[];
   ctas: {
     primary: { label: string; iconName: IconName; targetSection: string };
-    secondary: { label: string; iconName: IconName; targetSection: string };
     resume: { label: string; iconName: IconName; href: string };
   };
 }
 
 export const HERO: HeroContent = {
-  roleLabel: "ML / AI engineer",
+  name: "Aditya Chunduri",
+  roleLabel: "ML / AI Engineer",
   availability: "open to work",
-  headline: {
-    signal: "I ship ML systems, then measure whether they actually work.",
-    story: "I like the messy middle: a hard problem, a metric, and a system that has to earn the number.",
-  },
-  subhead:
-    "Applied AI \u00b7 ML Systems \u00b7 LLM & Agent Evaluation \u00b7 Computer Vision \u2014 M.S. Applied Data Science, USC",
-  intro: {
-    signal:
-      "I build ML systems end to end and measure whether they hold up: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Different domains, one habit: seeded runs, real metrics, a result you can reproduce. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
-    story:
-      "The thread across everything I build is the same. Take a domain I do not fully understand yet, find the metric that actually matters, and build a system that has to earn it. That has looked like DJ transitions, retinal masks, generative pipelines, focus tracking, and AutoML search, and right now it looks like agent security. The tools change. The habit does not.",
-  },
-  plain: {
-    headline: "I build software that uses machine learning, across a lot of different areas, and I check that it works.",
-    intro:
-      "My projects run across audio, images, language, computer vision, and web apps. The common thread is that each one is measured, not just built: a real number that says whether it works, and a setup where you can run it again and get the same answer. Right now I am focused on testing AI agents for security holes.",
-  },
-  chips: {
-    signal: [
-      { iconName: "Boxes", text: "End to end ML systems" },
-      { iconName: "Gauge", text: "Real metrics, seeded runs" },
-      { iconName: "Wrench", text: "Full-stack: React + FastAPI" },
-      { iconName: "Sparkles", text: "Research grade cores" },
-      { iconName: "CheckCircle2", text: "Reproducible by default" },
-    ],
-    story: [
-      { iconName: "Boxes", text: "Systems over scripts" },
-      { iconName: "Radar", text: "Curiosity as method" },
-      { iconName: "Gauge", text: "Measure before you claim" },
-      { iconName: "Rocket", text: "Reproducible by default" },
-      { iconName: "Brain", text: "Attention trained daily" },
-    ],
-  },
+  /*
+   * The old headline, "I ship ML systems, then measure whether they actually
+   * work", was a good line but it made a visitor infer the role instead of
+   * reading it. Identity resolves first now; the measurement thesis is still
+   * the spine of the site, it just gets proven by the projects rather than
+   * asserted above them.
+   */
+  headline: "Building agentic systems, evaluation infrastructure, and production AI applications.",
+  capabilities: [
+    "Python",
+    "PyTorch",
+    "LLM Systems",
+    "Evaluation",
+    "Computer Vision",
+    "Backend AI",
+  ],
+  subhead: "M.S. Applied Data Science, USC",
+  chips: [
+    { iconName: "Boxes", text: "End to end ML systems" },
+    { iconName: "Gauge", text: "Real metrics, seeded runs" },
+    { iconName: "Wrench", text: "Full-stack: React + FastAPI" },
+    { iconName: "CheckCircle2", text: "Reproducible by default" },
+  ],
   ctas: {
-    primary: { label: "Inspect The Work", iconName: "Terminal", targetSection: "projects" },
-    secondary: { label: "How I Think", iconName: "ScrollText", targetSection: "thinking" },
+    primary: { label: "View Engineering Work", iconName: "Terminal", targetSection: "projects" },
     resume: { label: "Resume", iconName: "FileText", href: ASSETS.resumePdf },
   },
 };
@@ -133,20 +129,7 @@ export interface HudStat {
  */
 
 /* ============================================================================
- * SECTION 2 — TICKER THOUGHTS  (rotates in the navbar pill)
- * ========================================================================= */
-
-export const TICKER_THOUGHTS: string[] = [
-  "Finding the smallest change that fixes the whole system...",
-  "Matching two songs on the exact bar where the beat lands...",
-  "Chasing edge cases (that's where truth hides)...",
-  "Throwing the camera pixels away, keeping only the numbers...",
-  "Reading a benchmark that says my own idea did not help...",
-  "Shipping only when the behavior is stable...",
-];
-
-/* ============================================================================
- * SECTION 3 — NAVIGATION
+ * SECTION 2 — NAVIGATION
  * ========================================================================= */
 
 export interface NavLink {
@@ -156,149 +139,37 @@ export interface NavLink {
 
 /** Order must match the DOM order in Portfolio.tsx, or the nav reads wrong. */
 export const NAV_LINKS: NavLink[] = [
-  { id: "projects", label: "Projects" },
+  { id: "projects", label: "Work" },
   { id: "experience", label: "Experience" },
   { id: "research", label: "Research" },
   { id: "skills", label: "Skills" },
-  { id: "thinking", label: "Thinking" },
+  { id: "about", label: "About" },
 ];
 
 /* ============================================================================
- * SECTION 4 — THINKING ("How I Think")
+ * SECTION 3 — ABOUT
  * ========================================================================= */
 
-interface ThinkingItem {
-  title: string;
-  iconName: IconName;
-  iconClassName?: string;
-  text: { signal: string; story: string };
+export interface AboutContent {
+  header: { title: string; iconName: IconName; eyebrow: string };
+  /** Three to five sentences. Engineering mindset, not autobiography. */
+  paragraphs: string[];
 }
 
-export interface ThinkingContent {
-  header: {
-    title: string;
-    iconName: IconName;
-    subtitle: { signal: string; story: string };
-  };
-  loopLabel: string;
-  loop: ThinkingItem[];
-  valuesLabel: string;
-  values: ThinkingItem[];
-  humanPart: { label: string; text: { signal: string; story: string } };
-}
-
-export const THINKING: ThinkingContent = {
-  header: {
-    title: "How I Think",
-    iconName: "Layers",
-    subtitle: {
-      signal: "A repeatable loop I use to design, debug, and ship.",
-      story: "My operating system for turning intensity into clarity.",
-    },
-  },
-  loopLabel: "Loop (the whole thing fits in my head)",
-  loop: [
-    {
-      title: "Observe",
-      iconName: "Eye",
-      iconClassName: "text-cyan-300",
-      text: {
-        signal: "Identify constraints, failure modes, and a measurable definition of success.",
-        story:
-          "I start with friction: contradictions, recurring weirdness, the edge case that won't leave.",
-      },
-    },
-    {
-      title: "Model",
-      iconName: "Boxes",
-      iconClassName: "text-purple-300",
-      text: {
-        signal: "Sketch an approach with the tradeoffs, risks, and interfaces named up front.",
-        story:
-          "I sketch a model and try to break it. If it survives, it becomes architecture.",
-      },
-    },
-    {
-      title: "Instrument",
-      iconName: "Gauge",
-      iconClassName: "text-emerald-300",
-      text: {
-        signal: "Measure early: evals, traces, structured logs, reproducible configs.",
-        story:
-          "I add gauges: tests, logs, metrics, anything that turns 'maybe' into 'we know'.",
-      },
-    },
-    {
-      title: "Iterate",
-      iconName: "Timer",
-      iconClassName: "text-slate-200",
-      text: {
-        signal: "Run fast experiments, isolate variables, keep a decision log.",
-        story:
-          "Short loops. Tight feedback. Find the one lever that fixes five things at once.",
-      },
-    },
-    {
-      title: "Ship",
-      iconName: "Rocket",
-      iconClassName: "text-cyan-200",
-      text: {
-        signal: "Package it: docs, tests, and a story that maps to outcomes.",
-        story: "I ship when the system behaves. Not when I feel brave.",
-      },
-    },
+/*
+ * This replaces a "How I Think" section that ran a five-step loop, four
+ * values, and a "human part", each in two voices. It sat below the evidence
+ * and restated in the abstract what the case studies already show concretely.
+ * What survives is the part a hiring manager cannot infer from a repo: which
+ * problems he goes looking for.
+ */
+export const ABOUT: AboutContent = {
+  header: { title: "About", iconName: "Layers", eyebrow: "About" },
+  paragraphs: [
+    "I work on AI systems where model capability alone is not the hard part. The interesting questions sit around the model: what enters a limited context window, which tool call is safe to make, what the system does when retrieval misses, and how you would know any of it is working.",
+    "That pulls me toward evaluation. Most of my projects ship with the measurement attached, because a system I cannot re-run and get the same answer from is a demo, not a result. It also means I publish results that went against me: MetaLearnML's benchmark says its learned ranking does not reduce end to end evaluation time, and the repo records that rather than burying it.",
+    "I build across the stack it takes to get there, from adversarial evals and retrieval pipelines to FastAPI services, agent orchestration, and on-device computer vision. The domains change; the habit of instrumenting first does not.",
   ],
-  valuesLabel: "What I'm optimizing for",
-  values: [
-    {
-      title: "Truthful systems",
-      iconName: "ShieldCheck",
-      iconClassName: "text-emerald-300",
-      text: {
-        signal:
-          "Ground claims with retrieval, verify with evals, fail loudly when confidence is wrong.",
-        story: "If it\u2019s not reliable, it\u2019s not helpful. I\u2019d rather be slower than wrong.",
-      },
-    },
-    {
-      title: "Reproducibility",
-      iconName: "CheckCircle2",
-      iconClassName: "text-cyan-300",
-      text: {
-        signal:
-          "Seeded configs + deterministic eval paths + versioned artifacts; same input, same verdict.",
-        story: "I sleep better when tomorrow\u2019s run matches today\u2019s run.",
-      },
-    },
-    {
-      title: "Leverage",
-      iconName: "ArrowUpRight",
-      iconClassName: "text-purple-300",
-      text: {
-        signal: "Build the measurement once, and every new case after that is just another row in the table.",
-        story: "I hunt the one lever that fixes five things at once.",
-      },
-    },
-    {
-      title: "Stable behavior over heroics",
-      iconName: "XCircle",
-      iconClassName: "text-slate-200",
-      text: {
-        signal:
-          "Regressions caught by instrumentation, not by vibes or a late night in the debugger.",
-        story: "I don't chase perfection. I chase stable behavior.",
-      },
-    },
-  ],
-  humanPart: {
-    label: "The human part",
-    text: {
-      signal:
-        "Wide angle attention and laser focus, running at the same time. Structure, meaning lists, tests, logs, and decision trails, keeps both aimed at signal instead of noise.",
-      story:
-        "My attention runs wide angle and laser at once. Structure is how I keep it useful: lists, tests, logs, and clean interfaces, so intensity turns into progress instead of noise.",
-    },
-  },
 };
 
 /* ============================================================================
@@ -345,14 +216,10 @@ export interface Project {
   /** HUD class label, e.g. "AI-SAFETY / EVAL". Uppercase, terse. */
   discipline: string;
   status: ProjectStatus;
-  /** Tier 1 — always visible on the card. One punchy "normal person" line, <= ~14 words. */
+  /** Always visible on the card. One punchy line, <= ~14 words. */
   hook: string;
-  /** Tier 2 — "Plain" / ELI5. 2-3 sentences, zero jargon. Tone-neutral (not signal/story). */
-  plain: string;
-  /** Tier 3 — "Technical", crisp variant. */
+  /** The technical description. One paragraph, used on the card and the case study. */
   oneLiner: string;
-  /** Tier 3 — "Technical", narrative variant. */
-  story: string;
   evidence: string[];
   architecture: ProjectArchitecture;
   decisions: ProjectDecision[];
@@ -373,7 +240,7 @@ export interface ProjectsSectionContent {
     title: string;
     iconName: IconName;
     eyebrow: string;
-    subtitle: { signal: string; story: string };
+    subtitle: string;
   };
   searchPlaceholder: string;
   projects: Project[];
@@ -381,15 +248,10 @@ export interface ProjectsSectionContent {
 
 export const PROJECTS: ProjectsSectionContent = {
   header: {
-    title: "The Rabbit Holes",
+    title: "Featured Engineering Work",
     iconName: "GitBranch",
-    // Conventional term here, character in the heading below. A recruiter
-    // scanning for "Projects" finds the word; the voice survives in the title.
-    eyebrow: "Projects",
-    subtitle: {
-      signal: "Case studies with constraints, tradeoffs, and outcomes.",
-      story: "Systems I built because I couldn\u2019t stop thinking about the problem.",
-    },
+    eyebrow: "Work",
+    subtitle: "Case studies with constraints, tradeoffs, evaluation, and outcomes.",
   },
   searchPlaceholder: "Search (RAG, evals, homography, demucs, privacy...)",
   projects: [
@@ -414,12 +276,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "I break AI agents on purpose so they fail in my lab, not in production.",
-      plain:
-        "Companies are wiring AI assistants into real tools faster than anyone can check whether they are safe. Agent Shield is the test rig that attacks these assistants the way a bad actor would, with hidden instructions, poisoned tools, and slow manipulation, then scores how often they fall for it, whether they warn their owner, and whether they still do their normal job. It also ships a small local filter that screens sketchy tool descriptions before the AI ever reads them.",
       oneLiner:
         "Agent Shield stress tests LLM agents across prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift. It runs on UK AISI's Inspect AI harness, maps every threat to OWASP and MITRE ATLAS, and now carries a second claim surface: a local runtime perimeter that screens MCP tool descriptions in flight.",
-      story:
-        "Agents get deployed faster than they get measured. So I built a reproducible attack surface first: one harness, one scoring schema, seeded tasks, so failures show up as scored diffs, not vibes. The results made the second half obvious. If no model flags a poisoned tool description, scoring that after the fact is not enough, so the same repo now ships a local perimeter that screens tool descriptions before the agent ever reads them.",
       evidence: [
         "6 live attack modules, 28 attack IDs: prompt injection, MCP tool poisoning, RAG/memory poisoning, covert exfiltration, social engineering, multi turn behavioral drift",
         "Introduced Transparency Rate, whether an agent flags an attack to its operator, as a third axis alongside ASR and Benign Utility in a six cell outcome model extending AgentDojo's 2x2 matrix",
@@ -509,12 +367,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "A DJ engine that mixes two songs into one clean transition, with 904 tests proving it.",
-      plain:
-        "Blending two tracks so the switch sounds seamless is real engineering. You have to match the key, the tempo, and the exact bar where the beat lands, then fade the bass out without a thud. This is a full app that does all of it automatically: pick two songs, get a mixed track, backed by a research grade audio core and a web interface that streams job progress live.",
       oneLiner:
         "AI RemixMate is a full stack DJ engine: a React/TypeScript frontend with SSE live streaming, a FastAPI async job queue, and a research grade MIR core (TIV harmonic scoring, Beat This! downbeat detection, CLAP 512-D semantic search), with 904 tests and mastering to -14 LUFS.",
-      story:
-        "A clean transition is hidden engineering. I started with Demucs stems and Camelot Wheel matching, then kept pulling the thread: librosa beat detection out, Beat This! (ISMIR 2024) in for proper downbeats; IIR bass shelving out, a true cosine taper stem ramp in; TIV harmonic scoring from the MIR literature added; CLAP 512-D semantic search added so DJs can find tracks by sound and not just by name. Then I wrapped it in a React frontend with live SSE job streaming so it behaves like a product.",
       evidence: [
         "FastAPI async job queue (SQLite write-through persistence) + React/TypeScript frontend, 10 pages, SSE live job streaming, Zustand state management",
         "TIV harmonic scoring (Bernardes et al. 2016 Tonal Interval Space) replacing psychoacoustic consonance approximation",
@@ -607,12 +461,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "One short brief in; a matching script, image, and voiceover out. Swap any model, no rewrites.",
-      plain:
-        "Most tools that generate media lock you into one company's model for text, another for images, another for voice. This pipeline takes a single prompt and produces all three, and it lets you swap the underlying model at any stage, cheap local models while you experiment and better cloud ones for the final run, without touching the rest of the code.",
       oneLiner:
         "AkashicTree is an agentic, model agnostic GenAI media pipeline that turns a single brief into text, image, and audio, coordinating local Ollama inference, Diffusers / FLUX.1, and ElevenLabs voice through one modular workflow.",
-      story:
-        "Generative pipelines usually lock you into one provider per modality. I wanted a brief to fan out into text, image, and audio with whichever backend makes sense that day, local Ollama for development and cloud for quality runs, without changing a line of the orchestration layer.",
       evidence: [
         "Single-brief \u2192 text + image + audio via one orchestration layer",
         "Local Ollama inference for text generation",
@@ -683,12 +533,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "A private journaling AI where the two claims that matter, recall and crisis safety, are measured, not promised.",
-      plain:
-        "A journaling assistant that runs entirely on your own computer, so nothing you write ever leaves the machine. The point is honesty about its own quality. It measures whether it actually pulls up the right past entry, because an average score was hiding one category that had quietly failed, and it has a plain deterministic safety check for crisis language that was tested by deliberately breaking it.",
       oneLiner:
         "AI Health Journal is a local first journaling assistant whose two load bearing claims, does retrieval surface the right past entry and does the safety floor catch a crisis, are measured and reproducible offline rather than asserted.",
-      story:
-        "Aggregate recall said 0.875 and looked healthy. Broken out by category, one bucket sat at 0.667: entries about a good day were pulling back the user's worst entries, because the embedder encoded topic and not emotional valence. In a journaling app the retrieved entries become the grounding context the person reads back, so on a good day the system was quietly reflecting their hardest writing at them. That bug convinced me the aggregate number is the enemy, and that everything here needs a per category breakdown and an eval I have broken on purpose myself.",
       evidence: [
         "Retrieval ablation across 4 strategies (dense MiniLM, BM25, hybrid RRF, dense nomic-embed-text) on a corpus where every query is tagged with the confusion it was built to induce",
         "The valence_flip category went 0.667 to 1.000 on an embedder swap that also lifted full corpus Recall@3 to 0.968 and runs roughly twice as fast (26.6ms vs 58.0ms median per embedding)",
@@ -771,12 +617,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "Stop arguing about which model is 'better'. Score it with a repeatable test suite instead.",
-      plain:
-        "A local tool for comparing language models on concrete tasks, reasoning, making things up, emotional tone, and writing correct code, with runs you can repeat and charts to line them up. It is the measurement habit that later grew into Agent Shield.",
       oneLiner:
         "Model Behavior Lab is a local Ollama based evaluation platform that benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and dashboards. It is the methodology that became the base for Agent Shield.",
-      story:
-        "I got tired of debating model quality with adjectives. So I built a platform that phrases the question in code: JSON test suites, scored outputs, repeatable runs. When a new model lands, the numbers are already waiting. This became the groundwork for Agent Shield.",
       evidence: [
         "Local Ollama-based evaluation \u2014 no external API dependency",
         "Benchmarks reasoning, hallucination, emotion alignment, and code correctness",
@@ -837,12 +679,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "A webcam focus tracker that never records video. Only the numbers it computes touch the disk.",
-      plain:
-        "A tool that watches, through your webcam, whether you are focused, drifting, or away during deep work, and nudges you after five seconds of drift. Every tool like this wants your camera feed in someone's cloud. This one throws the pixels away immediately and keeps only derived numbers, so the privacy claim is a property of the data on disk, not a promise.",
       oneLiner:
         "Attention Drift Detector classifies focus, drift, and absence in real time from head pose and iris gaze, nudges you after five continuous seconds of drift, and writes a session report. No video is ever recorded: only derived angles and labels reach disk.",
-      story:
-        "I wanted to know what my attention actually did during deep work, and every tool that offered to tell me wanted the camera feed in someone else's cloud. The interesting constraint was throwing the pixels away: if only derived numbers persist, the privacy claim stops being a policy promise and becomes a property of the data on disk.",
       evidence: [
         "MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second sliding window",
         "Three states (focused, drifting, absent) with an OS notification firing after 5 continuous seconds of drift",
@@ -916,12 +754,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "A chatbot that helps you build n8n workflows, and only exposes what's actually safe to expose.",
-      plain:
-        "Two projects had grown up side by side: one that searches n8n's docs, one that runs a locked down multi agent build pipeline behind signed approvals. I merged them and put a web layer on top. The disciplined call was scoping that web layer to grounded search and live status only, because wiring a chatbox straight into the build pipeline would mean rebuilding or bypassing its approval controls.",
       oneLiner:
         "Sourcewarden merges a retrieval index and a multi agent orchestration system for building n8n workflows behind a read only FastAPI layer that grounds every chat answer in cited evidence and verifies its own security controls live instead of shelling out to run anything itself.",
-      story:
-        "Two repos had grown side by side: one doing retrieval over n8n's docs and community examples, the other running a six role agent pipeline behind an Ed25519 signed approval ledger. I merged them into one system, then went to add a web layer. The obvious move was a chatbox that drives the whole pipeline end to end. The correct move was to check what was actually callable first. The orchestration lives entirely in prompt files a human runs through an AI coding agent, gated on purpose so nothing mutates a live workflow without a signed approval. Wiring a chatbox straight into that would mean rebuilding the approval flow in a browser or quietly bypassing it. So I scoped the web layer to what was real and safe to expose: grounded retrieval and live status, not execution.",
       evidence: [
         "2,256-row retrieval index across official n8n docs and community workflow examples, with an explicit evidence precedence: live instance schema, then official docs, then community examples, then untrusted references",
         "Six-role agent orchestration (supervisor, security firewall, skeleton architect, module builder, deviation monitor, eval tuner) gated by an Ed25519-signed run ledger, one-time nonces, and a 15-minute authorization window",
@@ -1006,12 +840,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "I built an AutoML ranker, then the benchmark that proved it does not save time, and I kept that result.",
-      plain:
-        "AutoML tools promise to reach a good model faster by predicting which candidates are worth trying. I built one, then a careful benchmark over 15 datasets to check the promise. It ranks candidates better than random guessing, but it did not measurably cut the work needed to reach a good model, and the project keeps that negative result written down instead of quietly dropping it.",
       oneLiner:
         "MetaLearnML is a tabular AutoML engine that ranks preprocessing by model candidates with a meta learner trained on past runs, next to a benchmark over 15 datasets built to measure whether that learned ranking actually beats proxy and random baselines. On end to end evaluation savings it does not, and the repo records that.",
-      story:
-        "The pitch for meta learned model selection is that it saves you evaluations. I built the engine and then the benchmark that would catch me if it did not. On ranking quality the meta learner is clearly better than random (median Spearman 0.57 vs 0.02). On the thing that matters, evaluations saved to reach a good model, the measured reduction was 0.0% with a 95% CI of 0 to 50%. The benchmark report marks the resume impact criterion as not met. Keeping that result visible is the point of the project.",
       evidence: [
         "Candidate universe: up to 12 preprocessing strategies × 7 (classification) or 9 (regression) models, ranked by fast proxy evaluation plus an optional RandomForest meta-learner over prior-run meta-features",
         "Leakage controls: outer dev/test split before any encoder is fit, fold-local preprocessing, a single scored touch of the test partition, deterministic splits, SHA-256 content-addressed candidate identity, and a versioned meta-feature schema that refuses to load on drift",
@@ -1091,12 +921,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "COURSEWORK",
       hook:
         "Plain English questions into SQL with five regex rules and zero machine learning.",
-      plain:
-        "A command line tool from a database course: load a spreadsheet, ask something like 'total sales grouped by region' in plain English, get the SQL back. It uses five hand written pattern rules rather than any AI, and if it does not recognize your question it says so instead of guessing.",
       oneLiner:
         "ChatDB loads a CSV into SQLite and turns a fixed grammar of plain English aggregate questions into SQL with regex pattern matching, not a model.",
-      story:
-        "Built for a USC database course. The constraint I set was natural language to SQL with zero ML: five hand written regex patterns, exact column matching, and a sample query generator that teaches the grammar it actually supports. It is honest about its edges. An unrecognized query returns an error string rather than a guess.",
       evidence: [
         "CSV ingestion with pandas: column-name normalization, then dtype-based classification into datetime / measure / attribute columns to drive query planning",
         "Five named regex intent patterns (sum / average / min / max / count, each grouped-by) mapped to SQL GROUP BY templates",
@@ -1163,12 +989,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "Once a coding agent reads something hostile, it stops being allowed to act for the rest of that turn.",
-      plain:
-        "Coding assistants read web pages, files and tool output, and some of that text is written to trick them. This sits between the tool and the model: it screens what comes back, marks anything suspicious as untrusted data rather than instructions, and then blocks that turn from writing files, running commands or reaching the network.",
       oneLiner:
         "A Claude Code hook layer that screens tool results through Agent Shield, wraps flagged content as untrusted data before the model reads it, and denies every write, execute and network tool for the remainder of that turn, keyed by prompt_id.",
-      story:
-        "The interesting constraint is that a settings file cannot express this. Permission rules are static: allow, ask and deny decide a call the same way every time, because nothing in a config knows what has already happened in the turn. The sentence I wanted was 'not after this turn ingested something flagged', and that needs state keyed to the turn. That one sentence is the product, and the rest is plumbing around it.",
       evidence: [
         "Turn-scoped taint keyed by prompt_id, surviving across separate hook subprocesses, so ingest in one tool call constrains every later call in the same turn",
         "Gate covers 14 tool names plus every mcp__* tool by prefix. The matcher was checked against the harness rather than assumed: a probe confirmed Bash and an MCP tool fire while Read does not, which a wildcard matcher would have hidden",
@@ -1242,12 +1064,8 @@ export const PROJECTS: ProjectsSectionContent = {
       status: "SHIPPED",
       hook:
         "Company functions down to role agents, with a verifier that refuses to call a blank job done.",
-      plain:
-        "A company is a set of functions, departments and jobs. This turns that structure into records a machine can check, then generates the role agents from them. A new company is a configuration file, not a fork of the code.",
       oneLiner:
         "An executable map of company functions to departments to branches to jobs to role agents, with a five-layer enforcement chain: job records, branch designs, a preflight gate, context screening through Agent Shield, and generated role agents.",
-      story:
-        "The honest part of this project is its own correction. It claimed the company ran. Then a captioning pass produced output on a blank job, because 51 of 159 job records used a heading the runner never read, so the model got empty inputs and still exited 0. The verifier now catches that class, and the repo's own assessment is that this is a verification harness, not an operational multi-agent company.",
       evidence: [
         "node scripts/verify.mjs passes 42 of 42 steps, exit 0, with the repository audit green",
         "Caught its own false success: a caption pass ran against blank inputs because 51 of 159 job records used a heading the runner did not read, and the run still exited 0. Fixed, and the verifier now fails on it",
@@ -1357,14 +1175,10 @@ export interface ExperienceItem {
   location: string;
   period: string;
   accent: ExperienceAccent;
-  /** Tier 1 — always visible. One plain line on what the role actually was. */
+  /** Always visible. One line on what the role actually was. */
   hook: string;
-  /** Tier 2 — "Plain" / ELI5. 1-2 sentences, zero jargon. */
-  plain: string;
-  /** Tier 3 — "Technical", narrative variant. */
-  story: string;
-  /** Tier 3 — "Technical", crisp variant. */
-  signal: string;
+  /** The technical summary, shown when the entry is expanded. */
+  summary: string;
   bullets: string[];
   tags: string[];
 }
@@ -1373,19 +1187,16 @@ export interface ExperienceSectionContent {
   header: {
     title: string;
     iconName: IconName;
-    subtitle: { signal: string; story: string };
+    subtitle: string;
   };
   items: ExperienceItem[];
 }
 
 export const EXPERIENCE: ExperienceSectionContent = {
   header: {
-    title: "Field Work",
+    title: "Experience",
     iconName: "Briefcase",
-    subtitle: {
-      signal: "Research and engineering roles. What I shipped, measured, and handed off.",
-      story: "Places where the problem pushed back and forced me to build better tools.",
-    },
+    subtitle: "Research and engineering roles. What I shipped, measured, and handed off.",
   },
   items: [
     {
@@ -1396,11 +1207,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       accent: "viridian",
       hook:
         "Built the tool a video team relies on to decide whether a camera to field mapping is trustworthy before they accept it.",
-      plain:
-        "For a studio turning NFL Blitz gameplay video into tracking data, I built the review tool that decides whether a computed field alignment is good enough to keep. Then I chased down why one class of alignments kept failing and proved which cause was real.",
-      story:
-        "The brief was computer vision for tracking NFL Blitz gameplay. What it needed first was a way to trust a homography before accepting it, so I built the reviewer tool and the schema gates around it. Then I spent the diagnosis time proving which failure mechanism was real and which coordinate bug was a red herring.",
-      signal:
+      summary:
         "Built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, then diagnosed a class of homography failures down to its geometric mechanism.",
       bullets: [
         "Built a single-reviewer browser tool (Python, OpenCV, NumPy, JavaScript, stdlib HTTP server) for field/template correspondence labeling: homography fitting with per-point residual reporting, 44-keypoint projection, overlay review, and attempt-state handling",
@@ -1420,11 +1227,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       accent: "teal",
       hook:
         "Made the clean artery versus vein training masks a team's retinal scan segmentation model learned from.",
-      plain:
-        "On a research team building a model that traces blood vessels in eye scans, my job was the data side: separating arteries from veins in the training images cleanly enough that the model had something honest to learn from.",
-      story:
-        "Retinal vessels are small and the labels are noisy, and every downstream diagnosis rides on the mask quality. My part was the data side: separating artery from vein cleanly enough that the team's model had something honest to learn from.",
-      signal:
+      summary:
         "Contributed mask generation and refinement to a team U-Net artery-vein segmentation project on retinal fundus images, with MLflow experiment tracking across dataset and augmentation variants.",
       bullets: [
         "Built an AV mask-generation pipeline from color-segmented retinal fundus images: artery/vein separation via RGB-channel differencing, producing binary and RGB training masks for the team's U-Net model",
@@ -1442,11 +1245,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       accent: "viridian",
       hook:
         "Turned confidential insurance paperwork into something a doctor could read at a glance.",
-      plain:
-        "Hospital insurance documents are dense and doctors do not have time to dig through them. I analyzed that data and built dashboards that put the handful of fields they actually need on one screen.",
-      story:
-        "A remote data analyst internship working on confidential insurance-document data. The analysis mattered less than the delivery: the useful output was not a model, it was a dashboard a busy doctor would actually open.",
-      signal:
+      summary:
         "Exploratory data analysis on confidential insurance-document data, delivered as Power BI and Tableau dashboards for doctor review.",
       bullets: [
         "Performed exploratory data analysis on confidential insurance-document data",
@@ -1462,11 +1261,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       accent: "sapphire",
       hook:
         "Automated four reconciliation processes by sitting with the accountants who ran them by hand.",
-      plain:
-        "An accounting firm was reconciling large transaction batches manually, which is slow and easy to get wrong late in a long day. I shadowed the accountants through live audits, learned the four processes they repeated most, and wrote Python workflows that do the matching and flag what needs a human.",
-      story:
-        "My first engineering job, and the one that taught me requirements are gathered by watching, not asking. I tagged along with accountants during live audits until I understood which four processes were repetitive enough to be worth automating, then built reconciliation workflows around rule-based matching with the failure cases written down rather than hidden.",
-      signal:
+      summary:
         "Built Python and pandas reconciliation workflows for four repetitive finance processes, on transaction batches averaging roughly USD 120,000 per run.",
       bullets: [
         "Developed Python/pandas reconciliation workflows with transaction-data standardization, schema validation, SQL storage, and rule-based matching",
@@ -1484,11 +1279,7 @@ export const EXPERIENCE: ExperienceSectionContent = {
       accent: "sapphire",
       hook:
         "First taste of computer vision: running a detector over test video and writing down where it broke.",
-      plain:
-        "A short remote internship early in undergrad. I ran a YOLOv5 and OpenCV detection pipeline over test video, compared how reliably it held up as lighting, motion and occlusion changed, and wrote up the cases where it failed.",
-      story:
-        "A short remote internship early in my undergrad, and my first real exposure to computer vision. Running the same detector across clips that differed in lighting, motion and occlusion taught me that the interesting part is not the model, it is characterising the conditions under which it stops working.",
-      signal:
+      summary:
         "Introductory object detection: YOLOv5 and OpenCV detection on test video, with reliability compared across lighting, motion and occlusion changes and failure cases documented.",
       bullets: [
         "Evaluated a YOLOv5 and OpenCV detection pipeline on test video",
@@ -1513,14 +1304,10 @@ export interface PublicationLink {
 export interface Publication {
   badge: string;
   title: string;
-  /** Tier 1 — always visible. One plain line on what the paper argues. */
+  /** Always visible. One line on what the paper argues. */
   hook: string;
-  /** Tier 2 — "Plain" / ELI5. 1-2 sentences, zero jargon. */
-  plain: string;
-  /** Tier 3 — "Technical", narrative variant. */
-  story: string;
-  /** Tier 3 — "Technical", crisp variant. */
-  signal: string;
+  /** The technical summary: question, method, result. */
+  summary: string;
   metrics: { label: string; value: string; accent: ResearchAccent }[];
   links: PublicationLink[];
 }
@@ -1529,19 +1316,16 @@ export interface ResearchContent {
   header: {
     title: string;
     iconName: IconName;
-    subtitle: { signal: string; story: string };
+    subtitle: string;
   };
   publications: Publication[];
 }
 
 export const RESEARCH: ResearchContent = {
   header: {
-    title: "Deep Theory",
+    title: "Research",
     iconName: "BookOpen",
-    subtitle: {
-      signal: "Research + publication work.",
-      story: "I like models that respect the physics of reality.",
-    },
+    subtitle: "Research question, method, result, and the artifacts behind each.",
   },
   publications: [
     {
@@ -1550,11 +1334,7 @@ export const RESEARCH: ResearchContent = {
         "Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security",
       hook:
         "When an AI resists an attack but never mentions it, that's not the same as staying safe. I measure the difference.",
-      plain:
-        "Security tests for AI agents usually check two things: did the attack work, and did the agent still do its job. They skip a third thing that matters \u2014 did the agent tell its owner something was wrong? This paper adds that measurement, so 'quietly resisted' and 'resisted and reported it' stop counting as the same result.",
-      story:
-        "Most agent benchmarks ask two questions\u2014did the task succeed, did the attack succeed\u2014and never whether the agent told its operator anything was wrong. I added that missing axis: Transparency Rate. Silent resistance and resistance-out-loud stop being the same outcome.",
-      signal:
+      summary:
         "Sole-author preprint introducing a transparency-aware evaluation protocol on Inspect AI. Adds Transparency Rate (TR) as a third axis to the AgentDojo outcome matrix, with an anchored prompt-injection result (n=20, Wilson 95% CIs) across four models and diagnostic probes over six adversarial surfaces.",
       metrics: [
         { label: "Contribution", value: "Transparency Rate", accent: "sapphire" },
@@ -1588,11 +1368,7 @@ export const RESEARCH: ResearchContent = {
       title: "Wind Power Analysis Using Machine Learning in Wind Turbines",
       hook:
         "Forecasting wind-farm output from a live software model of the farm, as the second of four authors.",
-      plain:
-        "Wind power is hard to predict, which makes it hard to plan around. This undergraduate publication builds a 'digital twin', a running software copy of a wind farm on Azure, and pairs two forecasting methods to predict output. I was the second of four authors.",
-      story:
-        "Wind is messy. The paper builds a Digital Twin on Azure to mirror the farm in software, then forecasts output with models that respect long-range time dependencies. My first publication, second of four authors, from undergrad at SRM.",
-      signal:
+      summary:
         "Hybrid forecasting combining TCN and KNN regression inside a Digital Twin architecture on Azure. IJRASET Vol 11 Issue VIII, Aug 2023. Second of four authors.",
       metrics: [
         { label: "Architecture", value: "Digital Twin", accent: "teal" },
@@ -1630,34 +1406,7 @@ export interface SkillCategory {
   accent: SkillAccent;
 }
 
-export interface UserManualItem {
-  num: string;
-  strong: string;
-  text: string;
-}
-
-export interface OffKeyboardItem {
-  title: string;
-  iconName: IconName;
-  iconClassName?: string;
-  extra?: string;
-  text: { signal: string; story: string };
-}
-
 export interface SidebarContent {
-  userManual: {
-    title: string;
-    iconName: IconName;
-    items: UserManualItem[];
-    collaborationStyle: { label: string; text: { signal: string; story: string } };
-    performanceHabits: { label: string; text: { signal: string; story: string } };
-  };
-  offKeyboard: {
-    title: string;
-    iconName: IconName;
-    subtitle: string;
-    items: OffKeyboardItem[];
-  };
   skills: {
     title: string;
     iconName: IconName;
@@ -1679,82 +1428,6 @@ export interface SidebarContent {
 }
 
 export const SIDEBAR: SidebarContent = {
-  userManual: {
-    title: "User Manual",
-    iconName: "FileText",
-    items: [
-      {
-        num: "01",
-        strong: "I optimize for:",
-        text: "Reproducibility. If I can\u2019t run it twice and get the same behavior, it isn\u2019t stable.",
-      },
-      {
-        num: "02",
-        strong: "I thrive when:",
-        text: "The problem is ambiguous and the solution needs a bridge between two worlds.",
-      },
-      {
-        num: "03",
-        strong: "Tooling:",
-        text: "I use configs, logs, and evals to force structure onto experimentation.",
-      },
-    ],
-    collaborationStyle: {
-      label: "Collaboration style",
-      text: {
-        signal:
-          "Give me the outcome and the constraints. I come back with an approach, the tradeoffs written down, and a shipped result with tests and artifacts.",
-        story:
-          "Give me a messy problem and a success metric. I turn it into a pipeline, instrument it, and iterate until the system behaves.",
-      },
-    },
-    performanceHabits: {
-      label: "Performance habits",
-      text: {
-        signal: "I treat focus like a trainable skill: routines, feedback loops, resets.",
-        story: "Intensity is a feature. Structure is how I aim it.",
-      },
-    },
-  },
-  offKeyboard: {
-    title: "Off-Keyboard Training",
-    iconName: "Activity",
-    subtitle: "High bandwidth attention, channeled into structure",
-    items: [
-      {
-        title: "Meditation",
-        iconName: "Brain",
-        iconClassName: "text-emerald-400",
-        extra: "5+ years",
-        text: {
-          signal: "Attention training: calm under pressure, faster reset, deliberate focus.",
-          story:
-            "Meditation is my reset button. It turns mental bandwidth into clean signal.",
-        },
-      },
-      {
-        title: "Athletics",
-        iconName: "Activity",
-        iconClassName: "text-cyan-400",
-        text: {
-          signal:
-            "Swimming (endurance + breath control), Badminton (speed + tactics), athletic conditioning.",
-          story:
-            "Sports that punish sloppy feedback loops: swimming and badminton don\u2019t lie.",
-        },
-      },
-      {
-        title: "Techno Focus",
-        iconName: "Music",
-        iconClassName: "text-purple-400",
-        text: {
-          signal: "Lyric-light techno as a focus soundtrack during deep work sprints.",
-          story:
-            "A steady rhythm helps me hold the thread\u2014like a metronome for thinking.",
-        },
-      },
-    ],
-  },
   skills: {
     title: "Cognitive Stack",
     iconName: "Layers",
@@ -1838,428 +1511,3 @@ export const FOOTER: FooterContent = {
   copyright: (year) => `\u00a9 ${year} Aditya Chunduri. All rights reserved.`,
 };
 
-/* ============================================================================
- * SECTION 10 — FAQ BOT INTENTS
- * ----------------------------------------------------------------------------
- * Each intent has utterances (phrases users might type), an answer, and links.
- * The matcher (src/lib/matchIntent.ts) scores incoming queries against utterances + tags.
- * ========================================================================= */
-
-export interface FAQLink {
-  label: string;
-  href: string;
-  sectionId?: string;
-}
-
-export interface FAQIntent {
-  id: string;
-  title: string;
-  utterances: string[];
-  answer: string | ReactNode;
-  links: FAQLink[];
-  tags: string[];
-}
-
-export const FAQ_INTENTS: FAQIntent[] = [
-  {
-    id: "about-me",
-    title: "About me",
-    utterances: [
-      "tell me about this person",
-      "tell me about yourself",
-      "who are you",
-      "about yourself",
-      "introduce yourself",
-      "what do you do",
-      "what is your background",
-      "who is aditya",
-      "tell me about aditya",
-    ],
-    answer:
-      "I'm Aditya Chunduri, M.S. Applied Data Science from USC (Dec 2025), B.Tech in CSE with an AI/ML specialisation from SRM (Jul 2023). I build ML systems across a range of domains and measure each one instead of just shipping it: adversarial evaluation for LLM agents, a full stack DJ engine with a research grade audio core, a model agnostic media pipeline, on device computer vision, an AutoML benchmark. Same habit everywhere, seeded runs and a reproducible number. Current focus is Agent Shield, an evaluation framework for agent security on UK AISI's Inspect AI harness.",
-    links: [
-      { label: "View Projects", href: "#projects", sectionId: "projects" },
-      { label: "How I Think", href: "#thinking", sectionId: "thinking" },
-      { label: "Resume", href: ASSETS.resumePdf },
-    ],
-    tags: ["about", "who", "introduction", "background", "person", "aditya", "yourself"],
-  },
-  {
-    id: "current-focus",
-    title: "What I'm working on now",
-    utterances: [
-      "what are you working on",
-      "current project",
-      "current focus",
-      "what now",
-      "what's next",
-      "right now",
-      "latest work",
-    ],
-    answer:
-      "Agent Shield, an LLM agent security evaluation framework. Adversarial evals for prompt injection, MCP tool poisoning, RAG memory poisoning, and behavioral drift on Inspect AI, with two surfaces anchored at n=20 and Wilson intervals and the rest labeled diagnostic probes. Seeded JSONL tasks scored on attack success rate, benign utility, and transparency rate, threats mapped to OWASP and MITRE ATLAS. The newest half is a local runtime perimeter (agent-shield-guard, agent-shield-mcp-proxy) that screens tool descriptions in flight rather than scoring them afterward.",
-    links: [
-      { label: "Agent Shield details", href: "#projects", sectionId: "agent-shield" },
-    ],
-    tags: ["current", "now", "next", "latest", "agent shield", "working on"],
-  },
-  {
-    id: "agent-shield",
-    title: "Agent Shield",
-    utterances: [
-      "agent shield",
-      "llm agent security",
-      "agent security",
-      "adversarial evaluation",
-      "inspect ai",
-      "agent dojo",
-      "prompt injection framework",
-      "mcp security",
-      "red teaming llm",
-    ],
-    answer:
-      "Agent Shield is an adversarial evaluation framework for LLM agents: 6 live attack modules and 28 attack IDs covering prompt injection, MCP tool poisoning, RAG memory poisoning, covert exfiltration, social engineering, and multi turn drift. Built on UK AISI's Inspect AI harness with seeded JSONL tasks and unified scoring (attack success rate, benign utility, transparency rate), threats mapped to OWASP and MITRE ATLAS. Two surfaces are anchored at n=20 with Wilson 95% CIs and the rest are labeled diagnostic probes, on purpose. The finding that drove the runtime half: on anchored MCP tool poisoning both logged models score ASR 0.000 and TR 0.000, meaning the poisoned description is neither executed nor flagged to the operator.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "agent-shield" },
-    ],
-    tags: [
-      "agent shield",
-      "security",
-      "adversarial",
-      "inspect ai",
-      "agent dojo",
-      "prompt injection",
-      "mcp",
-      "red teaming",
-      "ai safety",
-    ],
-  },
-  {
-    id: "summarize-projects",
-    title: "Summarize projects",
-    utterances: [
-      "what projects have you built",
-      "tell me about your projects",
-      "show me your work",
-      "what have you worked on",
-      "summarize your projects",
-      "list your projects",
-    ],
-    answer:
-      "Nine builds. Agent Shield: LLM agent security eval framework on Inspect AI (6 modules, 28 attack IDs, 2 anchored surfaces, Zenodo preprint) plus a local runtime perimeter. AI RemixMate: full stack DJ engine (React/TypeScript + FastAPI, TIV harmonic scoring, Beat This!, CLAP 512-D search, learned spectral matching, 904 tests). AkashicTree: agentic multimodal pipeline for text, image, and audio. AI Health Journal: local RAG journal with a measured retrieval ablation (0.968 Recall@3) and a mutation tested crisis safety floor at 1.000 sensitivity. Model Behavior Lab: local Ollama eval platform, the methodology that became Agent Shield. Attention Drift Detector: on device webcam attention monitoring where no video is ever stored. Sourcewarden: security gated retrieval + multi agent orchestration for n8n, exposed read only. MetaLearnML: a meta learned AutoML ranker plus the 15 dataset benchmark that measured it produced no end to end speedup, and kept that result. ChatDB: a rule based natural language to SQL CLI from a database course, five regex patterns, no ML.",
-    links: [
-      { label: "View Projects", href: "#projects", sectionId: "projects" },
-    ],
-    tags: ["projects", "work", "portfolio", "systems", "built"],
-  },
-  {
-    id: "behavior-lab",
-    title: "Model Behavior Lab",
-    utterances: [
-      "model behavior lab",
-      "evaluation framework",
-      "llm evaluation",
-      "truth seeking engine",
-      "how do you test models",
-      "model testing",
-      "eval framework",
-    ],
-    answer:
-      "Model Behavior Lab is a local, Ollama-based LLM evaluation platform. It benchmarks reasoning, hallucination, emotion alignment, and code correctness with repeatable runs and Plotly dashboards. JSON test suites make any Ollama model a drop-in target, and the methodology became the base for Agent Shield.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "model-behavior-lab" },
-    ],
-    tags: ["evaluation", "llm", "testing", "benchmark", "json", "reproducible", "ci/cd"],
-  },
-  {
-    id: "health-journal",
-    title: "AI Health Journal",
-    utterances: [
-      "health journal",
-      "ai journal",
-      "rag journal",
-      "external memory",
-      "privacy journal",
-      "journaling assistant",
-      "on device llm",
-      "dpo",
-    ],
-    answer:
-      "AI Health Journal is a local first journaling assistant built around a multi model Draft, Verify, Revise pipeline over Ollama, with Chroma and nomic-embed-text for retrieval. The point is that its two load bearing claims are measured, not asserted: a 4 way retrieval ablation (0.968 Recall@3 across the full corpus, and a valence_flip category that went 0.667 to 1.000 after the embedder swap) and a deterministic crisis safety floor at 1.000 sensitivity, verified by deliberately breaking it. PRIVACY_MODE=strict scrubs PII before storage; Pinecone and Anthropic are opt in gates that ship off.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "ai-health-journal" },
-    ],
-    tags: ["rag", "privacy", "journal", "dpo", "ollama", "chromadb", "on-device", "local-first"],
-  },
-  {
-    id: "remix-mate",
-    title: "AI RemixMate",
-    utterances: [
-      "remixmate",
-      "remix mate",
-      "audio remix",
-      "music remix",
-      "dj system",
-      "audio processing",
-      "demucs",
-      "camelot",
-      "librosa",
-    ],
-    answer:
-      "AI RemixMate is a full-stack DJ engine: FastAPI async job queue with SQLite persistence, React/TypeScript frontend (10 pages, SSE live streaming), and a research-grade MIR core. TIV harmonic scoring (Bernardes et al. 2016), Beat This! (ISMIR 2024) downbeat detection with bar-grid snapping, cosine-taper stem bass ramp, FxNorm per-stem LUFS normalization, CLAP 512-D semantic search, Essentia energy arc modeling, masking aware multiband EQ (Hafezi & Reiss 2015), and rekordbox XML + Serato GEOB cue export. Newest layer is a learned spectral pipeline: mel band trajectory matching picks track B's entry phrase with drop aware scoring, and per band weights update online from thumbs up/down verdicts. 904 tests, GitHub Actions CI.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "ai-remixmate" },
-    ],
-    tags: ["audio", "music", "remix", "demucs", "librosa", "camelot", "fastapi", "react", "clap", "beat this", "tiv", "essentia"],
-  },
-  {
-    id: "akashic-tree",
-    title: "AkashicTree",
-    utterances: [
-      "akashictree",
-      "akashic tree",
-      "content generation",
-      "media pipeline",
-      "flux.1",
-      "diffusers",
-      "elevenlabs",
-      "automated content",
-    ],
-    answer:
-      "AkashicTree is an agentic, model-agnostic GenAI media pipeline that turns a single brief into text, image, and audio. It coordinates local Ollama inference for text, Diffusers / FLUX.1 for image, and ElevenLabs for voice through one modular workflow, with drop-in model substitution at every stage.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "akashic-tree" },
-    ],
-    tags: ["content", "generation", "multimodal", "flux", "diffusers", "elevenlabs", "ollama"],
-  },
-  {
-    id: "attention-drift-detector",
-    title: "Attention Drift Detector",
-    utterances: [
-      "attention drift detector",
-      "attention monitoring",
-      "webcam tool",
-      "focus tracker",
-      "gaze tracking",
-      "mediapipe",
-      "computer vision project",
-      "deep work tool",
-    ],
-    answer:
-      "Attention Drift Detector is an on device webcam tool that classifies focus, drift, and absence in real time: MediaPipe Face Mesh (478 landmarks) to head pose via solvePnP to iris based gaze estimation, then a rule based classifier with temporal smoothing over a 1 second window. It nudges you after 5 continuous seconds of drift and writes an HTML session report. No video is ever recorded, only derived angles and session labels reach local SQLite. 52 tests run in under a second with no webcam or network needed.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "attention-drift-detector" },
-    ],
-    tags: ["attention", "drift", "webcam", "mediapipe", "opencv", "gaze", "computer vision", "privacy", "local-first", "focus"],
-  },
-  {
-    id: "sourcewarden",
-    title: "Sourcewarden",
-    utterances: [
-      "sourcewarden",
-      "source warden",
-      "n8n workflows",
-      "workflow orchestration",
-      "security gated",
-      "read only dashboard",
-      "ed25519",
-    ],
-    answer:
-      "Sourcewarden merges a retrieval system over n8n's docs and community examples with a six-role, Ed25519-gated agent orchestration pipeline, behind a read-only FastAPI layer. Every chat answer is grounded in cited evidence, and the monitoring dashboard recomputes all security-control hashes live against a signed manifest instead of trusting a cache. The deliberate call was scoping the web layer to retrieval and status only, never execution, so it can't rebuild or bypass the pipeline's signed approval flow. 2,256-row retrieval index, 71 tests including a byte-flip mutation test, ships as one Docker image.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "sourcewarden" },
-    ],
-    tags: ["n8n", "workflow", "orchestration", "security", "ed25519", "fastapi", "rag", "docker", "read-only"],
-  },
-  {
-    id: "metalearnml",
-    title: "MetaLearnML",
-    utterances: [
-      "metalearnml",
-      "meta learn ml",
-      "meta learning",
-      "automl",
-      "auto ml",
-      "model selection",
-      "candidate ranking",
-      "automl benchmark",
-    ],
-    answer:
-      "MetaLearnML is a tabular AutoML engine that ranks preprocessing-by-model candidates with a RandomForest meta-learner over prior runs, plus a 15-dataset OpenML benchmark built to test whether that ranking actually saves work. It does not: median evaluation reduction vs random was 0.0% (95% CI 0.0% to 50.0%), and the benchmark report marks the resume-impact criterion as not met. What it does do is rank better than random (median Spearman 0.57 vs 0.02). Leakage controls throughout: outer dev/test split before any encoder fit, fold-local preprocessing, one scored test touch, content-addressed candidate identity. 86 tests, GitHub Actions CI.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "metalearnml" },
-      { label: "GitHub", href: "https://github.com/Chunduri-Aditya/MetaLearnML" },
-    ],
-    tags: ["automl", "meta-learning", "model-selection", "benchmark", "ranking", "leakage", "scikit-learn", "openml", "null-result"],
-  },
-  {
-    id: "chatdb",
-    title: "ChatDB",
-    utterances: [
-      "chatdb",
-      "chat db",
-      "natural language to sql",
-      "nl to sql",
-      "text to sql",
-      "sql cli",
-      "csv to sql",
-      "regex sql tool",
-    ],
-    answer:
-      "ChatDB is a rule-based natural-language-to-SQL command-line tool built for a USC database course. No ML: it loads a CSV into SQLite with pandas and SQLAlchemy, infers column types (datetime / measure / attribute), and matches a fixed grammar of aggregate-by-group questions with five hand-written regex patterns to SQL GROUP BY templates. The shipped path prints the SQL rather than executing it, exact column matching has no fuzzy fallback, and an unrecognized query returns an explicit error instead of a guess. Local-only, single commit, not pushed to GitHub.",
-    links: [
-      { label: "View Project", href: "#projects", sectionId: "chatdb" },
-    ],
-    tags: ["sql", "nl-to-sql", "cli", "pandas", "sqlalchemy", "regex", "database", "coursework", "rule-based"],
-  },
-  {
-    id: "experience-roles",
-    title: "Roles & experience",
-    utterances: [
-      "research experience",
-      "have you done research",
-      "usc viterbi",
-      "research assistant",
-      "easley dunn",
-      "nfl blitz",
-      "internship",
-      "ssn",
-      "medical imaging",
-      "past roles",
-      "work experience",
-    ],
-    answer:
-      "Five roles across about four years. At Easley Dunn Productions (AI/ML Engineer Intern, Gameplay Analyzer team, Aug 2026 to present), I built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, reproduced a reference homography to a 4.73e-11 matrix difference with 0-pixel residuals, and isolated a class of homography failures to its geometric cause. At USC Viterbi (Jun\u2013Dec 2024), I contributed artery-vein mask generation and refinement to a team U-Net retinal-segmentation project (the team's model reached ~0.94 AUC, ~94% pixel accuracy), with MLflow experiment tracking. At Yashoda Hospitals (Nov 2022\u2013May 2023), I did exploratory analysis on confidential insurance-document data and built Power BI and Tableau dashboards for doctors. At RB Associates (Aug 2021\u2013Sep 2022), my first engineering job, I automated four repetitive finance reconciliation processes in Python and pandas, gathering the requirements by shadowing accountants during live audits. At SSN College (Jun\u2013Jul 2021), a short remote internship, I evaluated a YOLOv5 and OpenCV detection pipeline on test video and documented where its reliability broke down under lighting, motion and occlusion changes.",
-    links: [
-      { label: "Experience section", href: "#experience", sectionId: "experience" },
-    ],
-    tags: [
-      "experience",
-      "research",
-      "easley dunn",
-      "nfl blitz",
-      "homography",
-      "usc",
-      "viterbi",
-      "ssn",
-      "medical imaging",
-      "u-net",
-      "yolo",
-      "internship",
-    ],
-  },
-  {
-    id: "research-paper",
-    title: "Research paper",
-    utterances: [
-      "research paper",
-      "publication",
-      "wind power",
-      "digital twin",
-      "tcn",
-      "knn",
-      "your paper",
-      "published work",
-      "ijraset",
-    ],
-    answer:
-      "Two papers. (1) Sole-author preprint — “Beyond Attack Success Rate: Measuring Operator-Facing Transparency in LLM Agent Security” (Zenodo, 2026), introducing Transparency Rate as a third evaluation axis on the Inspect AI harness. (2) Peer-reviewed publication — “Wind Power Analysis Using Machine Learning in Wind Turbines” in IJRASET Vol 11 Issue VIII (Aug 2023), second of four authors, combining KNN + TCN inside a Digital Twin on Azure for wind forecasting.",
-    links: [
-      { label: "Agent Shield Paper", href: ASSETS.agentShieldPaper },
-      { label: "View on Zenodo", href: "https://doi.org/10.5281/zenodo.20789431" },
-      { label: "Wind Paper (IJRASET)", href: ASSETS.publicationPaper },
-      { label: "Research Section", href: "#research", sectionId: "research" },
-    ],
-    tags: ["research", "paper", "publication", "preprint", "zenodo", "transparency rate", "agent shield", "wind", "digital twin", "tcn", "knn", "azure"],
-  },
-  {
-    id: "skills-stack",
-    title: "Skills/stack",
-    utterances: [
-      "what are your skills",
-      "tech stack",
-      "technologies",
-      "what do you know",
-      "programming languages",
-      "tools you use",
-      "your skills",
-      "technical skills",
-    ],
-    answer:
-      "Eval & adversarial: Inspect AI, AgentDojo, HarmBench, OWASP LLM/Agentic, MITRE ATLAS, red teaming, prompt injection, MCP proxying, mutation testing. LLM & orchestration: LangChain, LangGraph, Ollama, Hugging Face, RAG, ChromaDB, pgvector. ML / CV / Audio: PyTorch, TensorFlow, Keras, Scikit-learn, OpenCV, MediaPipe, librosa, Demucs, Beat This!, CLAP, Diffusers. Systems & engineering: FastAPI, React/TypeScript, Docker, Flask, GitHub Actions, CI/CD, pytest, uv. Languages: Python, SQL, JavaScript/TypeScript, Bash.",
-    links: [
-      { label: "View Skills", href: "#skills", sectionId: "skills" },
-    ],
-    tags: [
-      "skills",
-      "stack",
-      "python",
-      "inspect ai",
-      "langchain",
-      "docker",
-      "rag",
-      "dpo",
-      "tools",
-      "technologies",
-      "programming",
-    ],
-  },
-  {
-    id: "contact-links",
-    title: "Contact/links",
-    utterances: [
-      "how to contact",
-      "email",
-      "linkedin",
-      "github",
-      "get in touch",
-      "contact info",
-      "social links",
-      "where are you",
-    ],
-    answer:
-      `Reach me at ${CONTACT.email}. Based in ${CONTACT.location}. Open to AI safety / agent security / LLM evaluation roles, research collaborations, and PhD discussions (targeting Fall 2027).`,
-    links: [
-      { label: "Email", href: `mailto:${CONTACT.email}` },
-      { label: "GitHub", href: CONTACT.github },
-      { label: "LinkedIn", href: CONTACT.linkedin },
-    ],
-    tags: ["contact", "email", "linkedin", "github", "social", "reach out"],
-  },
-  {
-    id: "resume",
-    title: "Resume",
-    utterances: [
-      "resume",
-      "cv",
-      "curriculum vitae",
-      "download resume",
-      "your resume",
-      "get resume",
-      "view resume",
-      "open resume",
-    ],
-    answer:
-      "One combined resume covering Agent Shield, adversarial evaluation, Inspect AI, DPO, red teaming, and the full ML / SWE stack (PyTorch, TensorFlow, computer vision, end-to-end pipelines).",
-    links: [
-      { label: "Resume (PDF)", href: ASSETS.resumePdf },
-    ],
-    tags: ["resume", "cv", "pdf", "download", "experience", "ml", "llm", "safety", "swe"],
-  },
-];
-
-/* ── FAQ bot launcher / chrome (UI strings) ───────────────────────────── */
-export const FAQ_BOT_UI = {
-  launcherLabel: "Ask about my work",
-  introMessage:
-    "I'm a lightweight FAQ bot. Ask about my projects, resume, tech stack, or how I think.",
-  fallbackMessage: "I'm not sure. Try one of these:",
-  inputPlaceholder: "Ask about my work...",
-  quickChips: [
-    { id: "summarize-projects", label: "Projects" },
-    { id: "resume", label: "Resume" },
-    { id: "contact-links", label: "Contact" },
-    { id: "skills-stack", label: "Tech stack" },
-    { id: "about-me", label: "How I think" },
-  ],
-};

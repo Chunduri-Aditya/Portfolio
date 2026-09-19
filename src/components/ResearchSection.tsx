@@ -2,20 +2,17 @@ import React, { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { AnimatedSection } from "./AnimatedSection";
-import { RESEARCH, type Mode } from "../data/content";
-import { useDepth } from "../lib/depth";
+import { RESEARCH } from "../data/content";
 
 const ACCENT: Record<string, string> = { teal: "#17b3b3", sapphire: "#2f8fe0", indigo: "#6d82e8", viridian: "#22c48c" };
 
 const PubFile: React.FC<{
   pub: (typeof RESEARCH.publications)[number];
   index: number;
-  mode: Mode;
-}> = ({ pub, index, mode }) => {
-  const { depth, setDepth } = useDepth();
+}> = ({ pub, index }) => {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
-  const body = depth === "plain" ? pub.plain : mode === "story" ? pub.story : pub.signal;
+  const body = pub.summary;
 
   return (
     <div className="glass edge-gradient overflow-hidden rounded-4xl">
@@ -49,22 +46,6 @@ const PubFile: React.FC<{
               className="overflow-hidden"
             >
               <div className="mt-5 border-t border-white/10 pt-5">
-                <div className="mb-4 inline-flex rounded-full border border-white/10 bg-white/[0.03] p-0.5" role="radiogroup" aria-label="Explanation depth">
-                  {(["plain", "technical"] as const).map((d) => (
-                    <button
-                      key={d}
-                      type="button"
-                      role="radio"
-                      aria-checked={depth === d}
-                      onClick={() => setDepth(d)}
-                      className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
-                      }`}
-                    >
-                      {d}
-                    </button>
-                  ))}
-                </div>
                 <p className="text-sm leading-relaxed text-text-dim">{body}</p>
                 <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {pub.metrics.map((m) => (
@@ -104,19 +85,19 @@ const PubFile: React.FC<{
   );
 };
 
-const ResearchSection: React.FC<{ mode: Mode }> = ({ mode }) => (
+const ResearchSection: React.FC = () => (
   <AnimatedSection id="research" labelledBy="research-heading">
     <header className="mb-8">
       <p className="eyebrow mb-2">Publications</p>
       <h2 id="research-heading" className="font-display text-3xl text-text sm:text-4xl">
         <span className="gradient-text">{RESEARCH.header.title}</span>
       </h2>
-      <p className="mt-2 max-w-2xl text-sm text-text-dim">{RESEARCH.header.subtitle[mode]}</p>
+      <p className="mt-2 max-w-2xl text-sm text-text-dim">{RESEARCH.header.subtitle}</p>
     </header>
 
     <div className="flex flex-col gap-6">
       {RESEARCH.publications.map((pub, i) => (
-        <PubFile key={pub.title} pub={pub} index={i} mode={mode} />
+        <PubFile key={pub.title} pub={pub} index={i} />
       ))}
     </div>
   </AnimatedSection>

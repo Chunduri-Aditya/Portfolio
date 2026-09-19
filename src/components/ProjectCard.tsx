@@ -2,9 +2,8 @@ import { memo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
-import type { Mode, Project } from "../data/content";
+import type { Project } from "../data/content";
 import { Icon } from "../lib/iconMap";
-import { useDepth } from "../lib/depth";
 import { PROJECT_VIZ } from "../lib/projectViz";
 import FlowDiagram from "./FlowDiagram";
 import MiniViz from "./MiniViz";
@@ -32,25 +31,17 @@ const STATUS: Record<Project["status"], string> = {
 const ProjectCard = memo(function ProjectCard({
   project,
   index,
-  mode,
 }: {
   project: Project;
   index: number;
-  mode: Mode;
 }) {
-  const { depth, setDepth } = useDepth();
   const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
 
   const hue = HUE[project.discipline] ?? "#2f8fe0";
   const mission = String(index + 1).padStart(2, "0");
   const viz = PROJECT_VIZ[project.id];
-  const body =
-    depth === "plain"
-      ? project.plain
-      : mode === "story"
-        ? project.story
-        : project.oneLiner;
+  const body = project.oneLiner;
 
   return (
     <motion.article
@@ -126,27 +117,6 @@ const ProjectCard = memo(function ProjectCard({
               className="overflow-hidden"
             >
               <div className="mt-5 border-t border-white/10 pt-5">
-                <div
-                  className="mb-4 inline-flex rounded-full border border-white/10 bg-white/[0.03] p-0.5"
-                  role="radiogroup"
-                  aria-label="Explanation depth"
-                >
-                  {(["plain", "technical"] as const).map((d) => (
-                    <button
-                      key={d}
-                      type="button"
-                      role="radio"
-                      aria-checked={depth === d}
-                      onClick={() => setDepth(d)}
-                      className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize transition-colors ${
-                        depth === d ? "bg-white/[0.12] text-text" : "text-text-faint hover:text-text-dim"
-                      }`}
-                    >
-                      {d}
-                    </button>
-                  ))}
-                </div>
-
                 <p className="text-sm leading-relaxed text-text-dim">{body}</p>
 
                 <div className="mt-5">
