@@ -29,6 +29,13 @@
 }
 
 /* ─── Base ────────────────────────────────────────────────── */
+:root {
+  /* Pairs with the color-scheme meta in index.html. Keeps form controls,
+     scrollbars and the browser's own surfaces dark, and stops Chrome's Auto
+     Dark Mode from re-tinting a page that is already dark. */
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   font-family: 'Hanken Grotesk Variable', system-ui, -apple-system, sans-serif;
