@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import Navbar from "./Navbar";
 import Hero from "./Hero";
 import AboutSection from "./AboutSection";
+import ContactSection from "./ContactSection";
 import ProjectsSection from "./ProjectsSection";
 import ExperienceSection from "./ExperienceSection";
 import ResearchSection from "./ResearchSection";
@@ -41,9 +42,10 @@ const Portfolio: React.FC = () => {
         <Hero scrollTo={scrollTo} />
 
         {/*
-          Evidence before background. Projects, Experience and Research come
-          first; About sits last, where the claims it makes have already been
-          shown. NAV_LINKS in content.ts is ordered to match.
+          Evidence before background, then the ask. Projects, Experience and
+          Research come first; About sits after them, where the claims it makes
+          have already been shown; Contact closes, because a reader who has read
+          this far is the one worth giving something to do.
         */}
         <div className="mt-28 grid grid-cols-1 gap-x-8 gap-y-28 lg:grid-cols-12">
           <div className="flex flex-col gap-28 lg:col-span-8">
@@ -60,6 +62,10 @@ const Portfolio: React.FC = () => {
 
         <div className="mt-28">
           <AboutSection />
+        </div>
+
+        <div className="mt-28">
+          <ContactSection />
         </div>
       </main>
 

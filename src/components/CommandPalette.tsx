@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO, PROJECTS } from "../data/content";
+import { hasCaseStudy } from "../lib/caseStudies";
 import { Icon } from "../lib/iconMap";
 import { useFocusTrap } from "../lib/useFocusTrap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
@@ -65,14 +66,20 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <ArrowUpRight size={15} strokeWidth={1.5} />,
         action: () => scrollTo(link.id),
       })),
+      /*
+       * Every project stays searchable, but only the eight with a case study
+       * navigate to one. The rest scroll to their row in the list, because
+       * sending the palette to /work/<id> for a project with no page would put
+       * a redirect behind an autocomplete result.
+       */
       ...PROJECTS.projects.map((p) => ({
         id: `project-${p.id}`,
         group: "Work" as Group,
         label: p.title,
-        sublabel: p.discipline,
+        sublabel: hasCaseStudy(p) ? p.discipline : `${p.discipline} · no case study`,
         icon: <Icon name={p.iconName} size={15} className={p.iconClassName} />,
         keywords: `${p.tags.join(" ")} ${p.discipline}`,
-        action: () => navigate(`/work/${p.id}`),
+        action: () => (hasCaseStudy(p) ? navigate(`/work/${p.id}`) : scrollTo(p.id)),
       })),
       {
         id: "link-github",

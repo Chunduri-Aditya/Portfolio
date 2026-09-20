@@ -20,8 +20,18 @@ import type { IconName } from "../lib/iconMap";
  * technical one, because the audience for this site is technical.
  * ========================================================================= */
 
+/**
+ * Resolve a /public asset against the deployed base path.
+ *
+ * The fallback is not defensive padding: `vite.config.ts` imports this module
+ * through `src/lib/caseStudies.ts` to build the sitemap and the emitted route
+ * files, and esbuild runs that in plain Node, where `import.meta.env` does not
+ * exist. Without it the whole config fails to load. Asset paths are unused on
+ * that path, so "/" is only ever a placeholder there; the browser and vitest
+ * both get the real base.
+ */
 const getPublicPath = (path: string): string => {
-  const base = import.meta.env.BASE_URL;
+  const base = import.meta.env?.BASE_URL ?? "/";
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return `${base}${cleanPath}`;
 };
@@ -59,11 +69,17 @@ export const CONTACT = {
  * SECTION 1 — HERO
  * ========================================================================= */
 
-interface Chip {
-  iconName: IconName;
-  text: string;
-}
-
+/**
+ * Five fields, which is the whole hero.
+ *
+ * It also carried `capabilities` (six recruiter keywords), `subhead` (the
+ * degree) and `chips` (four slogans). `chips` was never rendered by any
+ * component at all, and the other two were removed from the hero because they
+ * were each already stated somewhere that has room to back them up: the
+ * keywords in Capabilities, the degree in the sidebar and the proof strip.
+ * Data nothing renders is data nothing checks, so all three are gone rather
+ * than left here to drift.
+ */
 export interface HeroContent {
   /** Full name. The first thing a recruiter needs to resolve. */
   name: string;
@@ -71,12 +87,8 @@ export interface HeroContent {
   roleLabel: string;
   /** Availability. The single most perishable string on the site, so it lives here. */
   availability: string;
-  /** What he builds, in one sentence. */
+  /** What he builds, in one sentence. Also the source for og:description. */
   headline: string;
-  /** Capability line: the terms a recruiter is scanning for. */
-  capabilities: string[];
-  subhead: string;
-  chips: Chip[];
   ctas: {
     primary: { label: string; iconName: IconName; targetSection: string };
     resume: { label: string; iconName: IconName; href: string };
@@ -95,21 +107,6 @@ export const HERO: HeroContent = {
    * asserted above them.
    */
   headline: "Building agentic systems, evaluation infrastructure, and production AI applications.",
-  capabilities: [
-    "Python",
-    "PyTorch",
-    "LLM Systems",
-    "Evaluation",
-    "Computer Vision",
-    "Backend AI",
-  ],
-  subhead: "M.S. Applied Data Science, USC",
-  chips: [
-    { iconName: "Boxes", text: "End to end ML systems" },
-    { iconName: "Gauge", text: "Real metrics, seeded runs" },
-    { iconName: "Wrench", text: "Full-stack: React + FastAPI" },
-    { iconName: "CheckCircle2", text: "Reproducible by default" },
-  ],
   ctas: {
     primary: { label: "View Engineering Work", iconName: "Terminal", targetSection: "projects" },
     resume: { label: "Resume", iconName: "FileText", href: ASSETS.resumePdf },
@@ -168,6 +165,35 @@ export const PROOF_POINTS: string[] = [
   "Open-source engineering",
 ];
 
+/* ── Closing section ──────────────────────────────────────────────────── */
+
+export interface ClosingContent {
+  eyebrow: string;
+  title: string;
+  /** Two sentences. What he wants, and what makes a useful first message. */
+  paragraphs: string[];
+  ctaLabel: string;
+}
+
+/**
+ * The page used to end on About and then a footer, so a reader who had just
+ * read the evidence had nothing to do about it. This is the ask, and it is the
+ * only place on the site that makes one.
+ *
+ * The proof strip and HUD_STATS render here too. They were in the hero, where
+ * they competed with the name and the role for a first read; at the close they
+ * answer the question a convinced reader actually has.
+ */
+export const CLOSING: ClosingContent = {
+  eyebrow: "Contact",
+  title: "Get in touch",
+  paragraphs: [
+    "I am looking for ML and AI engineering work: agent systems, evaluation infrastructure, and the parts of a product that still have to hold up after the demo.",
+    "Tell me what the system has to do and what breaks when it does not. Every number on this page traces to a command and a commit, and I will walk through any of them.",
+  ],
+  ctaLabel: "Email me",
+};
+
 /* ============================================================================
  * SECTION 2 — NAVIGATION
  * ========================================================================= */
@@ -177,13 +203,18 @@ export interface NavLink {
   label: string;
 }
 
-/** Order must match the DOM order in Portfolio.tsx, or the nav reads wrong. */
+/**
+ * Reading order, which is not DOM order: Research is listed above Skills but
+ * renders below it. `useScrollSpy` resolves the current section by measured
+ * position rather than by this array, so the two are allowed to differ.
+ */
 export const NAV_LINKS: NavLink[] = [
   { id: "projects", label: "Work" },
   { id: "experience", label: "Experience" },
   { id: "research", label: "Research" },
   { id: "skills", label: "Skills" },
   { id: "about", label: "About" },
+  { id: "contact", label: "Contact" },
 ];
 
 /* ============================================================================
@@ -293,6 +324,18 @@ export interface Project {
    * cannot be followed.
    */
   featured?: boolean;
+  /**
+   * Give this project a page at /work/<id>.
+   *
+   * Set on eight of twelve. AkashicTree, Model Behavior Lab, ChatDB and the
+   * Attention Drift Detector ran 116 to 278 words with no problem, no
+   * constraints and no failure modes, against 846 to 1,199 for the flagships,
+   * so the "Case study" button promised an artifact that was not there. They
+   * link to their repositories instead, and drop out of the sitemap and the
+   * emitted route pages with them. See `src/lib/caseStudies.ts`, which is the
+   * single reader of this flag.
+   */
+  caseStudy?: boolean;
 }
 
 export interface ProjectsSectionContent {
@@ -317,6 +360,7 @@ export const PROJECTS: ProjectsSectionContent = {
   projects: [
     {
       id: "agent-shield",
+      caseStudy: true,
       featured: true,
       title: "Agent Shield",
       subtitle: "Adversarial Eval Framework + Local Runtime Perimeter",
@@ -453,6 +497,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "twin",
+      caseStudy: true,
       title: "Personal Digital Twin",
       subtitle: "Persistent Agent Memory Behind a Fail-Closed Privacy Boundary",
       iconName: "Brain",
@@ -555,6 +600,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "ai-remixmate",
+      caseStudy: true,
       title: "AI RemixMate",
       subtitle: "Full-Stack DJ Engine with Research-Grade MIR",
       iconName: "Music",
@@ -720,6 +766,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "ai-health-journal",
+      caseStudy: true,
       featured: true,
       title: "AI Health Journal",
       subtitle: "Local RAG Journal with a Measured Safety Floor",
@@ -972,6 +1019,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "sourcewarden",
+      caseStudy: true,
       featured: true,
       title: "Sourcewarden",
       subtitle: "Security-Gated n8n Workflow Orchestration",
@@ -1081,6 +1129,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "metalearnml",
+      caseStudy: true,
       featured: true,
       title: "MetaLearnML",
       subtitle: "Meta-Learned AutoML Ranking, Measured Against Its Baselines",
@@ -1266,6 +1315,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "jarvis",
+      caseStudy: true,
       title: "jarvis",
       subtitle: "Turn-Scoped Containment for Coding Agents",
       iconName: "ShieldCheck",
@@ -1341,6 +1391,7 @@ export const PROJECTS: ProjectsSectionContent = {
     },
     {
       id: "company-agents",
+      caseStudy: true,
       title: "Company Agents",
       subtitle: "An Executable Map of a Company's Roles",
       iconName: "Boxes",

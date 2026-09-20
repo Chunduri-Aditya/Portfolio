@@ -1,9 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
-import { CONTACT, HERO, HUD_STATS, PROOF_POINTS } from "../data/content";
+import { HERO } from "../data/content";
 import { Icon } from "../lib/iconMap";
-import Counter from "./Counter";
 import EvidencePanel from "./EvidencePanel";
 
 interface HeroProps {
@@ -11,13 +9,22 @@ interface HeroProps {
 }
 
 /**
- * Identity first.
+ * Identity first, and one thing to do about it.
  *
- * The previous hero opened on a claim ("I ship ML systems, then measure whether
- * they actually work") and left the role to an eyebrow, so a recruiter had to
- * infer the job title from a sentence about method. Name, role, and what he
- * builds now resolve in that order, followed by the terms a recruiter is
- * actually scanning for.
+ * Two passes made this. The first fixed the opening: it used to lead on a claim
+ * ("I ship ML systems, then measure whether they actually work") and leave the
+ * role to an eyebrow, so a recruiter had to infer the job title from a sentence
+ * about method. Name, role and what he builds resolve in that order now.
+ *
+ * The second removed everything that competed with the answer. The screen also
+ * held a six-item capability line, the degree, three social links, a five-item
+ * proof strip and four stat tiles, which is eleven things to read and six to
+ * click before a reader learns what to do. The capabilities are the Skills
+ * section, the degree is in the sidebar, the social links are in the nav and
+ * the footer, and the proof strip and stat tiles moved to the closing Contact
+ * section, where they answer "should I mail him" instead of interrupting "who
+ * is this". What is left is the name, the role, the sentence, one button, and
+ * the evidence panel, which is the only element here that is itself a result.
  */
 const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
   const fade = (delay: number) => ({
@@ -51,27 +58,7 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
           {HERO.headline}
         </motion.p>
 
-        <motion.ul
-          {...fade(0.22)}
-          className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[13px] text-text-faint"
-        >
-          {HERO.capabilities.map((c, i) => (
-            <li key={c} className="flex items-center gap-3">
-              {i > 0 && (
-                <span aria-hidden="true" className="text-text-faint/50">
-                  ·
-                </span>
-              )}
-              {c}
-            </li>
-          ))}
-        </motion.ul>
-
-        <motion.p {...fade(0.26)} className="mt-4 text-sm text-text-faint">
-          {HERO.subhead}
-        </motion.p>
-
-        <motion.div {...fade(0.32)} className="mt-9 flex flex-wrap items-center gap-3">
+        <motion.div {...fade(0.22)} className="mt-9 flex flex-wrap items-center gap-4">
           <button
             type="button"
             onClick={() => scrollTo(HERO.ctas.primary.targetSection)}
@@ -82,43 +69,19 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
               <Icon name="ArrowUpRight" size={14} />
             </span>
           </button>
+          {/*
+            A text link, not a second button. Two equally weighted CTAs make a
+            reader choose before they know enough to choose.
+          */}
           <a
             href={HERO.ctas.resume.href}
             target="_blank"
             rel="noreferrer"
             aria-label="View resume (PDF)"
-            className="flex items-center gap-2 rounded-full border border-white/25 px-5 py-3 text-sm font-semibold text-text transition-colors hover:border-white/50"
+            className="flex items-center gap-2 text-sm font-semibold text-text-dim underline decoration-white/25 underline-offset-4 transition-colors hover:text-text hover:decoration-white/60"
           >
             <Icon name={HERO.ctas.resume.iconName} size={15} />
             {HERO.ctas.resume.label}
-          </a>
-        </motion.div>
-
-        <motion.div {...fade(0.38)} className="mt-7 flex flex-wrap items-center gap-5">
-          <a
-            href={CONTACT.github}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 text-[13px] font-semibold text-text-dim transition-colors hover:text-text"
-          >
-            <Github size={15} strokeWidth={2} />
-            GitHub
-          </a>
-          <a
-            href={CONTACT.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 text-[13px] font-semibold text-text-dim transition-colors hover:text-text"
-          >
-            <Linkedin size={15} strokeWidth={2} />
-            LinkedIn
-          </a>
-          <a
-            href={`mailto:${CONTACT.email}`}
-            className="flex items-center gap-2 text-[13px] font-semibold text-text-dim transition-colors hover:text-text"
-          >
-            <Mail size={15} strokeWidth={2} />
-            Email
           </a>
         </motion.div>
         </div>
@@ -127,37 +90,6 @@ const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
           <EvidencePanel />
         </motion.div>
       </div>
-
-      {/* Proof strip. Very little vertical space, every claim backed below. */}
-      <motion.ul
-        {...fade(0.44)}
-        className="mt-14 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-white/[0.08] py-4 text-[12px] text-text-dim"
-      >
-        {PROOF_POINTS.map((p, i) => (
-          <li key={p} className="flex items-center gap-3">
-            {i > 0 && (
-              <span aria-hidden="true" className="text-text-faint/50">
-                |
-              </span>
-            )}
-            {p}
-          </li>
-        ))}
-      </motion.ul>
-
-      <motion.dl {...fade(0.5)} className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {HUD_STATS.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-white/[0.12] bg-white/[0.03] px-4 py-5 transition-colors hover:border-white/25"
-          >
-            <dd className="font-display text-3xl text-text">
-              <Counter value={s.value} className="gradient-text" />
-            </dd>
-            <dt className="mt-1 text-[11px] leading-tight text-text-faint">{s.label}</dt>
-          </div>
-        ))}
-      </motion.dl>
     </section>
   );
 };

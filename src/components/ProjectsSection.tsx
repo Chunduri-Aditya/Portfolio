@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "./AnimatedSection";
 import ProjectCard from "./ProjectCard";
+import ProjectRow from "./ProjectRow";
 import { PROJECTS } from "../data/content";
 
 /** How many tags the filter shows before "Show all". */
@@ -167,18 +168,27 @@ const ProjectsSection: React.FC = () => {
                 <ProjectCard project={project} index={indexById.get(project.id) ?? 0} />
               </StaggerItem>
             ))}
-            {featured.length > 0 && rest.length > 0 && (
+            {rest.length > 0 && (
               <StaggerItem key="rest-label">
-                <p className="eyebrow mt-6 border-t border-white/[0.08] pt-8">
+                <p className={`eyebrow ${featured.length > 0 ? "mt-6 border-t border-white/[0.08] pt-8" : ""}`}>
                   Everything else
                 </p>
               </StaggerItem>
             )}
-            {rest.map((project) => (
-              <StaggerItem key={project.id}>
-                <ProjectCard project={project} index={indexById.get(project.id) ?? 0} />
+            {/*
+              Rows, not cards. Eight more of the same card made the four
+              flagships indistinguishable from the rest of the list, which is
+              the opposite of what "Start here" is for.
+            */}
+            {rest.length > 0 && (
+              <StaggerItem key="rest-list">
+                <div className="border-t border-white/[0.08]">
+                  {rest.map((project) => (
+                    <ProjectRow key={project.id} project={project} />
+                  ))}
+                </div>
               </StaggerItem>
-            ))}
+            )}
           </AnimatePresence>
           {filteredProjects.length === 0 && (
             <p className="glass rounded-3xl px-4 py-10 text-center text-sm text-text-faint">

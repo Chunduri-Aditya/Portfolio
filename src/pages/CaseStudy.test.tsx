@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import CaseStudy from "./CaseStudy";
 import { PROJECTS } from "../data/content";
+import { hasCaseStudy } from "../lib/caseStudies";
 import { HUE } from "../components/ProjectCard";
 
 /**
@@ -58,8 +59,17 @@ describe("CaseStudy", () => {
     expect(screen.queryByRole("link", { name: /^GitHub$/ })).not.toBeInTheDocument();
   });
 
-  test("every project in the data set has a case study that renders", () => {
-    for (const project of PROJECTS.projects) {
+  test("a project without a case study redirects home rather than showing a stub", () => {
+    // ChatDB is a known id, so the unknown-id guard above never fires on it.
+    // Without its own check it would render 258 words under the same chrome the
+    // 1,199-word flagships use.
+    renderAt("/work/chatdb");
+
+    expect(screen.getByText("home")).toBeInTheDocument();
+  });
+
+  test("every project that claims a case study has one that renders", () => {
+    for (const project of PROJECTS.projects.filter(hasCaseStudy)) {
       const { unmount } = renderAt(`/work/${project.id}`);
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(project.title);
       unmount();

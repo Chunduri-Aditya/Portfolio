@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Github, Lock, Play } from "lucide-react";
 
 import { PROJECTS } from "../data/content";
+import { hasCaseStudy } from "../lib/caseStudies";
 import { Icon } from "../lib/iconMap";
 import { PROJECT_VIZ } from "../lib/projectViz";
 import { requestAccessHref } from "../lib/projectLinks";
@@ -23,7 +24,11 @@ const Section: React.FC<{ label: string; children: React.ReactNode }> = ({ label
  */
 const CaseStudy: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const project = PROJECTS.projects.find((p) => p.id === projectId);
+  const match = PROJECTS.projects.find((p) => p.id === projectId);
+  // A known id is not automatically a page. Four projects are too thin to carry
+  // this chrome, and nothing links or sitemaps them, so they resolve like any
+  // other address that does not exist.
+  const project = match && hasCaseStudy(match) ? match : undefined;
 
   useEffect(() => {
     if (!project) return;
@@ -34,7 +39,7 @@ const CaseStudy: React.FC = () => {
     };
   }, [project]);
 
-  // An unknown id is a dead URL, not an error state worth designing for.
+  // A dead URL is not an error state worth designing for.
   if (!project) return <Navigate to="/" replace />;
 
   const viz = PROJECT_VIZ[project.id];

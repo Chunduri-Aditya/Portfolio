@@ -3,6 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Github, Linkedin, Menu, X, Search, FileText } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO } from "../data/content";
 
+/**
+ * Mobile drawer only.
+ *
+ * The desktop bar carried the same three icons, which put GitHub, LinkedIn and
+ * the email address in four places at once: here, the hero, the new Contact
+ * section and the footer. Dropping them here is also what makes room for the
+ * sixth nav link without the bar wrapping at 1280px, where it turns on.
+ */
+
 const isMac =
   typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
 
@@ -86,21 +95,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
               <FileText size={13} strokeWidth={2} />
               Resume
             </a>
-
-            <div className="hidden items-center xl:flex">
-              {SOCIAL.map(({ href, icon: I, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="p-2 text-text-faint transition-colors hover:text-accent-teal"
-                  aria-label={label}
-                  target={href.startsWith("mailto") ? undefined : "_blank"}
-                  rel={href.startsWith("mailto") ? undefined : "noreferrer"}
-                >
-                  <I size={16} strokeWidth={2} />
-                </a>
-              ))}
-            </div>
 
             <button
               type="button"
