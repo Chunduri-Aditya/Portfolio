@@ -2,23 +2,25 @@
 
 Source for [chunduri-aditya.github.io/Portfolio](https://chunduri-aditya.github.io/Portfolio/).
 
-Single page, React 18 + TypeScript + Vite + Tailwind, with Framer Motion for
-motion and a lazily loaded React Three Fiber scene in the hero. No router: the
-nav scrolls between labelled landmark sections.
+React 18 + TypeScript + Vite + Tailwind, with Framer Motion for motion. One
+long home page whose nav scrolls between labelled landmark sections, plus a
+case-study route per project at `/work/<id>`. Eight of the twelve projects have
+one; `src/lib/caseStudies.ts` decides which, and the build reads the same list
+to emit the route files and the sitemap.
 
 ## Commands
 
 ```bash
 npm install
 npm run dev        # vite dev server
-npm run verify     # typecheck + lint + tests, the same gate CI runs
+npm run verify     # typecheck + lint + palette sync + tests, the same gate CI runs
 npm run build      # production build into dist/
 npm run preview    # serve the built output
 ```
 
-`verify` chains `typecheck`, `lint` and `test:run`. Run it before pushing;
-the deploy workflow runs the same three steps before `build`, so anything red
-locally is red in CI.
+`verify` chains `typecheck`, `lint`, `check:palette` and `test:run`. Run it
+before pushing; the deploy workflow runs the same four steps before `build`, so
+anything red locally is red in CI.
 
 ## Layout
 
@@ -67,8 +69,8 @@ behavioural refactor rather than a bug fix.
 
 ## Deploy
 
-Push to `main`. `.github/workflows/deploy-pages.yml` runs typecheck, lint and
-tests, then builds and publishes to GitHub Pages. The Pages source is set to
+Push to `main`. `.github/workflows/deploy-pages.yml` runs the `verify` steps,
+then builds and publishes to GitHub Pages. The Pages source is set to
 "GitHub Actions"; `origin/gh-pages` is a dead branch from an older manual
 deploy and nothing writes to it.
 
