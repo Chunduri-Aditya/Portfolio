@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
+import { CASE_STUDY_IDS } from './src/lib/caseStudies'
 
 // GitHub Pages base path - update this to match your repository name
 // If your repo is "Portfolio", keep it as "/Portfolio/"
@@ -12,18 +13,18 @@ const REPO_NAME = 'Portfolio' // Change this to your actual repository name
 const SITE_ORIGIN = 'https://chunduri-aditya.github.io'
 
 /**
- * Every project id in src/data/content.ts, which is also every case-study route.
+ * Every case-study route, derived from the data rather than from a committed
+ * list, so a new project cannot ship with a sitemap that has never heard of it.
  *
- * Read out of the source at build time rather than kept in a committed
- * sitemap, so a new project cannot ship with a sitemap that has never heard
- * of it. Ids are simple string literals on the Project objects, so a regex is
- * enough and there is no need to run the TypeScript.
+ * This used to scrape `^\s{6}id: "..."` out of content.ts as raw text. That was
+ * brittle in two ways: it broke on any reindent of the file, and it could only
+ * see ids, not which projects actually have a page. `src/lib/caseStudies.ts`
+ * imports cleanly here because content.ts's one import is `import type`, so
+ * esbuild strips it and nothing pulls React into the config.
  */
-function projectIds(): string[] {
-  const source = readFileSync(join(__dirname, 'src/data/content.ts'), 'utf8')
-  const ids = [...source.matchAll(/^\s{6}id: "([a-z0-9-]+)",$/gm)].map((m) => m[1])
-  if (ids.length === 0) throw new Error('sitemap: no project ids found in content.ts')
-  return ids
+function caseStudyIds(): string[] {
+  if (CASE_STUDY_IDS.length === 0) throw new Error('sitemap: no case-study ids in content.ts')
+  return CASE_STUDY_IDS
 }
 
 export default defineConfig({
@@ -55,7 +56,7 @@ export default defineConfig({
       name: 'emit-route-pages',
       closeBundle() {
         const html = readFileSync(join(__dirname, 'dist', 'index.html'), 'utf8')
-        for (const id of projectIds()) {
+        for (const id of caseStudyIds()) {
           const dir = join(__dirname, 'dist', 'work', id)
           mkdirSync(dir, { recursive: true })
           writeFileSync(join(dir, 'index.html'), html)
@@ -68,7 +69,7 @@ export default defineConfig({
         const base = `${SITE_ORIGIN}/${REPO_NAME}/`
         // Trailing slash matches the emitted directory index, so the canonical
         // URL is the one Pages serves directly rather than one it redirects to.
-        const urls = ['', ...projectIds().map((id) => `work/${id}/`)]
+        const urls = ['', ...caseStudyIds().map((id) => `work/${id}/`)]
         const body = urls
           .map((path) => `  <url>\n    <loc>${base}${path}</loc>\n  </url>`)
           .join('\n')
