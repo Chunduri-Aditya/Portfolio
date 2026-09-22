@@ -1246,6 +1246,80 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
     },
     {
+      id: "profile-rag",
+      title: "profile-rag",
+      subtitle: "Retrieval-Only Q&A Over This Site",
+      iconName: "Database",
+      iconClassName: "text-teal-400",
+      tags: ["LlamaIndex", "ChromaDB", "BM25", "FastAPI", "ONNX", "Docker", "Python"],
+      discipline: "RETRIEVAL / API",
+      status: "SHIPPED",
+      hook:
+        "The Ask box on this site: hybrid retrieval, a reranker, and no language model anywhere.",
+      oneLiner:
+        "profile-rag answers questions about this portfolio from its own content.ts, exported as 318 fact-sized chunks. BM25 and a dense Chroma index are fused by reciprocal rank, a cross-encoder reranks six candidates, and the best sentences of the top chunk come back with links to their source. A hand-written FAQ layer answers the canonical questions verbatim. Everything runs on CPU with ONNX models on a free host, so there is no API key and no token limit.",
+      evidence: [
+        "Frozen 48-question eval bank with expected chunk ids: hybrid plus rerank puts the right chunk in the top three for 47 of 48 questions, against 40 of 48 for BM25 alone (2026-09-22)",
+        "The eval floor was mutation-checked: removing the reranker's sort dropped the top-three hits to 46 of 48, and the floor was set above that value so the gate can actually fail",
+        "Zero LLM calls on the answer path: FAQ match, then retrieval, rerank and lexical sentence extraction; off-corpus questions fall back with suggestions instead of a guess",
+        "Health endpoint reports chunk count and the corpus sha256, so a deployment is tied to a specific content.ts commit",
+        "Single-threaded ONNX sessions and a startup warm cut extraction latency at 0.1 CPU from 55 to 153 s down to 4 to 9 s, measured with docker --cpus=0.1",
+        "14 tests, including allow and deny cases for the CORS allowlist, the 500-character cap and the per-IP rate limit",
+      ],
+      architecture: {
+        overview:
+          "content.ts → export-corpus.mjs → JSONL chunks → Chroma (bge-small) + BM25 → QueryFusionRetriever (RRF) → cross-encoder rerank → sentence pick → FastAPI /ask → Ask panel on this site",
+        diagram: `
++-------------+   +-------------------+   +--------------------+
+| content.ts  |-->| export-corpus.mjs |-->| 318 JSONL chunks   |
++-------------+   +-------------------+   +---------+----------+
+                                                    |
+                     +------------------------------+-----------+
+                     v                                          v
+            +-----------------+                        +-----------------+
+            | Chroma (dense)  |                        | BM25 (lexical)  |
+            +--------+--------+                        +--------+--------+
+                     +------------------+  RRF  +---------------+
+                                        v
+                             +---------------------+
+                             | cross-encoder rerank|
+                             +----------+----------+
+                                        v
+     FAQ hit? ----yes----> verbatim     |  no
+                                        v
+                             +---------------------+    +---------------+
+                             | sentence pick + src |--->| FastAPI /ask  |
+                             +---------------------+    +---------------+`,
+        tradeoffs: [
+          "No generation vs a small LLM: answers are quotes from the site, which reads stiffer than prose but can never invent a fact or cost a token",
+          "Free 0.1 CPU host vs paid compute: answers take one to a few seconds and the first request after a sleep is slower, in exchange for zero running cost",
+          "Hand-written FAQ vs pure retrieval: the FAQ answers the common questions crisply, at the cost of a file that has to be kept in step with the site",
+        ],
+      },
+      decisions: [
+        {
+          title: "Let retrieval do all the work",
+          why: "The site is the corpus and the corpus is small and fact-checked. A reranker over fact-sized chunks finds the right sentence; a model in front of it would only add cost, latency and a way to be wrong.",
+          tradeoff: "Questions the site does not answer get a fallback, not a synthesised reply.",
+        },
+        {
+          title: "Freeze the eval bank and ratchet the floor above the ablated value",
+          why: "A floor below what plain hybrid already scores would have stayed green with the reranker broken. The floor sits between the ablated and the real number, so it can fail.",
+        },
+        {
+          title: "Measure under the host's CPU quota before shipping",
+          why: "83 ms on a laptop became 150 s on a fraction of a core. Reproducing the quota with docker --cpus=0.1 turned the fix into a measurement instead of a guess.",
+        },
+      ],
+      links: {
+        github: "https://github.com/Chunduri-Aditya/profile-rag",
+      },
+      metrics: [
+        { label: "Recall@3", value: "47 / 48 questions" },
+        { label: "LLM calls", value: "0" },
+      ],
+    },
+    {
       id: "chatdb",
       title: "ChatDB",
       subtitle: "Rule-Based Natural-Language-to-SQL CLI",

@@ -11,9 +11,11 @@ import { CASE_STUDY_IDS, hasCaseStudy } from "./caseStudies";
  * page, and demoting one must never leave it with nothing to click.
  */
 describe("case-study eligibility", () => {
-  const DEMOTED = ["akashic-tree", "model-behavior-lab", "chatdb", "attention-drift-detector"];
+  // Four demoted on 2026-09-19 for thin bodies; profile-rag added 2026-09-22 as
+  // a card that links to its repo rather than promising a page.
+  const DEMOTED = ["akashic-tree", "model-behavior-lab", "chatdb", "attention-drift-detector", "profile-rag"];
 
-  test("the four thin projects have no case study", () => {
+  test("the projects without a case study have none", () => {
     for (const id of DEMOTED) {
       const project = PROJECTS.projects.find((p) => p.id === id);
       expect(project, `${id} is not in the data set`).toBeDefined();

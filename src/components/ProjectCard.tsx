@@ -33,6 +33,7 @@ export const HUE: Record<string, string> = {
   "AGENT-SECURITY / RUNTIME": "#17b3b3",
   "MULTI-AGENT / TOOLING": "#6d82e8",
   "AGENT / MEMORY": "#7fb4ee",
+  "RETRIEVAL / API": "#17b3b3",
 };
 
 const STATUS: Record<Project["status"], string> = {

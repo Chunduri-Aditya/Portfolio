@@ -45,6 +45,10 @@ All figures below collected **2026-09-18**.
 | Agent Shield attack IDs | 6 modules · 28 | Unique IDs across the six in-house modules: IN 5, PS 6, MM 1, DR 6, EX 5, TL 5. `AA-01`..`AA-05` are the external Auto_Apply benchmark mapped into the IN family and `XX-99` is a fixture in `tests/test_risk_registry.py`; neither counts. | `agent-shield` `6c142ee` |
 | AI Health Journal retrieval | 0.968 Recall@3 | Full corpus figure in `docs/IMPROVEMENTS.md`. The higher 0.979 is the smaller 19 query pre noise set and must not be printed as the headline. | `journal-agent` `77403dd` |
 | AI Health Journal crisis floor | 1.000 sensitivity (27/27) | `docs/IMPROVEMENTS.md` | `journal-agent` `77403dd` |
+| profile-rag corpus | 318 chunks | `npm run export:corpus` at Portfolio `c92b39f`; `curl /health` on the live service reports the same count | `profile-rag` `6f93001` |
+| profile-rag recall@3 | 47 / 48 (0.979) hybrid + rerank; 40 / 48 (0.833) BM25; 46 / 48 (0.958) with the rerank sort removed | `uv run python -m profile_rag.eval` on `eval/questions.jsonl`, 2026-09-22. Printed as counts because this ledger bans the string 0.979 for the AI Health Journal row above | `profile-rag` `6f93001` |
+| profile-rag latency at 0.1 CPU | 4 to 9 s extraction, under 1 s FAQ (was 55 to 153 s) | `docker run --cpus=0.1` against the local image, 2026-09-22; not printed as a number on the card, described in prose | `profile-rag` `6f93001` |
+| profile-rag tests | 14 | `uv run pytest`, 2026-09-22 | `profile-rag` `6f93001` |
 
 ### Numbers deliberately not printed
 
