@@ -1530,18 +1530,21 @@ export const EXPERIENCE: ExperienceSectionContent = {
       period: "Aug 2026 \u2013 Present",
       accent: "viridian",
       hook:
-        "Built the tool a video team relies on to decide whether a camera to field mapping is trustworthy before they accept it.",
+        "Turns NFL Blitz gameplay video into field positions in yards, and refuses the frames it cannot certify.",
       summary:
-        "Built a single-reviewer browser tool for field-registration labeling and homography validation on NFL Blitz footage, then diagnosed a class of homography failures down to its geometric mechanism.",
+        "Classical geometry, no trained model. Started with a labeling and validation tool for field-to-template homographies, then added a second independent mapping strategy, a windowed joint solve, a player-detection pass projected through each frame's certified camera, a 27-test regression suite, and a script that derives every headline number from committed results instead of prose.",
       bullets: [
+        "Wrote report_numbers.py after two project docs were found quoting an older run (790 certified, 323 across, 3.3 deg): it reads only committed per-frame results and prints the figures. Run on 2026-09-22: 785 of 873 frames posed along the field (781 solved from their own paint plus 4 hand-marked anchors), 313 of 873 across the field, certified frames up to 14.3 deg of paint tilt",
+        "Grew the regression suite from 8 to 27 tests (27 passed, 0 failed, exit 0 on 2026-09-22), including a guard that a windowed re-solve can never flip a refused frame to certified",
+        "Added a sliding-window joint solve with a roll-continuity prior, run as a post-pass over frames the per-frame camera solve had already certified: symmetric windows re-solved jointly, only the centre frame kept, so any lag is bounded to the window by construction rather than unbounded like a causal filter",
+        "Implemented a second, independent player-mapping strategy (direct 8-DoF homography via cv2.findHomography on hand-marked correspondences) run side by side with the team's 6-parameter per-frame camera solve, and reported plainly that it measured worse on this footage instead of replacing the model",
+        "Built the player-detection pass (pretrained YOLO11m COCO person detector, inference only, nothing trained) that projects foot points through each frame's certified homography and inherits that frame's certification: no certified solve, no coordinate",
         "Built a single-reviewer browser tool (Python, OpenCV, NumPy, JavaScript, stdlib HTTP server) for field/template correspondence labeling: homography fitting with per-point residual reporting, 44-keypoint projection, overlay review, and attempt-state handling",
         "Added the guardrails that make a labeled homography trustworthy: minimum-point and convex-hull spatial-distribution checks, schema validation before writes, OS-level immutable attempt records, restart-persistent pointers, and JSONL audit logging",
-        "Reproduced the frame-6 reference homography to a maximum matrix difference of 4.73e-11 with 0-pixel correspondence residuals, and verified the saved domain-gate result",
         "Isolated correspondence-span length as the supported failure mechanism for frame-15: narrow spans (~8\u201317 yards) produced homographies that failed full-field validity, wide spans (~42 yards) stayed locally consistent, shown through six controlled test categories",
-        "Found a real template-scale coordinate bug (the tool assumed an edge-to-edge 100-yard field; the asset is inset, ~8-yard error at the goal line) and confirmed it was not the cause of the frame-15 rejections",
-        "Defined ACCEPTED / REJECTED / UNLABELABLE / ADJUDICATION_REQUIRED attempt schemas; the validation suite passes 6/6 positive and 16/16 negative fixtures",
+        "Wrote the START_HERE handoff for the next person on the repo: which of 35 markdown files are current, the two rotation numbers that get confused (14.3 deg paint tilt vs 3.2 deg roll parameter), and the six approaches to absolute yard identity that already failed",
       ],
-      tags: ["Python", "OpenCV", "NumPy", "Homography", "Computer Vision", "Schema Validation"],
+      tags: ["Python", "OpenCV", "NumPy", "Homography", "Camera Solve", "YOLO", "Computer Vision"],
     },
     {
       org: "USC \u2014 Viterbi School of Engineering",
