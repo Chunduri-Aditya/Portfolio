@@ -1,6 +1,6 @@
 // Export src/data/content.ts as fact-sized chunks for the profile-rag service.
 // Usage: node scripts/export-corpus.mjs > corpus/portfolio.jsonl
-import { PROJECTS, EXPERIENCE, RESEARCH, CAPABILITIES, ABOUT } from "../src/data/content.ts";
+import { PROJECTS, EXPERIENCE, RESEARCH, CAPABILITIES, ABOUT, SIDEBAR, HERO, CONTACT } from "../src/data/content.ts";
 
 const SITE = "https://chunduri-aditya.github.io/Portfolio/";
 const rows = [];
@@ -34,6 +34,10 @@ for (const r of RESEARCH.publications) {
 }
 for (const g of CAPABILITIES.groups) {
   add(`skills/${g.category}`, "skills", g.category, `${SITE}#skills`, `${g.category}: ${g.tools.join(", ")}`);
+}
+add("profile/identity", "profile", HERO.name, SITE, `${HERO.name} is an ${HERO.roleLabel} based in ${CONTACT.location}, ${HERO.availability}. ${HERO.headline} Email: ${CONTACT.email}. GitHub: ${CONTACT.github}. LinkedIn: ${CONTACT.linkedin}.`);
+for (const ed of SIDEBAR.education.items) {
+  add(`education/${ed.school}`, "education", ed.school, `${SITE}#about`, `Education: ${ed.degree} from ${ed.school}, ${ed.location}, graduated ${ed.graduated}.`);
 }
 ABOUT.paragraphs.forEach((p, i) => add(`about/${i}`, "about", "About", `${SITE}#about`, p));
 
