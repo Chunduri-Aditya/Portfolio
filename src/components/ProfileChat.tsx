@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, ArrowUpRight, CornerDownLeft, RefreshCw } from "lucide-react";
-import { ask, health, suggestions as fetchSuggestions, type ChatAnswer } from "../lib/profileChat";
+import { ask, health, localHref, suggestions as fetchSuggestions, type ChatAnswer } from "../lib/profileChat";
 import { useFocusTrap } from "../lib/useFocusTrap";
 import { useLockBodyScroll } from "../lib/useLockBodyScroll";
 
@@ -200,7 +200,7 @@ const ProfileChat: React.FC<ProfileChatProps> = ({ isOpen, onClose, endpoint }) 
                       {phase.result.sources.slice(0, 3).map((s) => (
                         <li key={s.id}>
                           <a
-                            href={s.url}
+                            href={localHref(s.url)}
                             onClick={onClose}
                             className="group flex items-center justify-between gap-3 rounded-xl px-2 py-1.5 text-[12px] transition-colors hover:bg-white/[0.06]"
                           >

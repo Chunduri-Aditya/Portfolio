@@ -40,7 +40,7 @@ describe("ProfileChat", () => {
     await userEvent.click(pill);
     expect(await screen.findByText(/adversarial evaluation framework/)).toBeInTheDocument();
     const src = screen.getByRole("link", { name: /Agent Shield/ });
-    expect(src).toHaveAttribute("href", expect.stringContaining("/work/agent-shield/"));
+    expect(src).toHaveAttribute("href", "/Portfolio/work/agent-shield/");
   });
 
   test("fallback names the limit and re-offers suggestions", async () => {
