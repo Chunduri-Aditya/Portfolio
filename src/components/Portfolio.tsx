@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { Suspense, lazy, useCallback, useMemo, useState } from "react";
 
 import Navbar from "./Navbar";
 import Hero from "./Hero";
@@ -13,9 +13,16 @@ import Footer from "./Footer";
 import CommandPalette from "./CommandPalette";
 import { NAV_LINKS } from "../data/content";
 import { useScrollSpy } from "../lib/useScrollSpy";
+import { PROFILE_CHAT_URL, chatEnabled } from "../lib/profileChat";
+
+// Loaded only when a service URL was baked in at build time, so the static
+// bundle carries no chat code for a build that has nowhere to send a question.
+const ProfileChat = lazy(() => import("./ProfileChat"));
 
 const Portfolio: React.FC = () => {
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const chatOn = chatEnabled(PROFILE_CHAT_URL);
 
   // "hero" is tracked so no nav link is marked current while the hero is on
   // screen, but it is not itself a nav link.
@@ -29,6 +36,11 @@ const Portfolio: React.FC = () => {
 
   const openPalette = useCallback(() => setIsPaletteOpen(true), []);
   const closePalette = useCallback(() => setIsPaletteOpen(false), []);
+  const openChat = useCallback(() => {
+    setIsPaletteOpen(false);
+    setIsChatOpen(true);
+  }, []);
+  const closeChat = useCallback(() => setIsChatOpen(false), []);
 
   return (
     <div className="relative min-h-[100dvh] font-sans text-text antialiased">
@@ -36,7 +48,12 @@ const Portfolio: React.FC = () => {
         Skip to content
       </a>
 
-      <Navbar activeSection={activeSection} scrollTo={scrollTo} onOpenPalette={openPalette} />
+      <Navbar
+        activeSection={activeSection}
+        scrollTo={scrollTo}
+        onOpenPalette={openPalette}
+        onOpenChat={chatOn ? openChat : undefined}
+      />
 
       <main id="main" className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pt-28 pb-24 sm:px-6">
         <Hero scrollTo={scrollTo} />
@@ -71,7 +88,18 @@ const Portfolio: React.FC = () => {
 
       <Footer />
 
-      <CommandPalette isOpen={isPaletteOpen} onOpen={openPalette} onClose={closePalette} scrollTo={scrollTo} />
+      <CommandPalette
+        isOpen={isPaletteOpen}
+        onOpen={openPalette}
+        onClose={closePalette}
+        scrollTo={scrollTo}
+        onOpenChat={chatOn ? openChat : undefined}
+      />
+      {chatOn && PROFILE_CHAT_URL && (
+        <Suspense fallback={null}>
+          <ProfileChat isOpen={isChatOpen} onClose={closeChat} endpoint={PROFILE_CHAT_URL} />
+        </Suspense>
+      )}
     </div>
   );
 };

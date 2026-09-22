@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Github, Linkedin, Menu, X, Search, FileText } from "lucide-react";
+import { Sparkles, Mail, Github, Linkedin, Menu, X, Search, FileText, MessageSquare } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO } from "../data/content";
 
 /**
@@ -19,6 +19,8 @@ interface NavbarProps {
   activeSection: string;
   scrollTo: (id: string) => void;
   onOpenPalette: () => void;
+  /** Absent when no answer service is configured for this build. */
+  onOpenChat?: () => void;
 }
 
 const SOCIAL = [
@@ -27,7 +29,7 @@ const SOCIAL = [
   { href: CONTACT.linkedin, icon: Linkedin, label: "LinkedIn" },
 ];
 
-const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette }) => {
+const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette, onOpenChat }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -61,6 +63,18 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
                 {isMac ? "⌘K" : "^K"}
               </kbd>
             </button>
+
+            {onOpenChat && (
+              <button
+                type="button"
+                onClick={onOpenChat}
+                className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium text-text-dim transition-colors hover:border-white/35 hover:bg-white/[0.07] hover:text-text"
+                aria-label="Ask about my work"
+              >
+                <MessageSquare size={13} strokeWidth={2} />
+                Ask
+              </button>
+            )}
 
             <div className="flex items-center gap-0.5">
               {NAV_LINKS.map((link) => {
@@ -140,6 +154,19 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollTo, onOpenPalette 
                   <Search size={15} strokeWidth={2} />
                   Search
                 </button>
+                {onOpenChat && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      onOpenChat();
+                    }}
+                    className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-text-dim hover:bg-white/5 hover:text-text"
+                  >
+                    <MessageSquare size={15} strokeWidth={2} />
+                    Ask about my work
+                  </button>
+                )}
                 {NAV_LINKS.map((link) => {
                   const active = activeSection === link.id;
                   return (

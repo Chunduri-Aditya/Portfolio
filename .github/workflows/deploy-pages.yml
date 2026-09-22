@@ -50,8 +50,12 @@ jobs:
       - name: Test
         run: npm run test:run
 
+      # The answer service URL is baked in at build time. Leave the variable
+      # unset and the site hides the Ask entry entirely.
       - name: Build
         run: npm run build
+        env:
+          VITE_PROFILE_CHAT_URL: ${{ vars.PROFILE_CHAT_URL }}
       
       - name: Setup Pages
         uses: actions/configure-pages@v5

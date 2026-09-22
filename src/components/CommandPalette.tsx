@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft } from "lucide-react";
+import { Search, ArrowUpRight, Github, Linkedin, Mail, FileText, CornerDownLeft, MessageSquare } from "lucide-react";
 import { NAV_LINKS, CONTACT, HERO, PROJECTS } from "../data/content";
 import { hasCaseStudy } from "../lib/caseStudies";
 import { Icon } from "../lib/iconMap";
@@ -30,6 +30,8 @@ interface CommandPaletteProps {
   onOpen: () => void;
   onClose: () => void;
   scrollTo: (id: string) => void;
+  /** Absent when no answer service is configured for this build. */
+  onOpenChat?: () => void;
 }
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({
@@ -37,6 +39,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   onOpen,
   onClose,
   scrollTo,
+  onOpenChat,
 }) => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -50,6 +53,19 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const commands = useMemo<PaletteCommand[]>(() => {
     return [
+      ...(onOpenChat
+        ? [
+            {
+              id: "ask",
+              group: "Navigate" as Group,
+              label: "Ask about my work",
+              sublabel: "Answers from this site, with sources",
+              icon: <MessageSquare size={15} strokeWidth={1.5} />,
+              keywords: "chat question ask",
+              action: onOpenChat,
+            },
+          ]
+        : []),
       {
         id: "nav-hero",
         group: "Navigate" as Group,
@@ -116,7 +132,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => window.open(HERO.ctas.resume.href, "_blank", "noopener,noreferrer"),
       },
     ];
-  }, [scrollTo, navigate]);
+  }, [scrollTo, navigate, onOpenChat]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
