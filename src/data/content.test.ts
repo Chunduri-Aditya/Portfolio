@@ -61,10 +61,9 @@ describe("content integrity", () => {
     );
   });
 
-  // Flips to `test` once the post's blob URL returns 200 and the entry is
-  // uncommented in content.ts. The entry is held in a comment in content.ts
-  // until then, because a link that 404s never ships on a public surface.
-  test.skip("the evals post is listed as a POST and does not count as a paper", () => {
+  // Un skipped on 2026-09-23 once the post's blob URL returned 200 and the entry
+  // was uncommented in content.ts; a link that 404s never ships on a public surface.
+  test("the evals post is listed as a POST and does not count as a paper", () => {
     const posts = RESEARCH.publications.filter((p) => p.badge.startsWith("POST"));
     expect(posts).toHaveLength(1);
     expect(posts[0].title).toBe("Where my evals lied");

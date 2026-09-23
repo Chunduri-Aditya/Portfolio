@@ -1784,33 +1784,24 @@ export const RESEARCH: ResearchContent = {
         { label: "DOI", href: "https://doi.org/10.22214/ijraset.2023.52452" },
       ],
     },
-    /*
-     * Held until the post is on origin/main. The link below returned 404 at
-     * audit time because docs/posts/ in agent-shield was still untracked, and
-     * a link that 404s never ships on a public surface. Uncomment once the
-     * blob URL returns 200 and flip the `test.skip` named "the evals post is
-     * listed as a POST and does not count as a paper" in content.test.ts to
-     * `test`; HUD_STATS PAPERS already excludes POST badges.
-     *
-     * {
-     *   badge: "POST · 2026",
-     *   title: "Where my evals lied",
-     *   hook:
-     *     "Five numbers from my own eval work that were wrong, each with the commit that fixed it.",
-     *   summary:
-     *     "Five eval scores that read as measurements and were not, with the test suite green each time. Each entry names the number, why it was wrong, and the commit that corrected it, so every claim can be checked at source.",
-     *   metrics: [
-     *     { label: "Cases", value: "5", accent: "sapphire" },
-     *     { label: "Repos", value: "4", accent: "teal" },
-     *   ],
-     *   links: [
-     *     {
-     *       label: "Read The Post",
-     *       href: "https://github.com/Chunduri-Aditya/agent-shield/blob/main/docs/posts/where_my_evals_lied.md",
-     *     },
-     *   ],
-     * },
-     */
+    {
+      badge: "POST · 2026",
+      title: "Where my evals lied",
+      hook:
+        "Five numbers from my own eval work that were wrong, each with the commit that fixed it.",
+      summary:
+        "Five eval scores that read as measurements and were not, with the test suite green each time. Each entry names the number, why it was wrong, and the commit that corrected it, so every claim can be checked at source.",
+      metrics: [
+        { label: "Cases", value: "5", accent: "sapphire" },
+        { label: "Repos", value: "4", accent: "teal" },
+      ],
+      links: [
+        {
+          label: "Read The Post",
+          href: "https://github.com/Chunduri-Aditya/agent-shield/blob/main/docs/posts/where_my_evals_lied.md",
+        },
+      ],
+    },
   ],
 };
 
