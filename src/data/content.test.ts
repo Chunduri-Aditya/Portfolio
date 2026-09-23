@@ -47,8 +47,9 @@ describe("content integrity", () => {
   });
 
   test("HUD stats derive from the data rather than being typed", () => {
+    // Posts sit in the publications list but are not papers.
     expect(HUD_STATS.find((s) => s.label === "PAPERS")?.value).toBe(
-      String(RESEARCH.publications.length),
+      String(RESEARCH.publications.filter((p) => !p.badge.startsWith("POST")).length),
     );
     expect(HUD_STATS.find((s) => s.label === "PUBLIC REPOS")?.value).toBe(
       String(PROJECTS.projects.filter((p) => p.links.github).length),

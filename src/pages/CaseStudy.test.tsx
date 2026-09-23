@@ -52,7 +52,7 @@ describe("CaseStudy", () => {
   });
 
   test("private work offers request-access rather than a link that would 404", () => {
-    renderAt("/work/jarvis");
+    renderAt("/work/taintgate");
 
     const link = screen.getByRole("link", { name: /request access/i });
     expect(link.getAttribute("href")).toMatch(/^mailto:/);

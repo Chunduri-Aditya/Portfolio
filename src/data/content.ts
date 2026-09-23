@@ -1388,9 +1388,9 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
     },
     {
-      id: "jarvis",
+      id: "taintgate",
       caseStudy: true,
-      title: "jarvis",
+      title: "taintgate",
       subtitle: "Turn-Scoped Containment for Coding Agents",
       iconName: "ShieldCheck",
       iconClassName: "text-accent-viridian",
@@ -1456,7 +1456,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        requestAccess: "jarvis",
+        requestAccess: "taintgate",
       },
       metrics: [
         { label: "Tests", value: "124" },
@@ -1783,6 +1783,32 @@ export const RESEARCH: ResearchContent = {
         { label: "DOI", href: "https://doi.org/10.22214/ijraset.2023.52452" },
       ],
     },
+    /*
+     * Held until the post is on origin/main. The link below returned 404 at
+     * audit time because docs/posts/ in agent-shield was still untracked, and
+     * a link that 404s never ships on a public surface. Uncomment once the
+     * blob URL returns 200; nothing else needs to change (HUD_STATS PAPERS
+     * already excludes POST badges).
+     *
+     * {
+     *   badge: "POST · 2026",
+     *   title: "Where my evals lied",
+     *   hook:
+     *     "Five numbers from my own eval work that were wrong, each with the commit that fixed it.",
+     *   summary:
+     *     "Five eval scores that read as measurements and were not, with the test suite green each time. Each entry names the number, why it was wrong, and the commit that corrected it, so every claim can be checked at source.",
+     *   metrics: [
+     *     { label: "Cases", value: "5", accent: "sapphire" },
+     *     { label: "Repos", value: "4", accent: "teal" },
+     *   ],
+     *   links: [
+     *     {
+     *       label: "Read The Post",
+     *       href: "https://github.com/Chunduri-Aditya/agent-shield/blob/main/docs/posts/where_my_evals_lied.md",
+     *     },
+     *   ],
+     * },
+     */
   ],
 };
 
@@ -1810,7 +1836,10 @@ export const HUD_STATS: HudStat[] = [
     label: "PUBLIC REPOS",
     value: String(PROJECTS.projects.filter((p) => p.links.github).length),
   },
-  { label: "PAPERS", value: String(RESEARCH.publications.length) },
+  {
+    label: "PAPERS",
+    value: String(RESEARCH.publications.filter((p) => !p.badge.startsWith("POST")).length),
+  },
   {
     label: "ATTACK IDS CATALOGUED",
     value: String(ATTACK_SURFACE.reduce((n, m) => n + m.ids, 0)),
