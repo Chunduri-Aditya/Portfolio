@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Github, Lock, Play } from "lucide-react";
 
 import { PROJECTS } from "../data/content";
-import { hasCaseStudy } from "../lib/caseStudies";
+import { hasCaseStudy, renamedCaseStudyId } from "../lib/caseStudies";
 import { Icon } from "../lib/iconMap";
 import { PROJECT_VIZ } from "../lib/projectViz";
 import { requestAccessHref } from "../lib/projectLinks";
@@ -38,6 +38,11 @@ const CaseStudy: React.FC = () => {
       document.title = previous;
     };
   }, [project]);
+
+  // A renamed id lands on the same page under its new name; the old URL is in
+  // sent applications, so it must not fall through to the home page.
+  const renamed = renamedCaseStudyId(projectId);
+  if (!project && renamed) return <Navigate to={`/work/${renamed}`} replace />;
 
   // A dead URL is not an error state worth designing for.
   if (!project) return <Navigate to="/" replace />;

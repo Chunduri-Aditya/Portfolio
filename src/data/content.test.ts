@@ -51,9 +51,29 @@ describe("content integrity", () => {
     expect(HUD_STATS.find((s) => s.label === "PAPERS")?.value).toBe(
       String(RESEARCH.publications.filter((p) => !p.badge.startsWith("POST")).length),
     );
+    // The derivation above also passes if a post is mislabelled as a paper, so
+    // pin the count to the two papers that exist: the Zenodo preprint
+    // (badge: "PREPRINT · ZENODO 2026") and the IJRASET publication
+    // (badge: "PUBLICATION · IJRASET VOL 11, AUG 2023").
+    expect(HUD_STATS.find((s) => s.label === "PAPERS")?.value).toBe("2");
     expect(HUD_STATS.find((s) => s.label === "PUBLIC REPOS")?.value).toBe(
       String(PROJECTS.projects.filter((p) => p.links.github).length),
     );
+  });
+
+  // Flips to `test` once the post's blob URL returns 200 and the entry is
+  // uncommented in content.ts. The entry is held in a comment in content.ts
+  // until then, because a link that 404s never ships on a public surface.
+  test.skip("the evals post is listed as a POST and does not count as a paper", () => {
+    const posts = RESEARCH.publications.filter((p) => p.badge.startsWith("POST"));
+    expect(posts).toHaveLength(1);
+    expect(posts[0].title).toBe("Where my evals lied");
+    expect(
+      posts[0].links.some((l) =>
+        l.href.includes("agent-shield/blob/main/docs/posts/where_my_evals_lied.md"),
+      ),
+    ).toBe(true);
+    expect(HUD_STATS.find((s) => s.label === "PAPERS")?.value).toBe("2");
   });
 
   test("no stat is the project count wearing a different label", () => {

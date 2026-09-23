@@ -68,6 +68,17 @@ describe("CaseStudy", () => {
     expect(screen.getByText("home")).toBeInTheDocument();
   });
 
+  test("a renamed id redirects to the renamed case study, not home", () => {
+    // jarvis became taintgate. The old address is in sent applications, so it
+    // has to land on the same page under its new name rather than on the home
+    // page like an id that never existed. The route table above already has
+    // /work/:projectId, so the Navigate lands on the same route with the new id.
+    renderAt("/work/jarvis");
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("taintgate");
+    expect(screen.queryByText("home")).toBeNull();
+  });
+
   test("every project that claims a case study has one that renders", () => {
     for (const project of PROJECTS.projects.filter(hasCaseStudy)) {
       const { unmount } = renderAt(`/work/${project.id}`);

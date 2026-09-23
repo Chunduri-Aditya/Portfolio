@@ -2,7 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { CASE_STUDY_IDS } from './src/lib/caseStudies'
+import { CASE_STUDY_IDS, RENAMED_CASE_STUDY_IDS } from './src/lib/caseStudies'
+import { redirectStubHtml } from './src/lib/redirectStub'
 
 // GitHub Pages base path - update this to match your repository name
 // If your repo is "Portfolio", keep it as "/Portfolio/"
@@ -51,7 +52,9 @@ export default defineConfig({
        *
        * Copying the built index.html to each route is enough, because assets
        * are referenced from the base path and so resolve at any depth. The
-       * 404.html fallback stays for genuinely unknown paths.
+       * 404.html fallback stays for genuinely unknown paths. A renamed id gets
+       * a redirect stub at its old address instead of a copy, so a URL in a
+       * sent application still lands on the page under its new name.
        */
       name: 'emit-route-pages',
       closeBundle() {
@@ -61,6 +64,15 @@ export default defineConfig({
           mkdirSync(dir, { recursive: true })
           writeFileSync(join(dir, 'index.html'), html)
         }
+        // A renamed id keeps its old address as a redirect stub, never as a page.
+        for (const [from, to] of Object.entries(RENAMED_CASE_STUDY_IDS)) {
+          if (!/^[a-z0-9-]+$/.test(from) || !/^[a-z0-9-]+$/.test(to)) throw new Error(`redirect: ${from} -> ${to} is not a slug pair`)
+          if (caseStudyIds().includes(from)) throw new Error(`redirect: ${from} is still a case-study id`)
+          if (!caseStudyIds().includes(to)) throw new Error(`redirect: ${from} points at ${to}, which has no page`)
+          const dir = join(__dirname, 'dist', 'work', from)
+          mkdirSync(dir, { recursive: true })
+          writeFileSync(join(dir, 'index.html'), redirectStubHtml(`${SITE_ORIGIN}/${REPO_NAME}/work/${to}/`))
+        }
       },
     },
     {
@@ -69,6 +81,7 @@ export default defineConfig({
         const base = `${SITE_ORIGIN}/${REPO_NAME}/`
         // Trailing slash matches the emitted directory index, so the canonical
         // URL is the one Pages serves directly rather than one it redirects to.
+        // Renamed ids (RENAMED_CASE_STUDY_IDS) are absent on purpose: their stubs redirect and are not pages.
         const urls = ['', ...caseStudyIds().map((id) => `work/${id}/`)]
         const body = urls
           .map((path) => `  <url>\n    <loc>${base}${path}</loc>\n  </url>`)

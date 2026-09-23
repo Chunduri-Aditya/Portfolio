@@ -21,12 +21,12 @@ describe("profileChat endpoint", () => {
   test("ask posts the question and returns the typed answer", async () => {
     const fetchMock = vi.fn(() => json({ answer: "A.", mode: "extract", score: 1, sources: [], latency_ms: 12 }));
     vi.stubGlobal("fetch", fetchMock);
-    const out = await ask("what is jarvis", "https://x.example");
+    const out = await ask("what is taintgate", "https://x.example");
     expect(out.mode).toBe("extract");
     expect(out.answer).toBe("A.");
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("https://x.example/ask");
-    expect(JSON.parse(String(init.body))).toEqual({ question: "what is jarvis" });
+    expect(JSON.parse(String(init.body))).toEqual({ question: "what is taintgate" });
   });
 
   test("ask surfaces a non-2xx as an error, including 429", async () => {

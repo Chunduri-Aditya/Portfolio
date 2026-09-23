@@ -1787,8 +1787,9 @@ export const RESEARCH: ResearchContent = {
      * Held until the post is on origin/main. The link below returned 404 at
      * audit time because docs/posts/ in agent-shield was still untracked, and
      * a link that 404s never ships on a public surface. Uncomment once the
-     * blob URL returns 200; nothing else needs to change (HUD_STATS PAPERS
-     * already excludes POST badges).
+     * blob URL returns 200 and flip the `test.skip` named "the evals post is
+     * listed as a POST and does not count as a paper" in content.test.ts to
+     * `test`; HUD_STATS PAPERS already excludes POST badges.
      *
      * {
      *   badge: "POST · 2026",

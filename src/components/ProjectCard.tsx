@@ -13,7 +13,7 @@ import MiniViz from "./MiniViz";
  *
  * Keyed by every discipline in PROJECTS, checked by a test rather than by
  * eye: the map previously held nine entries against eleven disciplines, so
- * jarvis and Company Agents silently took the fallback and looked like a
+ * taintgate (then named jarvis) and Company Agents silently took the fallback and looked like a
  * different tier of work than they are.
  *
  * Hues are the ones that clear AA as ink-on-colour, since the case-study

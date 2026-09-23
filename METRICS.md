@@ -21,7 +21,7 @@ All figures below collected **2026-09-18**.
 | AkashicTree | 82 tests | `./.venv/bin/python -m pytest --collect-only -q` | `Projects/AkashicTree` | main | `bd786d0` |
 | Attention Drift Detector | 52 tests | `./.venv/bin/python -m pytest --collect-only -q` | `Projects/attention-drift-detector` | main | `532531e` |
 | Sourcewarden | 71 passing | `./.venv/bin/python -B -m unittest discover -s <dir>` over `web/tests` (20), `n8n_rag_system/tests` (34), `tests/self_improvement` (17); all three exit 0 | `Projects/sourcewarden` | main | `1486e71` |
-| jarvis | 124 tests | `./.venv/bin/python -m pytest --collect-only -q` | `Projects/jarvis` | - | `6ab9c10` |
+| taintgate (was jarvis; collected 2026-09-23) | 124 tests | `python3 -m pytest --collect-only -q` | `Projects/taintgate` (`Projects/jarvis` is a symlink to it) | - | `d8f437a` |
 | Company Agents | 42 of 42 steps | `node scripts/verify.mjs`, exit 0 | `Projects/Company_Agents_skeleton` | - | `dc781ad` |
 
 ### Traps found while collecting these

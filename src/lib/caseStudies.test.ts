@@ -1,5 +1,5 @@
 import { PROJECTS } from "../data/content";
-import { CASE_STUDY_IDS, hasCaseStudy } from "./caseStudies";
+import { CASE_STUDY_IDS, hasCaseStudy, RENAMED_CASE_STUDY_IDS, renamedCaseStudyId } from "./caseStudies";
 
 /**
  * A case study is a promise about depth. Four projects carried the same
@@ -49,5 +49,43 @@ describe("case-study eligibility", () => {
   test("every id in the list is a real project", () => {
     const known = new Set(PROJECTS.projects.map((p) => p.id));
     for (const id of CASE_STUDY_IDS) expect(known.has(id), `${id} is not a project`).toBe(true);
+  });
+});
+
+/**
+ * jarvis was renamed taintgate, and /work/jarvis/ sits in sent applications.
+ * Two invariants keep the rename honest: a renamed id must never resurrect as
+ * a page (if "jarvis" came back as a project id, the redirect and the page
+ * would fight over one URL), and a redirect must land on a page that exists
+ * (a target in the project list but without a case study would 404 twice).
+ */
+describe("renamed case-study ids", () => {
+  const projectIds = PROJECTS.projects.map((p) => p.id);
+
+  test("the jarvis rename is recorded", () => {
+    // Guards the loops below against passing on an empty map.
+    expect(RENAMED_CASE_STUDY_IDS).toHaveProperty("jarvis", "taintgate");
+  });
+
+  test("no old id is still a project or a case study", () => {
+    for (const oldId of Object.keys(RENAMED_CASE_STUDY_IDS)) {
+      expect(projectIds, `${oldId} is still a project id`).not.toContain(oldId);
+      expect(CASE_STUDY_IDS, `${oldId} still has a page of its own`).not.toContain(oldId);
+    }
+  });
+
+  test("every new id is a case study that exists, and none maps to itself", () => {
+    for (const [oldId, newId] of Object.entries(RENAMED_CASE_STUDY_IDS)) {
+      expect(CASE_STUDY_IDS, `${oldId} redirects to ${newId}, which has no page`).toContain(newId);
+      expect(newId, `${oldId} redirects to itself`).not.toBe(oldId);
+    }
+  });
+
+  test("renamedCaseStudyId maps the old id and nothing else", () => {
+    expect(renamedCaseStudyId("jarvis")).toBe("taintgate");
+    expect(renamedCaseStudyId("taintgate")).toBeUndefined();
+    expect(renamedCaseStudyId(undefined)).toBeUndefined();
+    // Own keys only: an id off Object.prototype must not resolve to a function.
+    expect(renamedCaseStudyId("constructor")).toBeUndefined();
   });
 });

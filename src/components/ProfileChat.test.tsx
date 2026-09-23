@@ -64,7 +64,7 @@ describe("ProfileChat", () => {
     });
     renderOpen();
     const input = await screen.findByRole("textbox");
-    await userEvent.type(input, "what is jarvis{Enter}");
+    await userEvent.type(input, "what is taintgate{Enter}");
     expect(await screen.findByText(/did not respond/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
   });
