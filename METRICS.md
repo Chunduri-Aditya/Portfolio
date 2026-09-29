@@ -66,9 +66,13 @@ All figures below collected **2026-09-18**.
 
 ## Resume PDF
 
-`public/Docs/Aditya_Chunduri.pdf` is the **ML Engineer lane base** from
-`Desktop/I_got_the_job/work/jobright-2026-09-17/`, chosen because this site
-positions as ML / AI engineer and its title tag says the same.
+`public/Docs/Aditya_Chunduri.pdf` is the **general best resume of 2026-09-28**
+(title "AI/ML Engineer"), built from
+`Desktop/I_got_the_job/work/general-best-2026-09-28/Aditya_Chunduri_Resume.tex`,
+sha256 `686eefc9…810b7`. Aditya picked it for the site on 2026-09-28; it is not
+one of the `live_bases` lane resumes in `active-resumes.json`. It replaced the
+ML Engineer lane base from `work/jobright-2026-09-17/`. All six of its link
+annotations returned HTTP 200 on 2026-09-28, and its DOIs match `content.ts`.
 
 ### Correcting what this file said on 2026-09-18
 
