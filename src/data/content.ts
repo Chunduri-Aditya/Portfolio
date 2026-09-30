@@ -1724,10 +1724,29 @@ export const EXPERIENCE: ExperienceSectionContent = {
   },
   items: [
     {
+      org: "Brightcone.ai",
+      role: "AI Engineer",
+      location: "Remote",
+      period: "Sep 2026 \u2013 Present",
+      accent: "teal",
+      hook:
+        "Builds twin, a personal agent that hands each step to Claude, Codex or Gemini and sends nothing until an approval card is clicked.",
+      summary:
+        "twin is the work of this role. Claude plans and drafts, Codex reviews every step of a background job with a typed verdict, and Gemini condenses long input. The models that do the work run text only; account reads, web search and approved writes run in separate restricted calls. The full write up is the twin case study.",
+      bullets: [
+        "Put all 43 connector write tools behind approval cards bound to a SHA256 of exactly what was shown: a card expires after 600 s, and a PreToolUse hook rechecks it right before it runs once",
+        "Made every model reply untrusted until it matches a strict typed shape for its kind; model text reaches another prompt only inside a block sealed with a fresh 128 bit marker",
+        "Capped spend in a routing table at $1 per run and $20 per day; a live email job took 4 calls, 15.9 s and $0.064 (2026-09-28)",
+        "Backed the guards with 1,477 offline tests and 646 mutation rows that break a guard on purpose; the last full run of 620 rows left 1 alive, and that guard now has its test",
+        "Stated limits: built for one user, measured times and costs are single live runs, only the Gmail and Calendar writes ran live, and meetings and phone calls have never run live",
+      ],
+      tags: ["Python", "Claude", "Codex", "Gemini", "Agent Orchestration", "Approval Gates", "Mutation Testing"],
+    },
+    {
       org: "Easley Dunn Productions, Inc.",
       role: "AI/ML Engineer Intern \u00b7 Gameplay Analyzer Team",
       location: "Remote",
-      period: "Aug 2026 \u2013 Present",
+      period: "Aug 2026 \u2013 Sep 2026",
       accent: "viridian",
       hook:
         "Turns NFL Blitz gameplay video into field positions in yards, and refuses the frames it cannot certify.",
