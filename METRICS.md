@@ -74,6 +74,15 @@ one of the `live_bases` lane resumes in `active-resumes.json`. It replaced the
 ML Engineer lane base from `work/jobright-2026-09-17/`. All six of its link
 annotations returned HTTP 200 on 2026-09-28, and its DOIs match `content.ts`.
 
+## Portfolio PDF
+
+`public/Docs/Aditya_Chunduri_Portfolio.pdf` is the upload version of this site
+for application forms that want a file, not a URL. `npm run export:pdf` builds
+it from `content.ts` alone, so it carries no number this ledger does not
+already cover, and it goes stale on any `content.ts` change until rerun. The
+export fails if any page overflows its Letter box or a diagram is clipped.
+Built 2026-09-29: 11 pages, and all 25 of its web links returned HTTP 200.
+
 ### Correcting what this file said on 2026-09-18
 
 An earlier version of this section claimed the resume "exists only as a PDF"
