@@ -31,7 +31,8 @@ const CANDIDATES: Candidate[] = [
 const fmt = (n: number) => (Number.isFinite(n) ? n.toFixed(2) : "−∞");
 
 /**
- * Interactive demonstration of the twin's context-selection policy.
+ * Interactive demonstration of Persona RAG's context-selection policy (shown on
+ * /work/persona-rag, the card that held /work/twin until 2026-09-29).
  *
  * The engineering question a persistent agent actually has to answer is not
  * "what can the model say" but "what earns a slot in a context window that is

@@ -4,7 +4,7 @@ Source for [chunduri-aditya.github.io/Portfolio](https://chunduri-aditya.github.
 
 React 18 + TypeScript + Vite + Tailwind, with Framer Motion for motion. One
 long home page whose nav scrolls between labelled landmark sections, plus a
-case-study route per project at `/work/<id>`. Eight of the twelve projects have
+case-study route per project at `/work/<id>`. Nine of the fourteen projects have
 one; `src/lib/caseStudies.ts` decides which, and the build reads the same list
 to emit the route files and the sitemap.
 

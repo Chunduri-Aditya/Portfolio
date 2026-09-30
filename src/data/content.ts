@@ -327,7 +327,7 @@ export interface Project {
   /**
    * Give this project a page at /work/<id>.
    *
-   * Set on eight of twelve. AkashicTree, Model Behavior Lab, ChatDB and the
+   * Set on nine of fourteen. AkashicTree, Model Behavior Lab, ChatDB and the
    * Attention Drift Detector ran 116 to 278 words with no problem, no
    * constraints and no failure modes, against 846 to 1,199 for the flagships,
    * so the "Case study" button promised an artifact that was not there. They
@@ -499,105 +499,127 @@ export const PROJECTS: ProjectsSectionContent = {
     {
       id: "twin",
       caseStudy: true,
-      title: "Personal Digital Twin",
-      subtitle: "Persistent Agent Memory Behind a Fail-Closed Privacy Boundary",
-      iconName: "Brain",
+      title: "twin",
+      subtitle: "A Personal Agent Across Claude, Codex and Gemini, Behind Approval Cards",
+      iconName: "Layers",
       tags: [
-        "Agent Architecture",
-        "Memory",
-        "RAG",
-        "Context Engineering",
-        "Local Inference",
+        "Multi-Agent",
+        "Agent Orchestration",
+        "Prompt Injection",
+        "Claude Code",
+        "Codex",
+        "Gemini",
+        "MCP",
         "Python",
       ],
-      discipline: "AGENT / MEMORY",
+      discipline: "AGENT / ORCHESTRATION",
       status: "SHIPPED",
-      hook: "A context window is always too small. This decides what earns a slot in it.",
-      oneLiner:
-        "A persistent personalised agent whose retrieval layer tags every chunk with its origin (profile, interview transcript, or expert reflection), ranks candidates by cosine similarity with a per-section offset, and masks disallowed sources to negative infinity before top-k so a filtered-out chunk cannot re-enter on score alone. The index refuses to build at all while a real transcript lacks a matching redacted copy, or while any transcript chunk contains more than 60% of a gold evaluation answer.",
+      hook: "One chat on my Mac, three models behind it, and nothing leaves on my behalf until I click.",
       problem:
-        "A personalised agent accumulates far more material than a context window holds, so every turn is a selection problem: given a question, which few pieces of what the system knows about a person actually deserve to be in front of the model? Ranking by similarity alone answers that badly, because the most textually similar paragraph is often not the most useful one, and because some material should never reach the model regardless of how well it scores.",
+        "I wanted one agent that answers in my voice and builds things by handing each step to the model that suits it: Claude, GPT through Codex, and Gemini. The design problem is trust across those handoffs. No model should grade its own work, text a model read (a hostile email included) must not break out of the quote it arrives in, and nothing should reach another person on my behalf until I have seen exactly what will be sent.",
       constraints: [
-        "Fixed context budget. Five chunks reach the model per turn, so selection is the whole game.",
-        "Privacy. Raw interview transcripts must never be embedded; only a redacted copy may enter the index.",
-        "Evaluation integrity. Indexed material can silently contain the answers to the evaluation set, which would make retrieval scores meaningless.",
-        "Local inference, so the material never leaves the machine, against weaker models than hosted frontier ones.",
-        "Reproducibility. The same profile, transcript, and reflections must produce the same index.",
+        "Spend caps in a routing table: $1 per run, $20 per day, 24 calls and 15 minutes per run. On a Max login the dollars are Claude's own estimates, so the day cap paces use rather than billing it.",
+        "Text only work models. The models that plan, draft and review get no tools and no MCP servers; account reads and web search run in separate restricted calls with only the tools they need.",
+        "Headless CLIs with structured output: Claude and Codex on existing subscriptions, Gemini on an AI Studio key because its free login is refused for the CLI. The adapters never drive a TUI and never pass a bypass or skip approvals flag by default.",
+        "A local page. The chat page listens on 127.0.0.1 behind a one time sign in link, and speech is transcribed on the Mac; the model calls themselves go to the three vendors.",
+        "Zero runtime dependencies in the core. The voice stack is its own project so it never enters the core environment.",
       ],
+      failureModes: [
+        "The taint gate checks shape, not meaning. Quoted text can still persuade a model that reads it, and one code guard is a grep over tokenized source that aliasing gets past.",
+        "Meetings and phone calls are built but have never run live, and the browser voice page has not been tested with a real mic.",
+        "The memory similarity floor does not separate right from wrong chats on short questions: notes from unrelated chats scored 0.59 to 0.66 against a floor of 0.58, and only the best chunk of each chat is used.",
+        "Drive reads still answered \"needs to be connected\" on 2026-09-28 until Drive is reconnected in claude.ai, and Notion was sometimes still pending when a call started. Gmail and Calendar were verified live.",
+        "A call killed by Stop reports no cost and is charged at its full cap.",
+        "Gemini's JSON output has no finish reason, so a truncated but non empty digest is accepted.",
+      ],
+      oneLiner:
+        "twin is a personal agent you chat with, typed or out loud. It answers right away or starts real work in the background, where Claude plans and drafts, Codex reviews every step with a typed verdict, and Gemini condenses long input. Every model reply is untrusted until a taint gate checks its shape, and every change to mail, calendar or documents waits on an approval card bound to a hash of exactly what was shown.",
       evidence: [
-        "Three source-tagged indexes over the profile, the redacted interview transcript, and expert reflections; every chunk and every index row carries its source",
-        "Retrieval masks disallowed sources to negative infinity before top-k, so a source filter cannot be defeated by a high similarity score",
-        "Section-aware ranking: a decide-intent query adds a +0.05 offset to chunks from the Decisions section, enough to change the cut only where scores are close",
-        "The index build fails closed twice: RedactionRequired when a real transcript has no up-to-date redacted copy, and LeakError when a transcript chunk contains more than 60% of a gold evaluation answer",
-        "A combined content hash over all three inputs, so an index cannot silently drift from the material it was built from",
-        "Index files written before the source tagging existed still load, so the schema change did not orphan earlier work",
+        "A /do job runs plan, draft, review, revise, final: Claude (Opus 5.5) plans up to 4 steps and drafts each, Codex reviews every draft with a typed verdict, and Claude revises up to 2 rounds. A live email job planned 1 step and took 4 calls, 15.9 s and $0.064, with 1 of 1 step agreed (2026-09-28)",
+        "43 connector write tools, every one behind an approval card bound to a SHA256 of exactly what was shown. The first decision wins, a card expires after 600 s, and a PreToolUse hook rechecks it right before it runs once. Live: a one click Gmail draft in 7.7 s and its typed delete in 8.4 s (2026-09-28)",
+        "1,477 offline tests, all passing, and 646 mutation rows that break a guard on purpose; a guard whose test still passes counts as missing. The last full run of 620 rows left 1 alive, and that guard now has its test",
+        "Every model reply is untrusted until it matches a strict typed shape for its kind, and anything else is quarantined. Model text reaches another prompt only inside a block sealed with a fresh 128 bit marker",
+        "Disagreement is shown, never hidden: a step Codex will not sign off on comes back flagged and marked unreviewed (a personal run: 1 of 3 steps agreed, 2026-09-28)",
+        "A send, a delete, or an address the owner never typed needs the first 8 characters of the card's digest typed back; one click is reserved for changes that reach nobody and can be undone. Writes are capped at 50 one click and 20 typed approvals a day, and one file stops them all",
+        "Speech is transcribed on the Mac with whisper.cpp and the answer is spoken back, 5.3 s end to end with the transcript in 0.86 s (2026-09-28). The voice eval passed with a word error rate of 0.00 (2026-09-27)",
+        "Memory across chats: each chat is a private markdown file indexed locally with SQLite full text search and local embeddings. Vector search is the mode the eval chose, finding 20 of 20 on the synthetic suite",
+        "twin mcp exposes four tools so another agent can hand it work: Claude Code started a run and read back the finished answer in 28.3 s (2026-09-28)",
       ],
       architecture: {
         overview:
-          "Profile + redacted transcript + reflections -> collect_chunks (tag source) -> embed -> index (+ combined hash) -> query embed -> cosine + section boost -> source mask -> top-k -> local model",
-        diagram: `  profile.md    transcript.md    reflections.md
-       |              |                 |
-       |         [ redact ]             |
-       |              |                 |
-       +------+-------+--------+--------+
-              |
-       collect_chunks          tags each chunk: profile | transcript | reflection
-              |
-        +-----+------+
-        | build gate |         RedactionRequired : no matching redacted copy
-        +-----+------+         LeakError         : chunk >= 60% of a gold answer
-              |                (nothing is embedded if either fires)
-           [ embed ]
-              |
-     index.npz + chunks.json  (per-row source, combined_sha over all 3 inputs)
-              |
-  query --> [ embed ] --> cosine score
-              |
-        + section boost        decide intent: Decisions +0.05
-              |
-        source mask            disallowed sources -> -inf, applied BEFORE top-k
-              |
-           top-k = 5
-              |
-        prompt assembly --> local model --> response`,
+          "Chat page or voice → converse hop (reply now, or start a job) → job loop: Gemini digest, Claude plan and draft, Codex critique, Claude revise and final → taint gate on every reply → approval card and PreToolUse gate for any write → append only journal",
+        diagram: `
+  you: chat page (127.0.0.1) or voice (whisper.cpp on the Mac)
+                          |
+                          v
+  chat.py    converse hop: reply now, or start a job (typed flag or /do)
+             opt in: lead.py decides one step at a time
+                          |   the job's task is your words, never a model's
+                          v
+  loop.py    gemini digest (long input) -> claude plan -> claude draft
+             -> codex critique -> claude revise (up to 2) -> claude final
+             routing.toml: model per role, $1 per run, $20 per day
+                          |   every model reply
+                          v
+  taint.py   typed shape check: accept as quoted data, or quarantine
+                          |   a write it wants to make
+                          v
+  approval.py  card bound to the sha256 of what you saw, 600 s,
+               one click, or 8 characters of the digest typed back
+      -> gate.py   PreToolUse hook: approved arguments only, runs once
+
+  journal.py  append only log of every step, rendered on the page
+  memory.py   one markdown file per chat, sqlite FTS5 + local vectors
+  mcp.py      other agents start runs over stdio`,
         tradeoffs: [
-          "The section boost is a hand-set constant, not a learned weight. It is legible and tunable, but it is a judgement call rather than a fitted one.",
-          "Failing the whole index build on a redaction or leak check means one bad chunk blocks all work, which is the correct default for privacy and the wrong one for iteration speed.",
-          "Local embedding and inference keep the material on the machine at the cost of model quality relative to hosted frontier models.",
+          "Headless CLIs instead of APIs: Claude and Codex run on subscriptions that already exist, but on a Max login the reported dollars are estimates, so the day cap paces use rather than tracking a bill",
+          "Text only work models plus restricted lookup calls: account data and web pages reach a working model only as quoted text, at the price of a separate call for every account read (a mail or calendar question cost $0.16 to $0.17 in the showcase)",
+          "A reviewer from a second vendor instead of self review: no model grades its own work, but agreement between two models is still not verification",
         ],
       },
       decisions: [
         {
-          title: "Mask sources before top-k, not after",
-          why: "Filtering after ranking would let a disallowed chunk consume one of the five slots and then be dropped, silently shrinking the context. Setting masked rows to negative infinity before selection means the budget is always spent on admissible material.",
+          title: "Drive the CLIs headless, not the APIs",
+          why: "Claude and Codex run on subscriptions that already exist, Gemini on an AI Studio key, and all three CLIs return structured output, so each adapter calls its CLI headless, never drives a TUI and passes no bypass flag by default.",
           tradeoff:
-            "Scores are no longer comparable across filter settings, so a chunk's rank only means something relative to the sources currently allowed.",
+            "On a Max login the dollars a CLI reports are its own estimates, not a bill, so the $20 day cap paces use and stops a runaway rather than tracking real spend.",
         },
         {
-          title: "Refuse to build the index rather than warn",
-          why: "A redaction gate that only warns is a gate that gets skipped under time pressure, and the failure it prevents is unrecoverable: once raw transcript text is embedded, it is in the index. The build raises instead.",
+          title: "Keep the working models text only",
+          why: "The models that plan, draft and review get no tools and no MCP servers. Account reads and web search run in a separate restricted call with only the tools they need; denying every other server whole also cut the tool list from 117 to 47 and the probe's cost from $0.47 to $0.25.",
           tradeoff:
-            "One unredacted chunk blocks the entire build, which is deliberately obstructive during iteration.",
+            "A lookup answer steered by a hostile mail still stays in the quoted chat history and could steer a later turn into proposing a change. The approval card, not the split, is what bounds that.",
         },
         {
-          title: "Treat evaluation leakage as a build-time error",
-          why: "If indexed material contains the gold answers, retrieval scores measure memorisation rather than retrieval, and the evaluation quietly stops meaning anything. A containment check over gold answers runs before anything is embedded.",
+          title: "A reviewer from a second vendor, with typed verdicts",
+          why: "Codex reviews every step Claude drafts, so no model grades its own work, and decisions come from typed fields rather than word matching: a draft that says \"agree\" does not end a review.",
           tradeoff:
-            "The 60% word-containment threshold is a heuristic. It will not catch a paraphrased answer, and it can fire on a passage that merely shares vocabulary.",
+            "Model agreement is not verification. Beyond the critique there are no deterministic checks yet, and the result view names the checks that did run.",
         },
         {
-          title: "A small additive section offset instead of a re-ranker",
-          why: "For a decide-style question, a recorded decision is usually more useful than a merely similar paragraph. A +0.05 offset expresses that preference where scores are close and stays out of the way where they are not.",
+          title: "Bind every write to the digest of what was shown",
+          why: "An approval card carries a SHA256 of exactly what the owner saw, the first decision wins, and the gate rechecks the digest right before the single run.",
           tradeoff:
-            "It cannot express anything more subtle than a per-section constant, and the value was set by inspection rather than fitted against a labelled set.",
+            "A draft addressed to someone by name now needs the typed prefix, friction kept on purpose until a measured complaint. A reply draft stays one click, so a hostile mail's sender can still get one.",
+        },
+        {
+          title: "Web search as a restricted call, not a browser",
+          why: "Driving a signed in browser would put the owner's accounts within a page's reach. The web call gets the question alone, with no chat history, notes or persona, because a fetched page could ask it to send what it holds.",
+          tradeoff:
+            "Search results and pages can be wrong or hostile. They are quoted, not verified, and the question itself reaches the search provider.",
+        },
+        {
+          title: "Pick the memory search mode with an eval",
+          why: "twin memory eval measures recall at 3 per search variant, and vector search is the mode it chose, finding 20 of 20 on the synthetic suite.",
+          tradeoff:
+            "The similarity floor does not separate right from wrong chats for short questions, so an unrelated chat's note can join the prompt.",
         },
       ],
       links: { requestAccess: "twin" },
       metrics: [
-        { label: "Context budget", value: "k=5 · 3 sources" },
-        { label: "Leak gate", value: "0.6 containment" },
+        { label: "Offline tests", value: "1,477" },
+        { label: "Mutation rows", value: "646" },
       ],
-      hasContextDemo: true,
     },
     {
       id: "ai-remixmate",
@@ -1542,6 +1564,109 @@ export const PROJECTS: ProjectsSectionContent = {
         { label: "Verify steps", value: "42 / 42" },
         { label: "Runtime deps", value: "0" },
       ],
+    },
+    {
+      id: "persona-rag",
+      caseStudy: true,
+      title: "Persona RAG",
+      subtitle: "Persistent Agent Memory Behind a Fail-Closed Privacy Boundary",
+      iconName: "Brain",
+      tags: [
+        "Agent Architecture",
+        "Memory",
+        "RAG",
+        "Context Engineering",
+        "Local Inference",
+        "Python",
+      ],
+      discipline: "AGENT / MEMORY",
+      status: "SHIPPED",
+      hook: "A context window is always too small. This decides what earns a slot in it.",
+      oneLiner:
+        "A persistent personalised agent whose retrieval layer tags every chunk with its origin (profile, interview transcript, or expert reflection), ranks candidates by cosine similarity with a per-section offset, and masks disallowed sources to negative infinity before top-k so a filtered-out chunk cannot re-enter on score alone. The index refuses to build at all while a real transcript lacks a matching redacted copy, or while any transcript chunk contains more than 60% of a gold evaluation answer.",
+      problem:
+        "A personalised agent accumulates far more material than a context window holds, so every turn is a selection problem: given a question, which few pieces of what the system knows about a person actually deserve to be in front of the model? Ranking by similarity alone answers that badly, because the most textually similar paragraph is often not the most useful one, and because some material should never reach the model regardless of how well it scores.",
+      constraints: [
+        "Fixed context budget. Five chunks reach the model per turn, so selection is the whole game.",
+        "Privacy. Raw interview transcripts must never be embedded; only a redacted copy may enter the index.",
+        "Evaluation integrity. Indexed material can silently contain the answers to the evaluation set, which would make retrieval scores meaningless.",
+        "Local inference, so the material never leaves the machine, against weaker models than hosted frontier ones.",
+        "Reproducibility. The same profile, transcript, and reflections must produce the same index.",
+      ],
+      evidence: [
+        "Three source-tagged indexes over the profile, the redacted interview transcript, and expert reflections; every chunk and every index row carries its source",
+        "Retrieval masks disallowed sources to negative infinity before top-k, so a source filter cannot be defeated by a high similarity score",
+        "Section-aware ranking: a decide-intent query adds a +0.05 offset to chunks from the Decisions section, enough to change the cut only where scores are close",
+        "The index build fails closed twice: RedactionRequired when a real transcript has no up-to-date redacted copy, and LeakError when a transcript chunk contains more than 60% of a gold evaluation answer",
+        "A combined content hash over all three inputs, so an index cannot silently drift from the material it was built from",
+        "Index files written before the source tagging existed still load, so the schema change did not orphan earlier work",
+      ],
+      architecture: {
+        overview:
+          "Profile + redacted transcript + reflections -> collect_chunks (tag source) -> embed -> index (+ combined hash) -> query embed -> cosine + section boost -> source mask -> top-k -> local model",
+        diagram: `  profile.md    transcript.md    reflections.md
+       |              |                 |
+       |         [ redact ]             |
+       |              |                 |
+       +------+-------+--------+--------+
+              |
+       collect_chunks          tags each chunk: profile | transcript | reflection
+              |
+        +-----+------+
+        | build gate |         RedactionRequired : no matching redacted copy
+        +-----+------+         LeakError         : chunk >= 60% of a gold answer
+              |                (nothing is embedded if either fires)
+           [ embed ]
+              |
+     index.npz + chunks.json  (per-row source, combined_sha over all 3 inputs)
+              |
+  query --> [ embed ] --> cosine score
+              |
+        + section boost        decide intent: Decisions +0.05
+              |
+        source mask            disallowed sources -> -inf, applied BEFORE top-k
+              |
+           top-k = 5
+              |
+        prompt assembly --> local model --> response`,
+        tradeoffs: [
+          "The section boost is a hand-set constant, not a learned weight. It is legible and tunable, but it is a judgement call rather than a fitted one.",
+          "Failing the whole index build on a redaction or leak check means one bad chunk blocks all work, which is the correct default for privacy and the wrong one for iteration speed.",
+          "Local embedding and inference keep the material on the machine at the cost of model quality relative to hosted frontier models.",
+        ],
+      },
+      decisions: [
+        {
+          title: "Mask sources before top-k, not after",
+          why: "Filtering after ranking would let a disallowed chunk consume one of the five slots and then be dropped, silently shrinking the context. Setting masked rows to negative infinity before selection means the budget is always spent on admissible material.",
+          tradeoff:
+            "Scores are no longer comparable across filter settings, so a chunk's rank only means something relative to the sources currently allowed.",
+        },
+        {
+          title: "Refuse to build the index rather than warn",
+          why: "A redaction gate that only warns is a gate that gets skipped under time pressure, and the failure it prevents is unrecoverable: once raw transcript text is embedded, it is in the index. The build raises instead.",
+          tradeoff:
+            "One unredacted chunk blocks the entire build, which is deliberately obstructive during iteration.",
+        },
+        {
+          title: "Treat evaluation leakage as a build-time error",
+          why: "If indexed material contains the gold answers, retrieval scores measure memorisation rather than retrieval, and the evaluation quietly stops meaning anything. A containment check over gold answers runs before anything is embedded.",
+          tradeoff:
+            "The 60% word-containment threshold is a heuristic. It will not catch a paraphrased answer, and it can fire on a passage that merely shares vocabulary.",
+        },
+        {
+          title: "A small additive section offset instead of a re-ranker",
+          why: "For a decide-style question, a recorded decision is usually more useful than a merely similar paragraph. A +0.05 offset expresses that preference where scores are close and stays out of the way where they are not.",
+          tradeoff:
+            "It cannot express anything more subtle than a per-section constant, and the value was set by inspection rather than fitted against a labelled set.",
+        },
+      ],
+      links: { requestAccess: "twin" },
+      metrics: [
+        { label: "Context budget", value: "k=5 · 3 sources" },
+        { label: "Leak gate", value: "0.6 containment" },
+      ],
+      hasContextDemo: true,
     },
   ],
 };

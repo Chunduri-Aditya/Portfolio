@@ -23,6 +23,7 @@ All figures below collected **2026-09-18**.
 | Sourcewarden | 71 passing | `./.venv/bin/python -B -m unittest discover -s <dir>` over `web/tests` (20), `n8n_rag_system/tests` (34), `tests/self_improvement` (17); all three exit 0 | `Projects/sourcewarden` | main | `1486e71` |
 | taintgate (was jarvis; collected 2026-09-23) | 124 tests | `python3 -m pytest --collect-only -q` | `Projects/taintgate` (`Projects/jarvis` is a symlink to it) | - | `d8f437a` |
 | Company Agents | 42 of 42 steps | `node scripts/verify.mjs`, exit 0 | `Projects/Company_Agents_skeleton` | - | `dc781ad` |
+| twin (run 2026-09-29) | 1,477 offline tests | `uv run pytest -q` in a clean clone: 1477 passed, 9 live tests deselected by the default `-m 'not live'`, exit 0 | `Desktop/twin` (local only, no remote) | - | `df968f0` |
 
 ### Traps found while collecting these
 
@@ -49,6 +50,9 @@ All figures below collected **2026-09-18**.
 | profile-rag recall@3 | 47 / 48 (0.979) hybrid + rerank; 40 / 48 (0.833) BM25; 46 / 48 (0.958) with the rerank sort removed | `uv run python -m profile_rag.eval` on `eval/questions.jsonl`, 2026-09-22. Printed as counts because this ledger bans the string 0.979 for the AI Health Journal row above | `profile-rag` `6f93001` |
 | profile-rag latency at 0.1 CPU | 4 to 9 s extraction, under 1 s FAQ (was 55 to 153 s) | `docker run --cpus=0.1` against the local image, 2026-09-22; not printed as a number on the card, described in prose | `profile-rag` `6f93001` |
 | profile-rag tests | 14 | `uv run pytest`, 2026-09-22 | `profile-rag` `6f93001` |
+| twin mutation rows | 646 | Entries in the `MUTATIONS` list of `scripts/mutate.py`, counted with `ast` in a clean clone, 2026-09-29. The last full run (620 rows, `c4460ca`) left 1 alive; `1de078e` added its test | `twin` `df968f0` |
+| twin card text, every other number | timings, costs, counts and caps in the evidence, decisions and limits | Quoted from twin's committed docs, none computed here: `docs/SHOWCASE.md` (15.9 s, 4 calls, $0.064, planned 1 step; 1 of 3 agreed; 43 write tools, 600 s, 50 one click and 20 typed a day; 7.7 s, 8.4 s; 5.3 s, 0.86 s, WER 0.00; 20 of 20; 28.3 s; $0.16 to $0.17), `docs/DEMO.md` (1 of 1 step agreed), `docs/ARCHITECTURE.md` (TG4 128 bit nonce; CN 117 to 47 tools, $0.47 to $0.25; H5 0.58 floor, unrelated notes 0.59 to 0.66; D2 and the Gemini AI Studio key), `src/twin/routing.toml` ($1 per run, $20 per day, 24 calls, 15 minutes) | `twin` `59885a5` |
+| Persona RAG context budget and leak gate | k=5 · 3 sources; 0.6 containment | `twin/index.py`: `search(..., k: int = 5, ...)` (L365), three sources profile, transcript, reflection (L5), `CONTAINMENT_THRESHOLD = 0.6` (L31) | `github.com/Chunduri-Aditya/twin` `b8716ea` |
 
 ### Numbers deliberately not printed
 
@@ -81,7 +85,9 @@ for application forms that want a file, not a URL. `npm run export:pdf` builds
 it from `content.ts` alone, so it carries no number this ledger does not
 already cover, and it goes stale on any `content.ts` change until rerun. The
 export fails if any page overflows its Letter box or a diagram is clipped.
-Built 2026-09-29: 11 pages, and all 25 of its web links returned HTTP 200.
+Rebuilt 2026-09-29 with the current twin and Persona RAG: 12 pages; 25 of its
+26 web links returned HTTP 200, and `/work/persona-rag/` returns 404 until the
+next deploy.
 
 ### Correcting what this file said on 2026-09-18
 

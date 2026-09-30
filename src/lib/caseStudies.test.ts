@@ -27,7 +27,9 @@ describe("case-study eligibility", () => {
   test("every other project keeps its case study", () => {
     const expected = PROJECTS.projects.filter((p) => !DEMOTED.includes(p.id)).map((p) => p.id);
     expect(CASE_STUDY_IDS).toEqual(expected);
-    expect(CASE_STUDY_IDS).toHaveLength(8);
+    // Nine since 2026-09-29: the current twin took /work/twin and the persona
+    // RAG card it replaced kept its page at /work/persona-rag.
+    expect(CASE_STUDY_IDS).toHaveLength(9);
   });
 
   test("a demoted project still has somewhere to send the reader", () => {

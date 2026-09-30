@@ -33,6 +33,11 @@ describe("content integrity", () => {
     expect(hits).toEqual([]);
   });
 
+  test("names no earlier repo of twin", () => {
+    // The old twin repo names stay out of the product; only the current name ships.
+    expect(everyString().filter((s) => /personal[\s_-]digital[\s_-]twin|twin-v2/i.test(s))).toEqual([]);
+  });
+
   test("does not revive the unsupportable frontier-model count", () => {
     // METRICS.md: neither 8 nor 4 is supportable, so the stat was dropped.
     expect(everyString().filter((s) => /\d+ of the \d+ target frontier/i.test(s))).toEqual([]);

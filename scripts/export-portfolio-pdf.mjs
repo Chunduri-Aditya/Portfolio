@@ -46,8 +46,12 @@ const repoLinks = (p) => {
   if (p.caseStudy) out.push(["Case study", wrapLink(`${SITE}work/${p.id}/`)]);
   if (p.links.github) out.push(["Code", wrapLink(p.links.github)]);
   if (p.links.requestAccess) {
-    const subject = encodeURIComponent(`Access request: ${p.links.requestAccess}`);
-    out.push(["Code", `Private repo, ${link(`mailto:${CONTACT.email}?subject=${subject}`, "access on request")}`]);
+    // Same mail as src/lib/projectLinks.ts (which plain Node cannot import), so
+    // two cards that share a repo name still arrive labelled with their title.
+    const repo = p.links.requestAccess;
+    const subject = encodeURIComponent(`Repo access request: ${repo}`);
+    const body = encodeURIComponent(`Hi Aditya,\n\nI read about ${p.title} on your portfolio and would like access to the ${repo} repository.\n\nWho I am:\nWhy I am asking:\n\nThanks`);
+    out.push(["Code", `Private repo, ${link(`mailto:${CONTACT.email}?subject=${subject}&body=${body}`, "access on request")}`]);
   }
   if (p.links.live) out.push(["Paper", link(p.links.live)]);
   if (p.links.demo) out.push(["Demo", link(p.links.demo)]);
@@ -194,7 +198,7 @@ ul { padding-left: 11pt; } li { margin-bottom: 2.5pt; } li::marker { color: var(
 .cover-grid { display: grid; grid-template-columns: 1fr 1.12fr; gap: 24pt; margin-top: 8pt; }
 .edu { margin-bottom: 5pt; }
 .toc { list-style: none; padding: 0; }
-.toc li { display: grid; grid-template-columns: 18pt 1fr 14pt; gap: 6pt; padding: 4pt 0; border-bottom: 0.5pt solid var(--line); margin: 0; }
+.toc li { display: grid; grid-template-columns: 18pt 1fr 14pt; gap: 6pt; padding: 3pt 0; border-bottom: 0.5pt solid var(--line); margin: 0; }
 .toc .num { font: 500 7.4pt "JBMono", monospace; color: var(--accent); padding-top: 1pt; }
 .toc .pg { font: 500 7.4pt "JBMono", monospace; color: var(--faint); text-align: right; padding-top: 1pt; }
 .toc .disc { font-size: 6.2pt; margin-left: 4pt; }
