@@ -1,4 +1,5 @@
-import { PROJECTS, RESEARCH, HUD_STATS, ATTACK_SURFACE } from "./content";
+import * as content from "./content";
+import { PROJECTS, RESEARCH, HUD_STATS, ATTACK_SURFACE, EXPERIENCE } from "./content";
 import { PROJECT_VIZ } from "../lib/projectViz";
 
 /**
@@ -8,6 +9,11 @@ import { PROJECT_VIZ } from "../lib/projectViz";
  * exactly how 0.979 ended up in a chart while the ledger said not to print it.
  */
 describe("content integrity", () => {
+  test("lists no Brightcone.ai employment, withdrawn by Aditya on 2026-11-02", () => {
+    expect(JSON.stringify(content)).not.toMatch(/brightcone/i);
+    expect(EXPERIENCE.items.map((item) => item.org)).toContain("Easley Dunn Productions, Inc.");
+  });
+
   const everyString = (): string[] => {
     const out: string[] = [];
     const walk = (v: unknown) => {
