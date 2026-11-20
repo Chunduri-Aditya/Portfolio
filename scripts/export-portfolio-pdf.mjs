@@ -197,8 +197,8 @@ ul { padding-left: 11pt; } li { margin-bottom: 2.5pt; } li::marker { color: var(
 .stat span { font: 500 6.6pt "JBMono", monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); }
 .cover-grid { display: grid; grid-template-columns: 1fr 1.12fr; gap: 24pt; margin-top: 8pt; }
 .edu { margin-bottom: 5pt; }
-.toc { list-style: none; padding: 0; }
-.toc li { display: grid; grid-template-columns: 18pt 1fr 14pt; gap: 6pt; padding: 3pt 0; border-bottom: 0.5pt solid var(--line); margin: 0; }
+.toc { list-style: none; padding: 0; font-size: 7.6pt; line-height: 1.22; }
+.toc li { display: grid; grid-template-columns: 18pt 1fr 14pt; gap: 6pt; padding: 2pt 0; border-bottom: 0.5pt solid var(--line); margin: 0; }
 .toc .num { font: 500 7.4pt "JBMono", monospace; color: var(--accent); padding-top: 1pt; }
 .toc .pg { font: 500 7.4pt "JBMono", monospace; color: var(--faint); text-align: right; padding-top: 1pt; }
 .toc .disc { font-size: 6.2pt; margin-left: 4pt; }
