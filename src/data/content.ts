@@ -1647,7 +1647,7 @@ export const PROJECTS: ProjectsSectionContent = {
         },
       ],
       links: {
-        github: "https://github.com/Chunduri-Aditya/ChatDB",
+        requestAccess: "ChatDB",
       },
       metrics: [
         { label: "Translation", value: "Regex rules" },

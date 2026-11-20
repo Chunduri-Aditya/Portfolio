@@ -105,12 +105,14 @@ describe("Portfolio", () => {
   test("a project without a case study offers its repo instead of a dead page", () => {
     renderHome();
 
-    // ChatDB is coursework with 258 words behind it. Demoting it is only honest
-    // if the row still goes somewhere a reader can actually read.
-    const link = screen.getByRole("link", { name: /Open the repository for ChatDB/i });
+    // Demoting a project is only honest if the row still goes somewhere a
+    // reader can actually read.
+    const link = screen.getByRole("link", {
+      name: /Open the repository for Attention Drift Detector/i,
+    });
     expect(link.getAttribute("href")).toMatch(/^https:\/\/github\.com\//);
     expect(
-      screen.queryByRole("link", { name: /Read the case study for ChatDB/i }),
+      screen.queryByRole("link", { name: /Read the case study for Attention Drift Detector/i }),
     ).not.toBeInTheDocument();
   });
 
