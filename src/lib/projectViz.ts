@@ -6,31 +6,14 @@ import type { Bar } from "../components/MiniViz";
  * chartable result get an entry; the rest lean on their flow diagram.
  */
 export const PROJECT_VIZ: Record<string, { title: string; bars: Bar[] }> = {
-  "agent-shield": {
-    title: "Transparency Rate — anchored prompt injection (n=20)",
-    bars: [
-      { label: "Claude Sonnet 4.5", value: 0.15, max: 1, display: "0.150", hue: "#17b3b3" },
-      { label: "Llama 3.1 8B", value: 0.0, max: 1, display: "0.000", hue: "#2f8fe0" },
-      { label: "Groq Llama 3.3 70B", value: 0.0, max: 1, display: "0.000", hue: "#2f8fe0" },
-      { label: "Gemini 3.5 Flash", value: 0.0, max: 1, display: "0.000", hue: "#2f8fe0" },
-    ],
-  },
   "ai-health-journal": {
-    title: "Retrieval recall — before / after the embedder swap",
+    // truth.md H2: the embedder swap on the 31 query v2 set, at commit 77403dd.
+    title: "Retrieval Recall@3 before and after the embedder swap",
     bars: [
+      { label: "MiniLM (before)", value: 0.855, max: 1, display: "0.855", hue: "#c1743a" },
+      { label: "nomic-embed-text (after)", value: 0.968, max: 1, display: "0.968", hue: "#17b3b3" },
       { label: "valence_flip category (before)", value: 0.667, max: 1, display: "0.667", hue: "#c1743a" },
       { label: "valence_flip category (after)", value: 1.0, max: 1, display: "1.000", hue: "#22c48c" },
-      /*
-       * 0.968, not 0.979.
-       *
-       * This bar read 0.979 while METRICS.md said in writing that 0.979 "must
-       * not be printed as the headline": it is the easier pre-noise subset,
-       * superseded the moment the noisy_typo and noisy_rambling queries were
-       * folded in. The card's own metrics field already said 0.968, so the same
-       * project was showing both numbers and the chart was showing the wrong
-       * one. Full 31-query corpus figure now.
-       */
-      { label: "Recall@3, full corpus (after)", value: 0.968, max: 1, display: "0.968", hue: "#17b3b3" },
     ],
   },
   metalearnml: {

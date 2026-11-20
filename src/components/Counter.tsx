@@ -4,7 +4,7 @@ import { useReducedMotion } from "framer-motion";
 
 /**
  * Count-up on first scroll into view. `value` may carry a non-numeric prefix or
- * suffix (e.g. "520+", "~0.94", "5+ yrs") — the leading/embedded number animates,
+ * suffix (e.g. "100+", "~0.50", "5+ yrs"): the leading or embedded number animates,
  * the rest is preserved.
  */
 const Counter: React.FC<{ value: string; className?: string; duration?: number }> = ({

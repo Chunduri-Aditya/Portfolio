@@ -12,8 +12,10 @@ import { CASE_STUDY_IDS, hasCaseStudy, RENAMED_CASE_STUDY_IDS, renamedCaseStudyI
  */
 describe("case-study eligibility", () => {
   // Four demoted on 2026-09-19 for thin bodies; profile-rag added 2026-09-22 as
-  // a card that links to its repo rather than promising a page.
-  const DEMOTED = ["akashic-tree", "model-behavior-lab", "chatdb", "attention-drift-detector", "profile-rag"];
+  // a card that links to its repo rather than promising a page. On 2026-11-19
+  // model-behavior-lab left the set (archived) and freeze-gate joined as a card
+  // with a preliminary result and no page.
+  const DEMOTED = ["akashic-tree", "chatdb", "attention-drift-detector", "profile-rag", "freeze-gate"];
 
   test("the projects without a case study have none", () => {
     for (const id of DEMOTED) {
@@ -28,8 +30,9 @@ describe("case-study eligibility", () => {
     const expected = PROJECTS.projects.filter((p) => !DEMOTED.includes(p.id)).map((p) => p.id);
     expect(CASE_STUDY_IDS).toEqual(expected);
     // Nine since 2026-09-29: the current twin took /work/twin and the persona
-    // RAG card it replaced kept its page at /work/persona-rag.
-    expect(CASE_STUDY_IDS).toHaveLength(9);
+    // RAG card it replaced kept its page at /work/persona-rag. Twelve since
+    // 2026-11-19: racket-vision, traderbot and spectraguard gained pages.
+    expect(CASE_STUDY_IDS).toHaveLength(12);
   });
 
   test("a demoted project still has somewhere to send the reader", () => {

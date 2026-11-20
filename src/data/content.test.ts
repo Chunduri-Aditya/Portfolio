@@ -1,5 +1,5 @@
 import * as content from "./content";
-import { PROJECTS, RESEARCH, HUD_STATS, ATTACK_SURFACE, EXPERIENCE } from "./content";
+import { PROJECTS, RESEARCH, HUD_STATS, ATTACK_SURFACE, EXPERIENCE, CAPABILITIES } from "./content";
 import { PROJECT_VIZ } from "../lib/projectViz";
 
 /**
@@ -28,9 +28,80 @@ describe("content integrity", () => {
     return out;
   };
 
-  test("never prints 0.979, which METRICS.md forbids as a headline", () => {
+  test("ai-health-journal never prints 0.979, which METRICS.md forbids as its headline", () => {
     // The pre-noise subset figure, superseded by 0.968 on the full corpus.
-    expect(everyString().filter((s) => s.includes("0.979"))).toEqual([]);
+    // Scoped to this project: profile-rag prints its own 0.979 (truth.md P1).
+    const ahj = PROJECTS.projects.find((p) => p.id === "ai-health-journal");
+    expect(ahj).toBeDefined();
+    const hits = [JSON.stringify(ahj), JSON.stringify(PROJECT_VIZ["ai-health-journal"] ?? {})].filter((s) =>
+      s.includes("0.979"),
+    );
+    expect(hits).toEqual([]);
+  });
+
+  test("prints no banned claim and no dollar amount", () => {
+    // truth.md Section 2 claims and the "Never print" clauses of Section 1.
+    const banned =
+      /0\.94 AUC|~?94% pixel|28 attack|33 attack|1,403|0\.971|1,880|\b904\b|520\+|1\.13 px|Kuber[n]etes|Brightcone|Softtek|OpenShift|TR 0\.000|Wilson upper bound|Isolation Forest|aditya2210|blocked attack|42 of 42|42 \/ 42/i;
+    const text = JSON.stringify(content) + JSON.stringify(PROJECT_VIZ);
+    expect(text.match(new RegExp(banned.source, "gi")) ?? []).toEqual([]);
+    expect(text.match(/\$\d[\d.,]*|USD ?\d[\d.,]*/g) ?? []).toEqual([]);
+    // truth.md E7: the SSN dates are May to June 2021, never June to July.
+    expect(text).not.toMatch(/Jun 2021 \u2013 Jul 2021/);
+  });
+
+  const projectText = (id: string): string => {
+    const p = PROJECTS.projects.find((q) => q.id === id);
+    expect(p, `${id} is missing`).toBeDefined();
+    return JSON.stringify(p) + JSON.stringify(PROJECT_VIZ[id] ?? {});
+  };
+
+  test("chatdb names no SQLite (truth.md CD1: MySQL and MongoDB)", () => {
+    expect(projectText("chatdb")).not.toMatch(/sqlite/i);
+  });
+
+  test("ai-remixmate claims no Beat This!, CLAP or Streamlit (truth.md RM1)", () => {
+    expect(projectText("ai-remixmate")).not.toMatch(/beat this|\bCLAP\b|streamlit/i);
+    const tools = CAPABILITIES.groups.flatMap((g) => g.tools);
+    expect(tools).not.toContain("CLAP");
+  });
+
+  test("agent-shield prints none of the withdrawn TR figures (truth.md A12 to A14)", () => {
+    const text = projectText("agent-shield");
+    for (const s of ["TR 0.000", "0.150", "0.161", "0.434"]) {
+      expect(text, s).not.toContain(s);
+    }
+  });
+
+  test("twin prints its truth.md T13 and T12 counts, not the retired ones", () => {
+    const text = projectText("twin");
+    expect(text).toContain("1,938");
+    expect(text).toContain("878");
+    for (const s of ["1,477", "646", "979", "980"]) {
+      expect(text, s).not.toContain(s);
+    }
+  });
+
+  test("profile-rag prints recall@3 0.979 (truth.md P1)", () => {
+    expect(projectText("profile-rag")).toContain("0.979");
+  });
+
+  test("company-agents prints 238 handoffs and never the retired verify gate (truth.md CAS2)", () => {
+    const text = projectText("company-agents");
+    expect(text).toContain("238");
+    expect(text).not.toMatch(/42 of 42|all checks pass/i);
+  });
+
+  test("ai-health-journal metrics lead with crisis sensitivity (truth.md H1)", () => {
+    const ahj = PROJECTS.projects.find((p) => p.id === "ai-health-journal");
+    expect(ahj?.metrics[0]?.value).toContain("1.00 (27 of 27)");
+  });
+
+  test("the Easley Dunn entry ends October 2026 (truth.md E15)", () => {
+    const easley = EXPERIENCE.items.find((item) => item.org === "Easley Dunn Productions, Inc.");
+    expect(easley).toBeDefined();
+    expect(JSON.stringify(easley)).toMatch(/Oct(ober)? 2026/);
+    expect(JSON.stringify(easley)).not.toMatch(/Sep(tember)? 2026/);
   });
 
   test("does not claim more anchored surfaces than agent-shield has", () => {
@@ -49,11 +120,12 @@ describe("content integrity", () => {
     expect(everyString().filter((s) => /\d+ of the \d+ target frontier/i.test(s))).toEqual([]);
   });
 
-  test("the attack-ID total matches the per-module breakdown", () => {
+  test("the attack total matches the per-module breakdown", () => {
     const total = ATTACK_SURFACE.reduce((n, m) => n + m.ids, 0);
-    expect(total).toBe(28);
+    // truth.md A4 and A24: 24 implemented attacks across six modules.
+    expect(total).toBe(24);
 
-    const stat = HUD_STATS.find((s) => s.label === "ATTACK IDS CATALOGUED");
+    const stat = HUD_STATS.find((s) => s.label === "ATTACKS IMPLEMENTED");
     expect(stat?.value).toBe(String(total));
   });
 
@@ -126,6 +198,66 @@ describe("content integrity", () => {
     expect(featured).toHaveLength(4);
     for (const p of featured) {
       expect(p.links.github, `${p.id} is featured but has no public repo`).toBeTruthy();
+    }
+  });
+});
+
+/**
+ * The project set after the 2026-11-19 refresh. New cards print only what their
+ * truth.md lines allow, and an archived card stays out of every list.
+ */
+describe("project set", () => {
+  const find = (id: string) => PROJECTS.projects.find((p) => p.id === id);
+  const text = (id: string): string => JSON.stringify(find(id)) + JSON.stringify(PROJECT_VIZ[id] ?? {});
+  const NEW = ["racket-vision", "traderbot", "spectraguard", "freeze-gate"];
+
+  test("the four new projects exist and model-behavior-lab is gone", () => {
+    for (const id of NEW) expect(find(id), `${id} is missing`).toBeDefined();
+    // INDEX.md verdict ARCHIVE and truth.md MB1: no card, no viz, no route.
+    expect(find("model-behavior-lab")).toBeUndefined();
+    expect(PROJECT_VIZ).not.toHaveProperty("model-behavior-lab");
+  });
+
+  test("each new project states a problem, constraints and failure modes", () => {
+    for (const id of NEW) {
+      const p = find(id);
+      expect(p?.problem, `${id} has no problem`).toBeTruthy();
+      expect(p?.constraints?.length ?? 0, `${id} constraints`).toBeGreaterThanOrEqual(2);
+      expect(p?.failureModes?.length ?? 0, `${id} failure modes`).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  test("racket-vision prints its test F1 with the precision limit (truth.md RV1)", () => {
+    const t = text("racket-vision");
+    expect(t).toContain("0.793");
+    expect(t).toContain("0.665");
+    expect(t).not.toMatch(/1\.13 ?px/);
+  });
+
+  test("traderbot is paper only and claims no backtest, live trading or returns (truth.md TB1)", () => {
+    const t = text("traderbot");
+    expect(t).toMatch(/paper/i);
+    // The stub file name `backtest.py` may print, because the card says it is a stub.
+    expect(t).not.toMatch(/backtest(?!\.py)|live trad|returns/i);
+    expect(t).toMatch(/stub/i);
+  });
+
+  test("freeze-gate is preliminary at n=5 and prints no defended figure (truth.md FG1)", () => {
+    const t = text("freeze-gate");
+    expect(t).toContain("preliminary");
+    expect(t).toContain("n=5");
+    // "Undefended" counts may print; a defended count never does.
+    expect(t).not.toMatch(/(?<!un)defended[^"]*\d\/5/i);
+    expect(find("freeze-gate")?.caseStudy).not.toBe(true);
+  });
+
+  test("links follow the 2026-11-19 visibility table in METRICS.md", () => {
+    // Public and past the exposure gate: the Persona RAG repo.
+    expect(find("persona-rag")?.links.github).toBe("https://github.com/Chunduri-Aditya/Personal-persona-chatbot");
+    // Private, no remote, or failed the exposure gate: request access only.
+    for (const id of ["twin", "ai-remixmate", "company-agents", ...NEW]) {
+      expect(find(id)?.links.github, `${id} must not link a repo`).toBeUndefined();
+      expect(find(id)?.links.requestAccess, `${id} needs request access`).toBeTruthy();
     }
   });
 });
