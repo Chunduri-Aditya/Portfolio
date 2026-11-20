@@ -40,3 +40,5 @@ vite.config.ts.timestamp-*
 
 # local design QA screenshots
 .hud-shots/
+
+.fable/
