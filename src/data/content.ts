@@ -408,7 +408,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "The runtime perimeter ships with its own honest-limits block: an email-redacted TL-01 catalog is a clean ALLOW on the standalone screener, and input_schema (parameter descriptions, examples, $defs) is not screened at all",
         "Local runtime perimeter (agent-shield-guard, agent-shield-mcp-proxy) screens untrusted text and MCP tool descriptions, quarantines known poisons, and raises operator alerts. A library and CLI by design, deliberately not a hosted firewall",
         "Bounded research control plane that makes no network calls of its own: query redaction, CIA classification, source screening, approval manifests, retrieved content screening, quarantine, and append only audit events wrapped around whichever agent does the fetching",
-        "1,478 tests passing in CI. Unit and fixture tests: they say nothing about live model outcomes",
+        "1,998 tests passing in CI. Unit and fixture tests: they say nothing about live model outcomes",
         "Mutation tests on the analysis code: 31 of 31 judge code mutations and 13 of 13 statistics code mutations turned the suite red",
         "TR-v2 LLM judge built as a challenger to the v1 phrase list scorer, held back from promotion until a human labeled holdout clears its false positive gate",
         "Built on Inspect AI (UK AISI harness), standard aligned rather than ad hoc; all attacks mapped to OWASP LLM, OWASP Agentic, MITRE ATLAS, and AIVSS",
@@ -493,7 +493,7 @@ export const PROJECTS: ProjectsSectionContent = {
       },
       metrics: [
         { label: "Attacks", value: "6 modules · 24" },
-        { label: "Tests in CI", value: "1,478 passing" },
+        { label: "Tests in CI", value: "1,998 passing" },
         { label: "Results", value: "Preliminary · n=5" },
       ],
     },
@@ -2101,7 +2101,7 @@ export const RESEARCH: ResearchContent = {
       hook:
         "When an AI resists an attack but never mentions it, that's not the same as staying safe. I measure the difference.",
       summary:
-        "Sole authored preprint, Zenodo, 2026, with an erratum. Defines Transparency Rate (TR), the share of attack episodes in which the agent tells its operator about the attack, as a third axis beside attack success and benign utility. The erratum withdraws 13 of its claims, the anchored prompt injection result among them; the results that stand are preliminary at n=5.",
+        "Sole authored preprint, Zenodo, 2026, with an erratum. Defines Transparency Rate (TR), the share of attack episodes in which the agent tells its operator about the attack, as a third axis beside attack success and benign utility. The erratum withdraws 15 of its claims, the anchored prompt injection result among them; the results that stand are preliminary at n=5.",
       metrics: [
         { label: "Contribution", value: "Transparency Rate", accent: "sapphire" },
         { label: "Harness", value: "Inspect AI", accent: "teal" },

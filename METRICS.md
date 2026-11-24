@@ -15,7 +15,7 @@ date say why they were not rerun.
 
 | Card | Value | Truth ID | Command | Repo | SHA | Date |
 |---|---|---|---|---|---|---|
-| Agent Shield | 1,478 tests passing in CI | A2 | CI run 43510131767, step "Run tests" (`uv run --frozen pytest -q`) | `Projects/agent-shield-complete/agent-shield` | `c283b93` | 2026-11-13 |
+| Agent Shield | 1,998 tests passing in CI | A2 | CI run 45485396078, step "Run tests" (`uv run --frozen pytest -q`) | `Projects/agent-shield-complete/agent-shield` | `bef4778` | 2026-11-24 |
 | Agent Shield | mutations 31 of 31, 13 of 13 red | A9 | `docs/paper_v2/mutation/` | `agent-shield` | n/a | per truth.md |
 | twin | 1,938 passed, 11 deselected | T13 | `uv run pytest -q` | `Desktop/twin` (private, no remote) | `06bfb4f` | 2026-10-07, not rerun (T13 Limits) |
 | twin | 878 mutations, 0 survived (875 on target, 3 off) | T12 | `docs/mutation-run.tsv` recount | `Desktop/twin` | run at `f6290f0` | 2026-10-03, not repeated (T12 Limits) |
@@ -44,8 +44,8 @@ date say why they were not rerun.
 |---|---|---|---|---|---|
 | Agent Shield | 24 attacks, six modules (5, 1, 6, 1, 5, 6) | A4, A24 | Paper Table 1 | `agent-shield` | per truth.md |
 | Agent Shield | 55 and 494 characters, fix `920c397` | A26 | `docs/ERRATUM.md:15` | `agent-shield` | 2026-11-10 |
-| Agent Shield | erratum withdraws 13 claims | A11 | `docs/ERRATUM.md` | `agent-shield` | per truth.md |
-| Agent Shield | n=5 results: 5 of 5, ASR 1.000; 3 of 20 over 5 prompts; 0 of 5 to 4 of 5 | A16, A17, A18 | Erratum "What stands" | `agent-shield` | per truth.md |
+| Agent Shield | erratum withdraws 15 claims | A11 | `docs/ERRATUM.md` | `agent-shield` | per truth.md |
+| Agent Shield | n=5 results: 5 of 5, ASR 1.000; 3 of 20 over 5 prompts | A16, A17 | Erratum "What stands" | `agent-shield` | per truth.md |
 | Agent Shield | preprint DOI 10.5281/zenodo.20789431 | A1 | Zenodo record | n/a | 2026-10-29 |
 | twin | 86 tools, 43 read, 43 write | T9 | per truth.md | `Desktop/twin` | 2026-10-07 |
 | twin | 600 s card expiry | T2 | `approval.py:31` | `Desktop/twin` | 2026-10-29 |
@@ -125,7 +125,7 @@ One row per card: the numbers it prints, and where each one comes from.
 
 | Card | Printed numbers | Truth ID or row |
 |---|---|---|
-| agent-shield | 24, six modules, 5/1/6/1/5/6; 1,478; 31 of 31, 13 of 13; 13 claims; 55 and 494 characters, `920c397`; n=5, 5 of 5, ASR 1.000, 3 of 20, 0 of 5 to 4 of 5; DOI | A1, A2, A3, A4, A9, A11, A16, A17, A18, A24, A25, A26 |
+| agent-shield | 24, six modules, 5/1/6/1/5/6; 1,998; 31 of 31, 13 of 13; 15 claims; 55 and 494 characters, `920c397`; n=5, 5 of 5, ASR 1.000, 3 of 20; DOI | A1, A2, A3, A4, A9, A11, A16, A17, A24, A25, A26 |
 | twin | 12,000; 86, 43, 43; SHA256, 600 s; 217, 1,586, 2026-09-27 to 2026-10-04, 14, 12, 2; 1,938, 11, 2026-10-07; 878, 875, 3; 20 of 20, 12 of 20, 16 of 20; four tools, 28.3 s | T2, T7, T8, T9, T10, T11, T12, T13 |
 | ai-remixmate | 1,976, 138; -14 LUFS; BS.1770-4; 8/16/32 bar grid; citation years 2015, 2016 | RM1, RM2, -14 LUFS row; bar grid and years are non metric |
 | akashic-tree | 9:16; Playground v2.5; 6 commits; 84 test functions | AK1 |

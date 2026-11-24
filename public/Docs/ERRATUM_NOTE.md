@@ -2,7 +2,7 @@
 
 This PDF is the preprint as published on Zenodo (doi.org/10.5281/zenodo.20789431). It is kept unchanged because it is the citable record.
 
-Its results are not all current. The erratum withdraws 13 of its claims. Erratum W3 withdraws the Wilson intervals at n=20 on the anchored rows, and the headline Transparency Rate result built on them: each n=20 log is 5 prompts over 4 epochs, so the effective n for both Llama models is 5.
+Its results are not all current. The erratum withdraws 15 of its claims. Erratum W3 withdraws the Wilson intervals at n=20 on the anchored rows, and the headline Transparency Rate result built on them: each n=20 log is 5 prompts over 4 epochs, so the effective n for both Llama models is 5.
 
 Read the corrections: https://github.com/Chunduri-Aditya/agent-shield/blob/main/docs/ERRATUM.md
 
