@@ -17,7 +17,7 @@ date say why they were not rerun.
 |---|---|---|---|---|---|---|
 | Agent Shield | 1,998 tests passing in CI | A2 | CI run 45485396078, step "Run tests" (`uv run --frozen pytest -q`) | `Projects/agent-shield-complete/agent-shield` | `bef4778` | 2026-11-24 |
 | Agent Shield | mutations 31 of 31, 13 of 13 red | A9 | `docs/paper_v2/mutation/` | `agent-shield` | n/a | per truth.md |
-| twin | 1,938 passed, 11 deselected | T13 | `uv run pytest -q` | `Desktop/twin` (private, no remote) | `06bfb4f` | 2026-10-07, not rerun (T13 Limits) |
+| twin | 2,638 passed, 1 skipped, 11 deselected | T13 | `uv run --frozen pytest -q`, provider keys unset | `Desktop/twin` (private, no remote) | `dcbda19` | 2026-11-24 |
 | twin | 878 mutations, 0 survived (875 on target, 3 off) | T12 | `docs/mutation-run.tsv` recount | `Desktop/twin` | run at `f6290f0` | 2026-10-03, not repeated (T12 Limits) |
 | AI RemixMate | 1,976 Python, 138 frontend | RM1 | pytest and vitest, per truth.md | `Projects/ai-remixmate` (private) | `a046fc9` | per truth.md |
 | AI Health Journal | 408 passed | H4 | pytest | `Projects/journal-agent` | `77403dd` | 2026-10-07, not rerun (H4 Limits) |
@@ -126,7 +126,7 @@ One row per card: the numbers it prints, and where each one comes from.
 | Card | Printed numbers | Truth ID or row |
 |---|---|---|
 | agent-shield | 24, six modules, 5/1/6/1/5/6; 1,998; 31 of 31, 13 of 13; 15 claims; 55 and 494 characters, `920c397`; n=5, 5 of 5, ASR 1.000, 3 of 20; DOI | A1, A2, A3, A4, A9, A11, A16, A17, A24, A25, A26 |
-| twin | 12,000; 86, 43, 43; SHA256, 600 s; 217, 1,586, 2026-09-27 to 2026-10-04, 14, 12, 2; 1,938, 11, 2026-10-07; 878, 875, 3; 20 of 20, 12 of 20, 16 of 20; four tools, 28.3 s | T2, T7, T8, T9, T10, T11, T12, T13 |
+| twin | 12,000; 86, 43, 43; SHA256, 600 s; 217, 1,586, 2026-09-27 to 2026-10-04, 14, 12, 2; 2,638, 1, 11, 2026-11-24, dcbda19; 878, 875, 3; 20 of 20, 12 of 20, 16 of 20; four tools, 28.3 s | T2, T7, T8, T9, T10, T11, T12, T13 |
 | ai-remixmate | 1,976, 138; -14 LUFS; BS.1770-4; 8/16/32 bar grid; citation years 2015, 2016 | RM1, RM2, -14 LUFS row; bar grid and years are non metric |
 | akashic-tree | 9:16; Playground v2.5; 6 commits; 84 test functions | AK1 |
 | ai-health-journal | 1.00 (27 of 27), 0.905 (38 of 42), 69; 0.855 to 0.968, 31 queries, `77403dd`; 408; case study figures | H1, H2, H4, IMPROVEMENTS.md row, crisis mutation row |
@@ -159,7 +159,7 @@ data (`text-rose-400` and similar).
 - **904, 1,880, 774, 520+** (AI RemixMate tests): RM1 bans them. 1,976 and 138 replace them.
 - **0.971** (AI Health Journal crisis sensitivity on the older 56 case set): H1 bans it.
 - **42 of 42** (Company Agents verify gate): CAS1 is superseded, and the gate now reads 41 of 42 (CAS2). Never "all checks pass".
-- **1,477** (twin tests) and **646** (twin mutation rows): replaced by T13 (1,938) and T12 (878). Never 979, 980 or "619 of 620" (T12 Limits).
+- **1,477** and **1,938** (twin tests) and **646** (twin mutation rows): replaced by T13 (2,638, 2026-11-24) and T12 (878). Never 979, 980 or "619 of 620" (T12 Limits).
 - **28** (Agent Shield attack IDs): A4 says print "24 implemented attacks across six modules". Never 28 or 33 beside the paper's results.
 - **47 / 48** as the profile-rag headline: P1 prints 0.979. The BM25 figure 40 / 48 is retired: P3 gives 0.833 as hybrid plus rerank recall@1.
 - **508** (AI Health Journal tests): H4 gives 408 at `77403dd`. Never 326 or 393.

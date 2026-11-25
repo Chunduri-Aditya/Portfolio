@@ -540,7 +540,7 @@ export const PROJECTS: ProjectsSectionContent = {
         "Routes work across three models: Claude plans, drafts, revises and finalizes; Codex critiques each step with a typed verdict; Gemini digests input over 12,000 characters. The working models run text only, with no tools or MCP servers",
         "86 connector tools across Gmail, Calendar, Drive and Notion, 43 read and 43 write. Every write sits behind an approval card bound to a SHA256 of exactly what was shown, with a 600 s expiry, plus spend caps per run and per day",
         "Run ledger: 217 logged runs and 1,586 events from 2026-09-27 to 2026-10-04; 14 approval cards issued, 12 approved and 2 rejected. Single user, and the count includes demo, eval and showcase runs",
-        "1,938 tests passed, 11 deselected (2026-10-07, not rerun since)",
+        "2,638 tests passed, 1 skipped, 11 deselected (2026-11-24, commit dcbda19)",
         "Mutation testing: 878 mutations in the last full run, none survived (875 caught by the intended test, 3 by another test). The run was not repeated",
         "Every model reply is untrusted until it matches a strict typed shape for its kind, and anything else is quarantined. Model text reaches another prompt only inside a sealed block with a fresh marker",
         "Memory eval on 20 synthetic questions, recall at 3: vector search 20 of 20, keyword search 12 of 20. Single run; the shipped search default is hybrid (16 of 20) and automatic recall uses vector",
@@ -618,7 +618,7 @@ export const PROJECTS: ProjectsSectionContent = {
       ],
       links: { requestAccess: "twin" },
       metrics: [
-        { label: "Tests passed", value: "1,938" },
+        { label: "Tests passed", value: "2,638" },
         { label: "Mutations, none survived", value: "878" },
       ],
     },

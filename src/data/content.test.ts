@@ -75,7 +75,7 @@ describe("content integrity", () => {
 
   test("twin prints its truth.md T13 and T12 counts, not the retired ones", () => {
     const text = projectText("twin");
-    expect(text).toContain("1,938");
+    expect(text).toContain("2,638");
     expect(text).toContain("878");
     for (const s of ["1,477", "646", "979", "980"]) {
       expect(text, s).not.toContain(s);
